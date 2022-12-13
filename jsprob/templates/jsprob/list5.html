@@ -57,7 +57,7 @@
             alert('Контроль безопасности обнаружил смещение времени! Этап защитан не будет!');
             }
             ds = ost;
-            if (kon>5 || ost>90000) {ost=0;}
+            if (kon!=5 || ost>90000) {ost=0;}
             addEventListener("keyup", function(event) {kk=0;});
             addEventListener("keydown", function(event) {
                   if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)

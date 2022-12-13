@@ -20,6 +20,7 @@ urlpatterns = [
     path('level3', views.level3, name='level3'),
     path('level4', views.level4, name='level4'),
     path('level5', views.level5, name='level5'),
+    path('itoglv', views.itoglv, name='itoglv'),
     path('regist', views.regist, name='regist'),
     path('itog', views.itog, name='itog'),
     path('toptab', views.toptab, name='toptab'),

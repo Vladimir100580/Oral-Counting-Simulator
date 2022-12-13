@@ -369,7 +369,7 @@ def level1(request):
     #     DataUser(log=usna, scores=0, pole1=fio, pole2='0$1$0$0$0$0$0$0').save()
     tt = DataUser.objects.get(log=usna)
     if tt.scores>0:
-        DataUser.objects.filter(log=usna).update(%s=(tt.pop+1))
+        DataUser.objects.filter(log=usna).update(pop=(tt.pop+1))
     # Defuser(fio, 1, request.session['ustns4usen'])
     return render(request, 'jsprob/level1.html', {'nm':usefio[1]})
 
@@ -452,6 +452,11 @@ def list5(request):
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
                    'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
+
+def itoglv(request):
+    ud = request.COOKIES.get('lelrec15').split('$')
+    print(ud)
+    return render(request, 'jsprob/level2.html')
 
 class Examples:
     def __init__(self, rab, mm):
