@@ -1,0 +1,79 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} ТУРНИР ПО УСТНОМУ СЧЕТУ Приветствие {% endblock %}
+{% block content %}
+
+<aside>
+    <h2 class="featuress" id = 'nomb' style="font-style: italic; font-size: max(20px, 3vw);"> Здравствуйте{{nm}}! </h2>
+    <h3 class="featuress" id = 'wait0' style="font-style: italic; font-size: max(17px, 2.5vw);"> III Турнир по устному счету уже начался! </h3>
+    <h3 class="featuress" id = 'wait1' style="font-style: italic; font-size: max(14px, 2.2vw);"> Участвовать могут все: от мала до велика. </h3>
+   <!-- <h3 class="featuress"> Django: {{a}} </h3>
+    <h3 class="featuress" id = 'wa'>  </h3>-->
+</aside>
+
+    <div class="features">
+         <form action="" method="get">
+            {% csrf_token %}
+         <h4 id = 'wait'> </h4>
+        {% if not user.is_authenticated %}
+        <h4> <input type="text" id="inpu" name="lg" placeholder='Ваш уникальный Логин' maxlength="40"  size="20"> </h4></br>
+        <button class="btn btn-success btn" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ВВЕСТИ </button></br></br>
+        <button class="btn btn-danger btn" id = 'butt2' type="submit" name="reg" onclick="Func()"> Зарегистрироваться </button></br></br>
+        {% else %}
+        </br>
+        {% if fl0 == '0' %}
+        <a href="{% url 'level1' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a></br></br>
+        {% else %}
+        <h4> ПОСМОТРИТЕ, ПОЖАЛУЙТСА, ОБЪЯВЛЕНИЕ НИЖЕ! </h4></br>
+        {% endif %}
+        {% if user.is_superuser %}
+
+        <a href="{% url 'logout' %}" id = "butt5" class="btn btn-success" onclick="Func()"> Я не {{nm}} </a>
+        <a href="{% url 'reset' %}" class="btn btn-danger"> Сброс </a>
+        </br></br>
+        {% endif %}
+        {% endif %}
+        <a href="{% url 'toptab' %}" id = "butt3" class="btn btn-success" onclick="Func()"> ТОП ИГРОКОВ </a>
+        <a href="{% url 'instr' %}" id = "butt6" class="btn btn-success" onclick="Func()"> ИНСТРУКЦИЯ </a></br></br>
+
+        <h4> Обращаем внимание на сроки турнира: с 10.10.2022 по 31.10.2022) </h4>
+        <!--<h4> Производится коррекция. Результат лукавых ТОП-ов будет удален.</h4>-->
+        <h4 style="color: red"> ВНИМАНИЕ! </h4>
+        <h5> Если Вы неправильно внесли свои данные при регистрации и желаете сохранить свои достижения в ТОП-е, </h5>
+        <h5> <a href="https://vk.com/vovartus" target="_blank"> обозначьте свои истинные ФИО в ЛС </a> . Участники с некорректными ФИО(ФИК) удаляются! </h5>
+        <h5> Попыток по улучшению своего результата можно совершать неограниченное число раз. </h5>
+        <h5> Десять участников, занявшие первые места в ТОП-е игроков, получат символические вознаграждения: </h5>
+        <h5> 1-3е места – 200рублей, 4-10е места – 100р.</h5>
+        <h5> Окончательный итого будет подведен 31.10.2022 в 21:00 (по московскому времени) </h5>
+    </form>
+    </div>
+
+    <style>
+        h2, h3, h4, h5 {
+          font-style: italic;
+        }
+    </style>
+
+    <script>
+    fl={{fl}};
+    function Func() {
+    if (fl==0) {document.getElementById('inpu').style.display='none';
+        document.getElementById('butt1').style.display='none';
+        document.getElementById('butt2').style.display='none';
+        }
+    if (fl==1)  {document.getElementById('butt4').style.display='none';}
+
+    document.getElementById('butt3').style.display='none';
+    document.getElementById('butt6').style.display='none';
+    localStorage.setItem('vrk', 10000);
+    var txt2 = document.getElementById('wait');
+    txt2.innerHTML = 'ПОЖАЛУЙСТА, ОЖИДАЙТЕ';
+    txt2.style.cssText = 'font-style: italic; font-size: 36px; margin-top: 50px;';
+    localStorage.setItem('kontr', 0);
+    localStorage.setItem('pravresh', 0);
+    localStorage.setItem('bezosh', 0);
+    localStorage.setItem('totsum', 0);
+    }
+
+
+    </script>
+{% endblock %}

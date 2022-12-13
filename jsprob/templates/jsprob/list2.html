@@ -1,0 +1,321 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} Уровень 2 {% endblock %}
+{% block content %}
+
+    <div class="features">
+ <h1 style="font-style: italic" id = 'vy4'> Вычислите:  </h1>
+        <h2 style="font-style: italic; font-size: min(68px, 16vw);" id = 'prim'> </h2>
+        <h2 style="font-style: italic; font-size: 72px; color: red" id = "err"> </h2>
+        <h3 style="font-style: italic" id = "end1"> </h3>
+        <h3 style="font-style: italic" id = "end2"> </h3>
+        <h3 style="font-style: italic" id = "end3"> </h3>
+        <button class="btn btn-success btn" style="margin-top: 50px;" id = 'butt'  onclick="Funcend()"> ПРОДОЛЖИТЬ </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn1' onclick="Func1()"> &nbsp;1&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn2' onclick="Func2()"> &nbsp;2&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn3' onclick="Func3()"> &nbsp;3&nbsp; </button></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn4' onclick="Func4()"> &nbsp;4&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn5' onclick="Func5()"> &nbsp;5&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn6' onclick="Func6()"> &nbsp;6&nbsp; </button></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn7' onclick="Func7()"> &nbsp;7&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn8' onclick="Func8()"> &nbsp;8&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn9' onclick="Func9()"> &nbsp;9&nbsp; </button></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn0' onclick="Func0()"> &nbsp;0&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnd' onclick="Funcd()"> &nbsp;<-&nbsp; </button></br></br>
+        <h2 style="font-style: italic" id = "prnpr"> </h2>
+        <h2 style="font-style: italic" id = "timer"> </h2>
+        <a href="{% url 'home' %}" id = "byni" class="btn btn-danger btn-sm"> ЗАВЕРШИТЬ! Перейти в главное меню. </a>
+
+    </div>
+    <script>
+        tas1 ={{tas1}};
+        tas2 ={{tas2}};
+        tasz ={{tasz}};
+        otv = {{otv}};
+        simv = ['+', '–', '•', ':'];
+        prim=-1;
+        kon = Number(localStorage.getItem('kontr'))+1;
+        localStorage.setItem('kontr', kon);
+        var na4 = new Date() - new Date(0)
+        document.getElementById('butt').style.display='none';
+        ds = 70000 - (new Date() - new Date(0) - Number(na4));
+        fl2=0;
+        fl1=0;
+        fl3=0;
+        fl4=0;
+        tt=0;
+        kk=0;
+        po=0;
+        p0 = 0;
+        p1 = 0;
+        n = 0;
+        ot='';
+
+        function Func() {
+            ost = 70000 - (new Date() - new Date(0) - Number(na4)) - 3000*n;
+            if (Math.abs(ost-ds)>5000) {
+            na4 = new Date() - new Date(0) + 120000;
+            alert('Контроль безопасности обнаружил смещение времени! Этап защитан не будет!');
+            }
+            ds = ost;
+            if (kon>2 || ost>70000) {ost=0;}
+            addEventListener("keyup", function(event) {kk=0;});
+            addEventListener("keydown", function(event) {
+                  if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)
+                     {fl1=1;
+                     ot = ot + String(event.keyCode-48);
+                     kk = event.keyCode;
+                     Funcnj();}
+                  if (event.keyCode>95 && event.keyCode<106 && event.keyCode!=kk)
+                     {fl1=1;
+                     ot = ot + String(event.keyCode-96);
+                     kk = event.keyCode;
+                     Funcnj();}
+                  if (event.keyCode==8 && kk!=8)
+                     {kk = 8;
+                     Funcd();}
+                  });
+            if (fl4==1 && tt==0) {
+                document.getElementById('byni').style.display='none';
+                document.getElementById('btn1').style.display='none';
+                document.getElementById('btn2').style.display='none';
+                document.getElementById('btn3').style.display='none';
+                document.getElementById('btn4').style.display='none';
+                document.getElementById('btn5').style.display='none';
+                document.getElementById('btn6').style.display='none';
+                document.getElementById('btn7').style.display='none';
+                document.getElementById('btn8').style.display='none';
+                document.getElementById('btn9').style.display='none';
+                document.getElementById('btn0').style.display='none';
+                document.getElementById('btnd').style.display='none';
+                document.getElementById('vy4').style.display='none';
+                document.getElementById('prim').style.display='none';
+                document.getElementById('prnpr').style.display='none';
+                document.getElementById('timer').style.display='none';
+                tt = new Date() - new Date(0);
+                if (po==2) {
+                document.getElementById('err').innerHTML = 'ОШИБКА';
+                document.getElementById('err').style.cssText = 'margin-top: 40px; font-style: italic; font-size: 62px; color: red;';
+                document.getElementById('end1').innerHTML = pr+'≠'+ot;
+                document.getElementById('end1').style.cssText = 'font-style: italic; font-size: 56px; color: red'
+
+                document.getElementById('end2').innerHTML = pr + '=' + sr;
+                document.getElementById('end2').style.cssText = 'font-style: italic; font-size: 72px; color: blue'
+                }
+                if (po==1) {
+                document.getElementById('err').innerHTML = 'НЕВЕРНО';
+                document.getElementById('err').style.cssText = 'margin-top: 120px; font-style: italic; font-size: 62px; color: red;';
+                ot='';}
+                }
+            if (fl4==1 && new Date() - new Date(0) - Number(tt) > (2000*po - 1000)) {
+                document.getElementById('byni').style.display='';
+                document.getElementById('btn1').style.display='';
+                document.getElementById('btn2').style.display='';
+                document.getElementById('btn3').style.display='';
+                document.getElementById('btn4').style.display='';
+                document.getElementById('btn5').style.display='';
+                document.getElementById('btn6').style.display='';
+                document.getElementById('btn7').style.display='';
+                document.getElementById('btn8').style.display='';
+                document.getElementById('btn9').style.display='';
+                document.getElementById('btn0').style.display='';
+                document.getElementById('btnd').style.display='';
+                document.getElementById('vy4').style.display='';
+                document.getElementById('prim').style.display='';
+                document.getElementById('prnpr').style.display='';
+                document.getElementById('timer').style.display='';
+                document.getElementById('err').innerHTML = '';
+                document.getElementById('end1').innerHTML = '';
+                document.getElementById('end2').innerHTML = '';
+                document.getElementById('err').style.cssText = 'margin-top:0px;';
+                fl4=0;
+                tt=0;
+                fl3=0;
+                ot='';
+                if (po==2) {po=0;}
+                }
+
+            if (ost<=0 && fl3==0 || prim>=10 && fl3==0)  {
+                if (ost<0) {ost=0}
+                document.getElementById('byni').style.display='none';
+                document.getElementById('btn1').style.display='none';
+                document.getElementById('btn2').style.display='none';
+                document.getElementById('btn3').style.display='none';
+                document.getElementById('btn4').style.display='none';
+                document.getElementById('btn5').style.display='none';
+                document.getElementById('btn6').style.display='none';
+                document.getElementById('btn7').style.display='none';
+                document.getElementById('btn8').style.display='none';
+                document.getElementById('btn9').style.display='none';
+                document.getElementById('btn0').style.display='none';
+                document.getElementById('btnd').style.display='none';
+                document.getElementById('vy4').style.display='none';
+                document.getElementById('prim').style.display='none';
+                document.getElementById('prnpr').style.display='none';
+                document.getElementById('timer').style.display='none';
+                document.getElementById('butt').style.display='';
+                if (kon==2) {
+                document.getElementById('end1').innerHTML = 'На втором уровне набрано очков: ' + ost + '.';
+                document.getElementById('end1').style.cssText = 'margin-top: 90px; font-style: italic;';
+                document.getElementById('end2').innerHTML = document.getElementById('prnpr').innerHTML = 'Решено правильно: '+ (p0 + p1) + ', <br> из них безошибочно: ' + p0 + '<br> двойных ошибок: ' + n;
+                document.getElementById('end2').style.cssText = 'font-style: italic;';}
+                ostf = ost;
+                document.getElementById('butt').style.display='';
+                fl3=1;
+                ostf = ost;
+
+                fl00={{fl00}};
+                sclvus={{sclvus}};
+                minsc={{minsc}};
+                scnow={{scnow}};
+                txta = '';
+                txtb = '';
+                pz=0;
+                pz1=0;
+                pz0=0;
+                if (ostf>Number(sclvus)){
+                pz0=1;
+                if (Number(sclvus)>0) { pz=1;
+                txta = 'Вы улучшили собственный рекорд в этом этапе на ' + (ostf-Number(sclvus)) + '.<br>';}
+                }
+                if (ostf<Number(sclvus)*0.8) {
+                txtb = 'Ваш личный рекорд пройденного этапа куда выше. Соберитесь.<br>';
+                } if (fl00==0 && ostf>Number(minsc)) {
+                pz1=1;
+                txta = txta + 'Вы попадате в ТОП-10 второго этапа. (На данный момент) <br>';
+                } if (fl00==1 && ostf>Number(scnow)) {
+                pz1=2;
+                txta = txta + 'Ваш результат в ТОП-10 пройденного этапа на данный момент улучшен! <br>';
+                }
+                if (pz!=0 || pz1!=0) { txta = '<br>Поздравляем!<br>' + txta;}
+                if (pz0!=0 || pz1!=0) {
+                document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                document.cookie = "lelrec15=" + sclvus + '$' + ostf;}
+                txta=txtb+txta
+                document.getElementById('end3').innerHTML = txta;
+
+                document.getElementById('butt').style.display='';
+
+
+            } if (fl3==0) {
+            document.getElementById('timer').innerHTML = Math.floor(ost/1000);
+            if (fl2==0) {
+                prim++;
+                ot='';
+                pr=(tas1[prim]-prim**2-otv)+simv[tasz[prim]]+tas2[prim];
+                document.getElementById('prim').innerHTML = pr + '=';
+                fl2=1;}
+            if (fl1==1) {
+                document.getElementById('prim').innerHTML = pr + '=' + ot;
+                fl1=0;
+                }
+                    }
+                    }
+
+        function Funcnj() {
+            if (prim<5) {sr = tas1[prim] - prim**2 - otv + tas2[prim];}
+            else {sr = tas1[prim] - prim**2 - otv - tas2[prim]}
+            if (ot.length == String(sr).length) {
+                if (ot == sr) {
+                fl2 = 0;
+                if (po==0) p0++;
+                if (po==1) p1++;
+                po = 0;
+                }
+                else {
+                    if (po==1){
+                        fl2 = 0;
+                        n++;}
+                    fl4=1;
+                    fl3=1;
+                    po++;
+                }
+                //document.getElementById('prnpr').innerHTML = 'Верных ответов: '+ p0 + p1 + ', <br> из них безошибочных: ' + p0 + '<br> двойных ошибок: ' + n;
+                //fl2 = 0;
+                    }
+            else {document.getElementById('prim').innerHTML = pr + ot;}
+                }
+
+        function Func1() {
+            fl1=1;
+            ot = ot + '1'
+            Funcnj();
+            }
+
+        function Func2() {
+            fl1=1;
+            ot = ot + '2'
+            Funcnj();
+            }
+
+        function Func3() {
+            fl1=1;
+            ot = ot + '3'
+            Funcnj();
+            }
+
+        function Func4() {
+            fl1=1;
+            ot = ot + '4'
+            Funcnj();
+            }
+
+        function Func5() {
+            fl1=1;
+            ot = ot + '5'
+            Funcnj();
+            }
+
+        function Func6() {
+            fl1=1;
+            ot = ot + '6'
+            Funcnj();
+            }
+
+        function Func7() {
+            fl1=1;
+            ot = ot + '7'
+            Funcnj();
+            }
+
+        function Func8() {
+            fl1=1;
+            ot = ot + '8'
+            Funcnj();
+            }
+
+        function Func9() {
+            fl1=1;
+            ot = ot + '9'
+            Funcnj();
+            }
+
+        function Func0() {
+            fl1=1;
+            ot = ot + '0';
+            Funcnj();
+            }
+
+        function Funcd() {
+            fl1=1;
+            if (ot.length == 1) {ot = '';}
+            if (ot.length > 1)   {ot = ot.substring(0, ot.length - 1);}
+            console.log(ot);
+            Funcnj();
+            }
+
+        function Funcend() {
+            document.getElementById('butt').style.display='none';
+            localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ostf);
+            localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);
+            localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);
+            localStorage.setItem('lvl2', ostf);
+            window.location.assign('level3');
+            }
+
+        Func();
+        timerId = setInterval(() => Func(), 10);
+
+        //document.getElementById('mas').innerHTML=mas[1][2]
+
+    </script>
+{% endblock %}

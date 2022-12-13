@@ -1,0 +1,96 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} ИТОГ ИГРЫ {% endblock %}
+{% block content %}
+
+<aside>
+    <h3 class="featuress" style="font-style: italic"> ИТОГИ ИГРЫ: </h3>
+</aside>
+        <div class="features">
+
+        <h5 class='centstr' style='color:#AD1457'> Этап 1. Разминка. </h5>
+        <h5 class='rightstr' style='color:#AD1457'> {{lv1}} </h5>
+
+        <h5 class='centstr' style='color: #0000ff'> Этап 2. "Сквозь десятки". </h5>
+        <h5 class='rightstr' style='color: #0000ff'> {{lv2}} </h5>
+
+        <h5 class='centstr' style='color: #2E7D32'> Этап 3. "Минуя сотни". </h5>
+        <h5 class='rightstr' style='color: #2E7D32'> {{lv3}} </h5>
+
+        <h5 class='centstr' style='color:#AD1457'> Этап 4. "Хитрое" умножение. </h5>
+        <h5 class='rightstr' style='color:#AD1457'> {{lv4}} </h5>
+
+        <h5 class='centstr' style='color: #0000ff'> Этап 5. "Life hack"-Деление. </h5>
+        <h5 class='rightstr' style='color: #0000ff'> {{lv5}} </h5>
+
+        <h4 class='centstr'> ВСЕГО: </h4>
+        <h4 class='rightstr'> {{su}} </h4>
+
+        <h5 class='centstr' style='color:#AD1457'> Бонус за безошибочные ответы:{{bon}}</h5>
+        <h5 class='rightstr' style='color:#AD1457'> {{bonz}} </h5>
+        <div style="clear: left"></div>
+        </br>
+
+        <h2 style="font-style: italic; font-size: 28px;" id = 'txt1'> </h2>
+        <h2 style="font-style: italic; font-size: 28px;" id = 'txt2'> </h2>
+        </br></br>
+        <h2 style="font-style: italic; font-size: 24px; float: center;" > {{txt3}} </h2>
+        <h2 style="font-style: italic; font-size: 20px; float: right;" > {{txt4}} </h2>
+        </br></br></br>
+        <h4 id = 'wait'> </h4>
+        <a href="{% url 'toptab' %}" id = "butt" class="btn btn-success" onclick="Func()"> ТОП ИГРОКОВ </a>
+
+    </div>
+
+    <style>
+
+
+   .centstr {
+    float: left;
+    width: 75%;
+    text-align: center;
+   }
+   .rightstr {
+    float: left;
+    width: 25%;
+    text-align: left;
+   }
+     </style>
+
+    <script>
+    t = '{{t}}';
+    tx = '{{tx}}';
+    sum = '{{sum}}';
+    scold = '{{scold}}';
+    ds = '{{ds}}';
+    fl = {{fl}};
+    localStorage.setItem('key3', Number(localStorage.getItem('key3'))+1);
+    if (localStorage.getItem('key3')>1) {
+    document.getElementById('txt2').style.display='none';}
+    if (fl == 1){
+        txt1 = 'Поздравляем!<br> Вы набрали: ' + sum + t +',<br> что – ' + tx + '.';
+        txt2 = 'и побили свой предыдущий рекорд(' + scold + ')<br> на ' + ds +'.';}
+    if (fl == 2){
+        txt1 = 'Вы набрали: ' + sum + t +', что – ' + tx + '.';
+        txt2 = 'Однако, не смогли побить <br> свой предыдущий рекорд: ' + scold + '.';}
+    if (fl == 3){
+        txt1 = 'Вы набрали: ' + sum + t +', что – ' + tx + '.';
+        txt2 = 'Тем самым повторили свой <br> предыдущий рекорд!';}
+    if (fl == 4){
+        txt1 = 'Поздравляем!<br> Вы набрали: ' + sum + t + '.';
+        txt2 = 'Для первого раза – <br> ' + tx + '!;'}
+    if (fl == 5) {
+        txt1 = 'УВЫ. Вам не удалось набрать ни одного балла.';
+        txt2 = 'Однако, так как это Ваша первая попытка, <br> дарим Вам 500 поощрительных очков.';}
+
+    document.getElementById('txt1').innerHTML = txt1;
+    document.getElementById('txt2').innerHTML = txt2;
+
+    function Func() {
+            document.getElementById('butt').style.display='none';
+            var txt2 = document.getElementById('wait');
+            txt2.innerHTML = 'ПОЖАЛУЙСТА, ОЖИДАЙТЕ';
+            txt2.style.fontStyle = 'Italic';
+            }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} Регистрация {% endblock %}
+{% block content %}
+
+<aside>
+    <h2 class="featuress" style="font-style: italic" id = 'nomb'> Зарегистрируйтесь, пожалуйста, заполнив 4 поля </h2>
+    <h4 class="featuress" style="font-style: italic" id = 'wait'> Логин должен быть уникальным, по нему Вы будете входить в приложение, не забудьте его </h4>
+</aside>
+
+
+    <div class="features">
+         <form action="" method="get">
+            {% csrf_token %}
+        <h4> <input type="text" id="inpu0" name="lg" placeholder='Уникальный Логин' maxlength="30"  size="20"> </h4>
+        <h4> <input type="text" id="inpu1" name="fam" placeholder='Ваша Фамилия' maxlength="25"  size="20"> </h4>
+        <h4> <input type="text" id="inpu2" name="name" placeholder='Ваше Имя' maxlength="25"  size="20"> </h4>
+        <h4> <input type="text" id="inpu3" name="kl" placeholder='Ваш класс (или отчество)' maxlength="25"  size="20"> </h4>
+
+             <h4 style="font-style: italic"> Логин должен быть довольно сложным, чтобы его не смогли повторить другие игроки. </h4>
+             <h4 style="font-style: italic"> Если введенный логин уже будет в базе данных, придется заполнить форму заново. </h4>
+             <h4 style="font-style: italic"> В ТОП таблице будут указаны Ваши ФИК (или ФИО)) </h4>
+        <h4 id = 'wait0'> </h4>
+        <button class="btn btn-success btn" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ВВЕСТИ </button></br></br>
+        <a href="{% url 'home' %}" id = 'butt2' class="btn btn-success btn-sm"> Начальное меню </a></br></br>
+
+    </form>
+    </div>
+    <script>
+
+    function Func() {
+        localStorage.setItem('vrk', 10000);
+        document.getElementById('butt1').style.display='none';
+        document.getElementById('butt2').style.display='none';
+
+        var txt2 = document.getElementById('wait0');
+        txt2.innerHTML = 'ПОЖАЛУЙСТА, ПОДОЖДИТЕ';
+        txt2.style.fontStyle = 'Italic';
+      }
+
+
+
+    </script>
+{% endblock %}
