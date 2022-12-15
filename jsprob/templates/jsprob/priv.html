@@ -21,7 +21,7 @@
         {% else %}
         </br>
         {% if fl0 == '0' %}
-        <a href="{% url 'level1' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a></br></br>
+        <a href="{% url 'begin' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a></br></br>
         {% else %}
         <h4> ПОСМОТРИТЕ, ПОЖАЛУЙТСА, ОБЪЯВЛЕНИЕ НИЖЕ! </h4></br>
         {% endif %}
@@ -68,6 +68,7 @@
     var txt2 = document.getElementById('wait');
     txt2.innerHTML = 'ПОЖАЛУЙСТА, ОЖИДАЙТЕ';
     txt2.style.cssText = 'font-style: italic; font-size: 36px; margin-top: 50px;';
+    localStorage.setItem('key3',0);
     localStorage.setItem('kontr', 0);
     localStorage.setItem('pravresh', 0);
     localStorage.setItem('bezosh', 0);

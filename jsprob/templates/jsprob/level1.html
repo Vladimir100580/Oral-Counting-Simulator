@@ -1,24 +1,23 @@
 {% extends 'jsprob/shabl.html' %}
-{% block title %} Этап {% endblock %}
+{% block title %} {{lv}} {{namlv}} {% endblock %}
 {% block content %}
 
     <div class="features">
-        <h2 style="font-style: italic; font-size: 96px;" > Этап 1. </h2>
-        <h2 style="font-style: italic; font-size: 76px;" > Разминка </h2>
-        <h2 style="font-style: italic; font-size: 52px;" > Успеха, {{nm}} </h2></br>
+        <h2 style="font-style: italic; font-size: 96px;" > {{lv}} </h2>
+        <h2 style="font-style: italic; font-size: 76px;" > {{namlv}} </h2>
+        <h2 style="font-style: italic; font-size: 52px;" > {{usp}} </h2></br>
         <h2 id ='wt'></h2>
         <button class="btn btn-success btn-lg" id = 'butt'  onclick="Func()"> НАЧАТЬ </button></br></br>
 
     </div>
     <script>
     function Func() {
-            localStorage.setItem('key3',0);
             document.getElementById('butt').style.display='none';
             document.getElementById('wt').innerHTML = 'GO!';
             document.getElementById('wt').style.cssText = 'font-style: italic; font-size: 112px;'
             document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = "lelrec15=e";
-            window.location.assign('list1');
+            window.location.assign('{{list}}');
             }
 
     </script>
