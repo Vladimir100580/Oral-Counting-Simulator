@@ -11,11 +11,6 @@ aside {
     border: 2px solid #800000;
 }
 
-aside img {
-    width: 0px;
-    float: left;
-}
-
 aside .logo {
     font-size: 0px;
     margin-left: 0px;
@@ -24,49 +19,10 @@ aside .logo {
     top: 1px;
 }
 
-main h5 {
-    margin-top: 0px;
-}
-
-
-aside h3 {
-    font-size: 25px;
-    margin-left: 0px;
-    margin-top: 0px;
-    font-weight: boult;
-}
-
-aside ul {list-style: none}
-
 aside button {
     margin-left: 0px;
     }
 
-aside ul li {
-    color: #ffff;
-    display: block;
-    margin-left: -15px;
-    margin-top: 5px;
-    }
-
-aside ul a {
-    text-decoration: none;
-    }
-
-aside ul li:hover, aside ul a:hover {
-    color: #FFB6C1;
-    text-decoration: none;
-}
-
-main1 {
-    float: left;
-    background: #40E0D0;
-    width: 60%;
-    padding: 2%;
-    height: 100vh;
-    color: #fff;
-    border-up: 3px solid #800000;
-}
 
 main .features {
     float: left;
@@ -92,16 +48,6 @@ main form {
     margin-top 20px;
 }
 
-main .features h1 {font-size: 40px;}
-main .features p {max-width: 500px; margin: 20px auto}
-
-select1 {
-   font-size: 25px;
-}
-
-h6 {
-   float: up
-}
 
  * {
       touch-action: manipulation;

@@ -4,6 +4,9 @@
 
 <aside>
     <h2 class="featuress" style="font-style: italic" > {{txt1}} </h2>
+    {% if txtpz != '' %}
+    <h2 class="featuress" style="font-style: italic" > Великолепно! </h2>
+    {% endif %}
 </aside>
 
 
@@ -11,10 +14,10 @@
             {% csrf_token %}
 
     <div class="features">
-         <h3> {{txt2}} </h3>
-         <h3> {{txt3}} </h3>
-         <h3> {{txt4}} </h3>
-         <h3> {{txt5}} </h3>
+
+         <h4> {{txt5}} </h4><br>
+         <h3> {{txt6}} </h3><br>
+         <h5> {{txt2}} </h5>
         </br>
         <h2 id ='wt' style="font-style: italic"></h2>
         <button class="btn btn-danger btn" id = 'butt' type="submit" name="prod" > ПРОДОЛЖИТЬ </button></br></br>

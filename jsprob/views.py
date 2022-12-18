@@ -484,13 +484,15 @@ def itoglv(request):
         if mn % 10 == 1: tx = ' очко.'
     vstsl = ['На разминке ', 'Во втором этапе ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
     txt1 = vstsl + 'Вы набрали ' + ud[1] + tx
-    txt2 = 'Решено правильно: ' + ud[2] + ','
-    txt3 = 'из них безошибочно: ' + ud[3] + ','
-    txt4 = 'двойных ошибок: ' + str(int(10-(float(ud[2]))));
-    txt5 =''
+    txt2 = 'Решено правильно: ' + ud[2] + '; из них безошибочно: ' + ud[3] + '. '
+    txt5 = ''
+    txtpz = ''
+    txt6 = ''
 
     if float(ud[1]) > float(sclvus):
-        txt5 = 'Вы улучшили собственный рекорд пройденного этапа на ' + str(int(float(ud[1]) - float(sclvus))) + '.'
+        txt5 = 'Вы улучшили собственный рекорд пройденного этапа на ' + str(int(float(ud[1]) - float(sclvus))) + '. '\
+               + ' (' + str(int(float(sclvus))) + ' --> ' + str(int(float(ud[1]))) + ')'
+
         mas0 = [i for i in DataUser.objects.filter(scoresl1__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
         if ud[0] == '1':
             mas0 = [i for i in
@@ -528,9 +530,45 @@ def itoglv(request):
             DataUser.objects.filter(log=usna).update(scoresl6=ud[1])
             mas1 = [i for i in
                     DataUser.objects.filter(scoresl6__gt=ud[1]).order_by('-' + krit).values_list(krit, 'fik')]
-        print('sclvus:', sclvus, '  ud[1]:', ud[1])
+        pos_old = int(len(mas0) + 1)
+        pos_now = int(len(mas1) + 1)
+        if pos_now < 11:
+            if pos_old == pos_now:
+                txtpz = 'Поздравляем!'
+                if pos_now != 1:
+                    txt6 = 'Вы еще прочнее укрепились на ' + str(pos_now) + '-позиции в TOP-10 пройденного уровня.'
+                else:
+                    txt6 = 'Вы еще сильнее утвердили свое ЛИДЕРСТВО в пройденном этапе.'
+            else:
+                if pos_old > 10:
+                    if pos_now != 1:
+                        txtpz = 'ПОЗДРАВЛЯЕМ!'
+                        txt6 = 'На данный момент Вы вошли в TOП-10 пройденного уровня! \
+                                 ( ' + str(pos_now) + ' место )'
+                    else:
+                        txtpz = 'ПОЗДРАВЛЯЕМ!!!'
+                        txt6 = 'На данный момент Вы врываетесь в ТОП-10 и становитесь ЧЕМПИОНОМ пройденного уровня.'
+                else:
+                    if pos_now != 1:
+                        txtpz = 'ПОЗДРАВЛЯЕМ!'
+                        txt6 = 'Вы улучшили свою позицию в TOП-10 пройденного этапа. ( ' +\
+                                 str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                    else:
+                        txtpz = 'ПОЗДРАВЛЯЕМ!!!'
+                        txt6 = 'На данный момент Вы становитесь ЧЕМПИОНОМ пройденного уровня!'
+        else:
+            if pos_old != pos_now:
+                txt6 = 'В TOП-е пройденного этапа Ваше место стало выше. ( ' +\
+                                                 str(pos_old) + ' --> ' + str(pos_now) + ' )'
+    else:
+        if float(ud[1]) < float(sclvus)*.8:
+            txt6 = 'Соберитесь. Ваш личный рекорд пройденного этапа куда выше.'
+        if float(ud[1]) > float(sclvus)*.90 and float(ud[1]) != float(sclvus):
+            txt6 = 'Еще немного и Ваш рекорд пройденного этапа ( ' + str(int(float(sclvus))) + ' ) был бы побит.'
 
-        print('mas0:', mas0, len(mas0), '   mas1:', mas1, len(mas1))
+        # print('sclvus:', sclvus, '  ud[1]:', ud[1])
+        #
+        # print('mas0:', mas0, len(mas0), '   mas1:', mas1, len(mas1))
 
     if request.method == 'GET':
         answer = request.GET
@@ -542,7 +580,7 @@ def itoglv(request):
             return render(request, 'jsprob/level1.html',
                           {'usp': usp, 'lv': meslv, 'namlv': mesnam, 'list': 'list' + str(lastlv + 1)})
     return render(request, 'jsprob/itoglv.html',
-                  {'txt1': txt1, 'txt2': txt2, 'txt3': txt3, 'txt4': txt4, 'txt5': txt5})
+                  {'txt1': txt1, 'txt2': txt2, 'txt5': txt5, 'txt6': txt6, 'txtpz': txtpz})
 
 
 class Examples:
