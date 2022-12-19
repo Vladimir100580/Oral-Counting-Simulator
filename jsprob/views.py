@@ -563,7 +563,7 @@ def itoglv(request):
     else:
         if float(ud[1]) < float(sclvus)*.8:
             txt6 = 'Соберитесь. Ваш личный рекорд пройденного этапа куда выше.'
-        if float(ud[1]) > float(sclvus)*.90 and float(ud[1]) != float(sclvus):
+        if float(ud[1]) > float(sclvus)*.97 and float(ud[1]) != float(sclvus):
             txt6 = 'Еще немного и Ваш рекорд пройденного этапа ( ' + str(int(float(sclvus))) + ' ) был бы побит.'
 
         # print('sclvus:', sclvus, '  ud[1]:', ud[1])
@@ -573,7 +573,7 @@ def itoglv(request):
     if request.method == 'GET':
         answer = request.GET
         if 'prod' in answer:
-
+            if ud[0] == '5': return redirect('home')  #'5' - количество этапов
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
             mesnam = ['"Сквозь десятки"', "Минуя сотни", '"Хитрое" умножение', '"Life hack"-Деление', 'Назв 6.'][lastlv - 1]
             usp = ['Удачи, ' + request.session['ustns4usennam'] + '!', '', '', '', '', ''][lastlv - 1]

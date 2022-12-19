@@ -1,8 +1,6 @@
 from random import randint
 
 
-
-
 mas = [0 for i in range(10)]
 print(mas)
 n = 0

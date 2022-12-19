@@ -327,6 +327,24 @@
             }
 
         function Funcend() {
+            document.getElementById('byni').style.display='none';
+            document.getElementById('btn1').style.display='none';
+            document.getElementById('btn2').style.display='none';
+            document.getElementById('btn3').style.display='none';
+            document.getElementById('btn4').style.display='none';
+            document.getElementById('btn5').style.display='none';
+            document.getElementById('btn6').style.display='none';
+            document.getElementById('btn7').style.display='none';
+            document.getElementById('btn8').style.display='none';
+            document.getElementById('btn9').style.display='none';
+            document.getElementById('btn0').style.display='none';
+            document.getElementById('btnd').style.display='none';
+            document.getElementById('vy4').style.display='none';
+            document.getElementById('prim').style.display='';
+            document.getElementById('prnpr').style.display='none';
+            document.getElementById('timer').style.display='none';
+            document.getElementById('prim').innerHTML = 'ЭТАП ЗАВЕРШЕН!'
+            document.getElementById('prim').style.cssText = 'margin-top:50px;';
             localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ost);
             localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);
             localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);
