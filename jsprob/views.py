@@ -110,9 +110,10 @@ def itog(request):
         if float(ud[0]) < float(ud[1]):
             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl5=ud[1])
 
-    usna = request.user.username
+    usna = request.session['ustns4usen']
     if (usna == None): return redirect('home')
     tts = request.COOKIES.get('totsumm').split('(#)$)')
+    print('tts', tts)
     bonz = int(float(tts[2]) * 100)
     sum = int(float(tts[0])) + bonz
     bon = ' 100 X ' + str(int(float(tts[2]))) + ':'
@@ -387,37 +388,37 @@ def begin(request):
                   {'usp': 'Успеха, ' + usefio[1], 'lv': 'Этап 1.', 'namlv': 'Разминка', 'list': 'list1'})
 
 
-def level2(request):
-    ud = request.COOKIES.get('lelrec15').split('$')
-    usefio = request.user.first_name.split('$#$%')
-    if ud[0] != 'e':
-        if float(ud[0]) < float(ud[1]):
-            DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl1=ud[1])
-    return render(request, 'jsprob/level2.html', {'nm': usefio[1]})
-
-
-def level3(request):
-    ud = request.COOKIES.get('lelrec15').split('$')
-    if ud[0] != 'e':
-        if float(ud[0]) < float(ud[1]):
-            DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl2=ud[1])
-    return render(request, 'jsprob/level3.html')
-
-
-def level4(request):
-    ud = request.COOKIES.get('lelrec15').split('$')
-    if ud[0] != 'e':
-        if float(ud[0]) < float(ud[1]):
-            DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl3=ud[1])
-    return render(request, 'jsprob/level4.html')
-
-
-def level5(request):
-    ud = request.COOKIES.get('lelrec15').split('$')
-    if ud[0] != 'e':
-        if float(ud[0]) < float(ud[1]):
-            DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl4=ud[1])
-    return render(request, 'jsprob/level5.html')
+# def level2(request):
+#     ud = request.COOKIES.get('lelrec15').split('$')
+#     usefio = request.user.first_name.split('$#$%')
+#     if ud[0] != 'e':
+#         if float(ud[0]) < float(ud[1]):
+#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl1=ud[1])
+#     return render(request, 'jsprob/level2.html', {'nm': usefio[1]})
+#
+#
+# def level3(request):
+#     ud = request.COOKIES.get('lelrec15').split('$')
+#     if ud[0] != 'e':
+#         if float(ud[0]) < float(ud[1]):
+#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl2=ud[1])
+#     return render(request, 'jsprob/level3.html')
+#
+#
+# def level4(request):
+#     ud = request.COOKIES.get('lelrec15').split('$')
+#     if ud[0] != 'e':
+#         if float(ud[0]) < float(ud[1]):
+#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl3=ud[1])
+#     return render(request, 'jsprob/level4.html')
+#
+#
+# def level5(request):
+#     ud = request.COOKIES.get('lelrec15').split('$')
+#     if ud[0] != 'e':
+#         if float(ud[0]) < float(ud[1]):
+#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl4=ud[1])
+#     return render(request, 'jsprob/level5.html')
 
 
 def list1(request):
@@ -426,7 +427,7 @@ def list1(request):
     fio = usefio[0] + ' ' + usefio[1] + ' ' + usefio[2]
     # Du = Defuser(fio, 1, request.session['ustns4usen'])
     return render(request, 'jsprob/list1.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot})
+                  {'ti': 40000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot})
 
 
 def list2(request):
@@ -436,7 +437,7 @@ def list2(request):
     Du = Defuser(fio, 2, request.session['ustns4usen'])
     return render(request, 'jsprob/list2.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 70000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def list3(request):
@@ -446,7 +447,7 @@ def list3(request):
     Du = Defuser(fio, 3, request.session['ustns4usen'])
     return render(request, 'jsprob/list3.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 80000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def list4(request):
@@ -456,7 +457,7 @@ def list4(request):
     Du = Defuser(fio, 4, request.session['ustns4usen'])
     return render(request, 'jsprob/list4.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 100000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def list5(request):
@@ -466,7 +467,7 @@ def list5(request):
     Du = Defuser(fio, 5, request.session['ustns4usen'])
     return render(request, 'jsprob/list5.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 90000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def itoglv(request):
@@ -573,7 +574,7 @@ def itoglv(request):
     if request.method == 'GET':
         answer = request.GET
         if 'prod' in answer:
-            if ud[0] == '5': return redirect('home')  #'5' - количество этапов
+            if ud[0] == '5': return redirect('itog')  #'5' - количество этапов
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
             mesnam = ['"Сквозь десятки"', "Минуя сотни", '"Хитрое" умножение', '"Life hack"-Деление', 'Назв 6.'][lastlv - 1]
             usp = ['Удачи, ' + request.session['ustns4usennam'] + '!', '', '', '', '', ''][lastlv - 1]

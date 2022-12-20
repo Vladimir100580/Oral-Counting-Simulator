@@ -32,6 +32,7 @@
         tas2 = {{tas2}};
         tasz = {{tasz}};
         otv = {{otv}};
+        ti = {{ti}};
 
         simv = ['+', '–', '•', ':'];
         prim=-1;
@@ -39,7 +40,7 @@
         localStorage.setItem('kontr', kon);
         var na4 = new Date() - new Date(0);
         document.getElementById('butt').style.display='none';
-        ds = 40000 - (new Date() - new Date(0) - Number(na4));
+        ds = ti - (new Date() - new Date(0) - Number(na4));
         fl1=0;
         fl2=0;
         fl3=0;
@@ -53,13 +54,13 @@
         ot='';
 
         function Func() {
-            ost = 40000 - (new Date() - new Date(0) - Number(na4));
+            ost = ti - (new Date() - new Date(0) - Number(na4));
             if (Math.abs(ost-ds)>3000) {
             na4 = new Date() - new Date(0) + 120000;
             alert('Контроль безопасности обнаружил смещение времени! Этап защитан не будет!');
             }
             ds = ost;
-            if (kon!=1 || ost>40000) {ost=0;}
+            if (kon!=1 || ost>ti) {ost=0;}
             addEventListener("keyup", function(event) {kk=0;});
             addEventListener("keydown", function(event) {
                   if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)

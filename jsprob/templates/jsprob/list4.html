@@ -30,13 +30,14 @@
         tas2 ={{tas2}};
         tasz ={{tasz}};
         otv = {{otv}};
+        ti = {{ti}};
         simv = ['+', '–', '•', ':'];
         prim=-1;
         kon = Number(localStorage.getItem('kontr'))+1;
         localStorage.setItem('kontr', kon);
         var na4 = new Date() - new Date(0)
         document.getElementById('butt').style.display='none';
-        ds = 100000 - (new Date() - new Date(0) - Number(na4));
+        ds = ti - (new Date() - new Date(0) - Number(na4));
         fl2=0;
         fl1=0;
         fl3=0;
@@ -50,13 +51,13 @@
         ot='';
 
         function Func() {
-            ost = 100000 - (new Date() - new Date(0) - Number(na4)) - 6000*n;
+            ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
             if (Math.abs(ost-ds)>8000) {
             na4 = new Date() - new Date(0) + 120000;
             alert('Контроль безопасности обнаружил смещение времени! Этап защитан не будет!');
             }
             ds = ost;
-            if (kon!=4 || ost>100000) {ost=0;}
+            if (kon!=4 || ost>ti) {ost=0;}
             addEventListener("keyup", function(event) {kk=0;});
             addEventListener("keydown", function(event) {
                   if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)
@@ -269,7 +270,7 @@
             localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ost);
             localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);
             localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);
-            localStorage.setItem('lvl3', ost);
+            localStorage.setItem('lvl4', ost);
             document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = "lelrec15=" + 4 + '$' + ost + '$' + (p0 + p1) + '$' + p0;
             clearInterval(timerId);

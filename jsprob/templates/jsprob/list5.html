@@ -31,13 +31,14 @@
         tas2 ={{tas2}};
         tasz ={{tasz}};
         otv = {{otv}};
+        ti = {{ti}};
         simv = ['+', '–', '•', ':'];
         prim=-1;
         kon = Number(localStorage.getItem('kontr'))+1;
         localStorage.setItem('kontr', kon);
         var na4 = new Date() - new Date(0)
         document.getElementById('butt').style.display='none';
-        ds = 90000 - (new Date() - new Date(0) - Number(na4));
+        ds = ti - (new Date() - new Date(0) - Number(na4));
         fl2=0;
         fl1=0;
         fl3=0;
@@ -51,13 +52,13 @@
         ot='';
 
         function Func() {
-            ost = 90000 - (new Date() - new Date(0) - Number(na4)) - 5000*n;
+            ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
             if (Math.abs(ost-ds)>7000) {
             na4 = new Date() - new Date(0) + 120000;
             alert('Контроль безопасности обнаружил смещение времени! Этап защитан не будет!');
             }
             ds = ost;
-            if (kon!=5 || ost>90000) {ost=0;}
+            if (kon!=5 || ost>ti) {ost=0;}
             addEventListener("keyup", function(event) {kk=0;});
             addEventListener("keydown", function(event) {
                   if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)
@@ -272,20 +273,16 @@
             localStorage.setItem('lvl5', ost);
             document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = "lelrec15=" + 5 + '$' + ost + '$' + (p0 + p1) + '$' + p0;
-            clearInterval(timerId);
             var txt2 = document.getElementById('wait');
             txt2.innerHTML = 'ПОЖАЛУЙСТА, ПОДОЖДИТЕ';
             txt2.style.fontStyle = 'Italic';
-            localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);
-            localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);
-            localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ostf);
-            localStorage.setItem('lvl5', ost);
             document.cookie = "totsumm=" + localStorage.getItem('totsum') + '(#)$)'
              + localStorage.getItem('pravresh') + '(#)$)' + localStorage.getItem('bezosh') + '(#)$)'
              + localStorage.getItem('lvl1') + '(#)$)' + localStorage.getItem('lvl2') + '(#)$)'
               + localStorage.getItem('lvl3') + '(#)$)' + localStorage.getItem('lvl4') + '(#)$)'
                + localStorage.getItem('lvl5');
             localStorage.setItem('key1', 0);
+            clearInterval(timerId);
             window.location.assign('itoglv');
             }
 
