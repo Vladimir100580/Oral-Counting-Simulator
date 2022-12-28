@@ -78,6 +78,19 @@
     localStorage.setItem('lvl3', 0);
     localStorage.setItem('lvl4', 0);
     localStorage.setItem('lvl5', 0);
+    localStorage.setItem('lvl6', 0);
+    i = 0;
+    st = '';
+    while(i < 10)
+        {
+        n = Math.floor(Math.random() * 50) + 11;
+        if (i != 9) {st = st + n + '$';}
+        else {st = st + n;}
+        i++;
+        }
+    localStorage.setItem('shifr', st);
+    document.cookie = "keyshif=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = "keyshif=" + st;
     }
 
     </script>

@@ -1,9 +1,24 @@
 import time
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from random import randint
 from .models import DataUser, Indexs
 from django.contrib.auth import authenticate, login
+import json
+
+
+
+# def setcookie(request):
+#
+#     response = HttpResponse()
+#     response.set_cookie('bookname0', 'Sherlock Holmes0')
+#     response.set_cookie('bookname2', 'Sherlock Holmes2')
+#     response.delete_cookie('bookname')
+#     tts = request.COOKIES.get('bookname')
+#     print(tts)
+#     print('cookie', request.COOKIES)
+#     return response
 
 
 def hello(request):
@@ -283,7 +298,20 @@ def itog(request):
           '«Когда сядешь вкушать пищу с властелином, то тщательно наблюдай, что перед тобою, и поставь преграду в гортани твоей, если ты алчен.» Притчи Соломона 23:1-2',
           '«Не вкушай пищи у человека завистливого и не прельщайся лакомыми яствами его; потому что, каковы мысли в душе его, таков и он;...» Притчи Соломона 23:6-7',
           '«В уши глупого не говори, потому что он презрит разумные слова твои.» Притчи Соломона 23:9',
-          '«Приложи сердце твое к учению и уши твои — к умным словам.» Притчи Соломона 23:12'
+          '«Приложи сердце твое к учению и уши твои — к умным словам.» Притчи Соломона 23:12',
+          '«Не смотри на вино, как оно краснеет, как оно ухаживается ровно: впоследствии, как змей, оно укусит, и ужалит, как аспид;» Притчи Соломона 23:31-32',
+          '«Мудростью устрояется дом и разумом утверждается, и с умением внутренности его наполняются всяким драгоценным и прекрасным имуществом.» Притчи Соломона 24:3-4',
+          '«Человек мудрый силен, и человек разумный укрепляет силу свою.» Притчи Соломона 24:5',
+          '«Не негодуй на злодеев и не завидуй нечестивым, потому что злой не имеет будущности, — светильник нечестивых угаснет.» Притчи Соломона 24:19-20',
+          '«Удали неправедного от царя, и престол его утвердится правдою.» Притчи Соломона 25:5',
+          '«Не вступай поспешно в тяжбу: иначе что будешь делать при окончании, когда соперник твой осрамит тебя?» Притчи Соломона 25:8',
+          '«Веди тяжбу с соперником твоим, но тайны другого не открывай, дабы не укорил тебя услышавший это, и тогда бесчестие твое не отойдет от тебя.» Притчи Соломона 25:9-10',
+          '«Кротость склоняет к милости вельможа, и мягкий язык переламывает кость.» Притчи Соломона 25:15',
+          '«Не учащай входить в дом друга твоего, чтобы он не наскучил тобою и не возненавидел тебя.» Притчи Соломона 25:17',
+          '«Что молот и меч и острая стрела, то человек, произносящий ложное свидетельство, против ближнего своего.» Притчи Соломона 25:18',
+          '«Если голоден враг твой, накорми его хлебом; и если он жаждет, напой его водою: ибо, делая сие, ты собираешь горящие угли на голову его и, Госопдь воздаст тебе.» Притчи Соломона 25:21-22',
+          '«Как нехорошо есть много меду, так домогаться славы не есть слава.» Притчи Соломона 25:27',
+          '«Что город разрушенный без стен, то человек, не владеющий духом своим.» Притчи Соломона 25:28'
           ]
 
     pr = mp[randint(0, len(mp) - 1)].split('Притчи')
@@ -375,6 +403,8 @@ def reset(request):
 
 def begin(request):
     usna = request.user.username
+    # ud = request.COOKIES.get('keyshif').split('$')
+    # print('ud=', ud)
     tt = DataUser.objects.get(log=usna)
     if tt.scores > 0:
         DataUser.objects.filter(log=usna).update(pop=(tt.pop + 1))
@@ -426,8 +456,8 @@ def list1(request):
     usefio = request.user.first_name.split('$#$%')
     fio = usefio[0] + ' ' + usefio[1] + ' ' + usefio[2]
     # Du = Defuser(fio, 1, request.session['ustns4usen'])
-    return render(request, 'jsprob/list1.html',
-                  {'ti': 40000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot})
+    data = {'ti': 4000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
+    return render(request, 'jsprob/list1.html', data)
 
 
 def list2(request):
@@ -437,7 +467,7 @@ def list2(request):
     Du = Defuser(fio, 2, request.session['ustns4usen'])
     return render(request, 'jsprob/list2.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 70000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 7000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def list3(request):
@@ -447,7 +477,7 @@ def list3(request):
     Du = Defuser(fio, 3, request.session['ustns4usen'])
     return render(request, 'jsprob/list3.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 80000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 8000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def list4(request):
@@ -457,7 +487,7 @@ def list4(request):
     Du = Defuser(fio, 4, request.session['ustns4usen'])
     return render(request, 'jsprob/list4.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 100000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 10000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def list5(request):
@@ -467,7 +497,7 @@ def list5(request):
     Du = Defuser(fio, 5, request.session['ustns4usen'])
     return render(request, 'jsprob/list5.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 90000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                   'ti': 9000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
 
 
 def itoglv(request):
@@ -491,7 +521,7 @@ def itoglv(request):
     txt6 = ''
 
     if float(ud[1]) > float(sclvus):
-        txt5 = 'Вы улучшили собственный рекорд пройденного этапа на ' + str(int(float(ud[1]) - float(sclvus))) + '. '\
+        txt5 = 'Вы улучшили собственный рекорд пройденного этапа на ' + str(int(float(ud[1]) - float(sclvus))) + '. ' \
                + ' (' + str(int(float(sclvus))) + ' --> ' + str(int(float(ud[1]))) + ')'
 
         mas0 = [i for i in DataUser.objects.filter(scoresl1__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
@@ -552,19 +582,19 @@ def itoglv(request):
                 else:
                     if pos_now != 1:
                         txtpz = 'ПОЗДРАВЛЯЕМ!'
-                        txt6 = 'Вы улучшили свою позицию в TOП-10 пройденного этапа. ( ' +\
-                                 str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                        txt6 = 'Вы улучшили свою позицию в TOП-10 пройденного этапа. ( ' + \
+                               str(pos_old) + ' --> ' + str(pos_now) + ' )'
                     else:
                         txtpz = 'ПОЗДРАВЛЯЕМ!!!'
                         txt6 = 'На данный момент Вы становитесь ЧЕМПИОНОМ пройденного уровня!'
         else:
             if pos_old != pos_now:
-                txt6 = 'В TOП-е пройденного этапа Ваше место стало выше. ( ' +\
-                                                 str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                txt6 = 'В TOП-е пройденного этапа Ваше место стало выше. ( ' + \
+                       str(pos_old) + ' --> ' + str(pos_now) + ' )'
     else:
-        if float(ud[1]) < float(sclvus)*.8:
+        if float(ud[1]) < float(sclvus) * .8:
             txt6 = 'Соберитесь. Ваш личный рекорд пройденного этапа куда выше.'
-        if float(ud[1]) > float(sclvus)*.97 and float(ud[1]) != float(sclvus):
+        if float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
             txt6 = 'Еще немного и Ваш рекорд пройденного этапа ( ' + str(int(float(sclvus))) + ' ) был бы побит.'
 
         # print('sclvus:', sclvus, '  ud[1]:', ud[1])
@@ -574,9 +604,10 @@ def itoglv(request):
     if request.method == 'GET':
         answer = request.GET
         if 'prod' in answer:
-            if ud[0] == '5': return redirect('itog')  #'5' - количество этапов
+            if ud[0] == '5': return redirect('itog')  # '5' - количество этапов
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
-            mesnam = ['"Сквозь десятки"', "Минуя сотни", '"Хитрое" умножение', '"Life hack"-Деление', 'Назв 6.'][lastlv - 1]
+            mesnam = ['"Сквозь десятки"', "Минуя сотни", '"Хитрое" умножение', '"Life hack"-Деление', 'Назв 6.'][
+                lastlv - 1]
             usp = ['Удачи, ' + request.session['ustns4usennam'] + '!', '', '', '', '', ''][lastlv - 1]
             return render(request, 'jsprob/level1.html',
                           {'usp': usp, 'lv': meslv, 'namlv': mesnam, 'list': 'list' + str(lastlv + 1)})

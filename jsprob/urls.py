@@ -27,6 +27,7 @@ urlpatterns = [
     path('instr', views.instr, name='instr'),
     path('reset', views.reset, name='reset'),
     path('toplvl', views.toplvl, name='toplvl'),
+    # path('setcookie', views.setcookie, name='setcookie'),
 
     path('login/',
          LoginView.as_view
