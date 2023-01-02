@@ -4,7 +4,7 @@
 
 <aside>
 
-    <h2 class="featuress" style="font-style: italic" > ТОП-7 участников турнира </h2>
+    <h2 class="featuress" style="font-style: italic" > ТОП-10 участников турнира </h2>
     <h4 class="featuress" style="font-style: italic" > по каждому этапу в отдельности </h4>
 
 </aside>
@@ -17,31 +17,38 @@
                      {% if mas.0 == '1' %}
                      <h6 class='leftstr'style='color:#AD1457'> {{mas.1}} </h6>
                      <h6 class='centstr'style='color:#AD1457'> {{mas.2}} </h6>
-
                      {% endif %}
-                     {% if mas.0 == '2' %}
+
+                     {% if mas.0 == '3' %}
                      <h5 class='leftstr' style='color: white'> {{mas.1}} </h5>
                      <h5 class='centstr'style='color: white'> {{mas.2}} </h5>
-
                      {% endif %}
+
                      {% if mas.0 == '0' %}
                      <h6 class='leftstr' style='color: #0000ff'> {{mas.1}} </h6>
                      <h6 class='centstr'style='color: #0000ff'> {{mas.2}} </h6>
                      {% endif %}
+
+                     {% if mas.0 == '2' %}
+                     <h6 class='leftstr' style='color: #2E7D32'> {{mas.1}} </h6>
+                     <h6 class='centstr'style='color: #2E7D32'> {{mas.2}} </h6>
+                     {% endif %}
+
                 {% endfor %}
                 <div style="height:200px"></div>
                 </br>
         {% endfor %}
         <div style="clear: left"></div>
-        </br>
+        <!--</br>
         <h4 style="color: red; font-style: italic"> ВНИМАНИЕ! </h4>
         <h5 style="font-style: italic"> Если Вы неправильно внесли свои данные при регистрации и желаете сохранить свои достижения в ТОП-е, </h5>
         <h5 style="font-style: italic"> <a href="https://vk.com/vovartus" target="_blank"> обозначьте свои истинные ФИО в ЛС </a> . Участники с некорректными ФИО(ФИК) будут удалены! </h5>
-
+        -->
         </br>
         <h3 id ='wt' style="font-style: italic"></h3>
         <a href="{% url 'home' %}" id = 'butt1' class="btn btn-success" onclick="Func()"> СТАРТОВОЕ МЕНЮ </a>
         <a href="{% url 'toptab' %}" id = 'butt2' class="btn btn-success" onclick="Func()"> Общий ТОП </a>
+        <a href="{% url 'topday' %}" id = 'butt3' class="btn btn-success" onclick="Func()"> ТОП ДНЯ </a>
         </br></br>
     </div>
     <style>
@@ -63,6 +70,7 @@
         function Func() {
                 document.getElementById('butt1').style.display='none';
                 document.getElementById('butt2').style.display='none';
+                document.getElementById('butt3').style.display='none';
                 document.getElementById('wt').innerHTML = 'Пожалуйста, подождите.';}
     </script>
 {% endblock %}

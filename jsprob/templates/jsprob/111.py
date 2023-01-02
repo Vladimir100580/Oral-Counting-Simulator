@@ -1,6 +1,7 @@
 from random import randint
 
-
+tt = [[] for i in range(5)]
+print(tt)
 mas = [0 for i in range(10)]
 print(mas)
 n = 0

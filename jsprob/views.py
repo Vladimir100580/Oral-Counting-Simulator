@@ -518,7 +518,6 @@ def itog(request):
           ]
     pr = mp[randint(0, len(mp) - 1)].split('Притчи')
     DataUser.objects.filter(log=usna).update(pole2='1')
-
     return render(request, 'jsprob/itog.html', {'txt': txt, 'txt1': txt1, 'txt2': txt2, 'txt3': txt3,
                                                 'txt4': txt4, 'txt5': txt5, 'txt6': txt6, 'txt7': pr[0],
                                                 'txt8': 'Притчи' + pr[1],
@@ -530,53 +529,86 @@ def itog(request):
 
 def toptab(request):
     tt = []
-    usna = request.user.username
+    try:
+        usna = request.user.first_name.replace('$#$%', ' ')
+    except:
+        usna = ''
     n = 0
-    for r in DataUser.objects.order_by('-scores')[:100]:
+    for r in DataUser.objects.order_by('-scores'):
         if r.scores != 0:
             n += 1
-            fio = str(n) + ') ' + r.pole1
-            if r.log != usna:
-                if n % 3 == 1:
-                    tt.append(['1', fio, r.scores, r.pole2.split('$')[0] + '/' + r.pole2.split('$')[2]])
-                if n % 3 == 0:
-                    tt.append(['4', '', '', '', '', '', '', '', '', '', fio, r.scores,
-                               r.pole2.split('$')[0] + '/' + r.pole2.split('$')[2]])
-                if n % 3 == 2:
-                    tt.append(['3', '', '', '', '', '', '', fio, r.scores,
-                               r.pole2.split('$')[0] + '/' + r.pole2.split('$')[2]])
-            else:
-                tt.append(['2', '', '', '', fio, r.scores, r.pole2.split('$')[0] + '/' + r.pole2.split('$')[2]])
+            fio = str(n) + ') ' + r.fik
+            if r.fik != usna: col = str(n % 3)
+            else: col = '3'
+            tt.append([col, fio, r.scores, str(r.pravil) + '/' + str(r.bezosh)])
     return render(request, 'jsprob/toptab.html', {'tt': tt})
 
 
 def toplvl(request):
-    tt = [[] for i in range(5)]
+    tt = [[] for i in range(6)]
     try:
         usna = request.user.first_name.replace('$#$%', ' ')
     except:
         usna = ''
     n = 0
     m = 0
-    topzn = Indexs.objects.all()
-    for topz in topzn:
-        n += 1
-        if n > 1:
-            sctablv = topz.scor.split('_')
-            del sctablv[len(sctablv) - 2:len(sctablv)]
-            namtablv = topz.fio.split('$^%^')
-            del namtablv[len(namtablv) - 2:len(namtablv)]
-            i = 0
-            for nml in namtablv:
-                if sctablv[i] != 0:
-                    if i == 0: tt[n - 2].append(str(n - 1))
-                    if nml != usna:
-                        tk = [str(i % 2), str(i + 1) + '. ' + nml, sctablv[i]]
-                    else:
-                        tk = ['2', str(i + 1) + '. ' + nml, sctablv[i]]
-                    tt[n - 2].append(tk)
-                i += 1
+    for l in range(6):
+        n = 0
+        m += 1
+        tt[m - 1].append(m)
+        for r in DataUser.objects.order_by('-scoresl'+str(m)).values_list('fik', 'scoresl'+str(m))[:10]:
+            n += 1
+            if r[0] != usna: col = str(n % 3)
+            else: col = '3'
+            tt[m - 1].append([col, str(n) + ') ' + r[0], r[1]])
+            print(tt)
     return render(request, 'jsprob/toplvl.html', {'tt': tt})
+
+
+def topday(request):
+    tt = []
+    try:
+        usna = request.user.first_name.replace('$#$%', ' ')
+    except:
+        usna = ''
+    n = 0
+    for r in DataUser.objects.order_by('-scorTD'):
+        if r.scores != 0:
+            n += 1
+            fio = str(n) + ') ' + r.fik
+            if r.fik != usna: col = str(n % 3)
+            else: col = '3'
+            tt.append([col, fio, r.scorTD])
+    data = {
+        'tt': tt,
+        'tx1': 'ТОП сегодняшнего дня',
+        'tx2': 'Текущие достижения текущего дня',
+        'tx3': 'В таблице отображается Ваш лучший сегодняшний результат'
+    }
+    return render(request, 'jsprob/topday.html', data)
+
+
+def topglob(request):
+    tt = []
+    try:
+        usna = request.user.first_name.replace('$#$%', ' ')
+    except:
+        usna = ''
+    n = 0
+    for r in DataUser.objects.order_by('-res1'):
+        if r.scores != 0:
+            n += 1
+            fio = str(n) + ') ' + r.fik
+            if r.fik != usna: col = str(n % 3)
+            else: col = '3'
+            tt.append([col, fio, r.res1])
+    data = {
+        'tt': tt,
+        'tx1': 'Глобальный ТОП',
+        'tx2': 'Достижения всех игроков за все время',
+        'tx3': 'В таблице отображаются лучшие результаты'
+    }
+    return render(request, 'jsprob/topday.html', data)
 
 
 def reset(request):

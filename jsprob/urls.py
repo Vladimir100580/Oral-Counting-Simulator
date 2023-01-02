@@ -24,10 +24,12 @@ urlpatterns = [
     path('itoglv', views.itoglv, name='itoglv'),
     path('regist', views.regist, name='regist'),
     path('itog', views.itog, name='itog'),
+    path('topday', views.topday, name='topday'),
     path('toptab', views.toptab, name='toptab'),
+    path('toplvl', views.toplvl, name='toplvl'),
+    path('topglob', views.topglob, name='topglob'),
     path('instr', views.instr, name='instr'),
     path('reset', views.reset, name='reset'),
-    path('toplvl', views.toplvl, name='toplvl'),
     # path('setcookie', views.setcookie, name='setcookie'),
 
     path('login/',
