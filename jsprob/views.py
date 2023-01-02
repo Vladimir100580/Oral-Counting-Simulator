@@ -105,10 +105,6 @@ def regist(request):
                 return redirect('regist')
             if User.objects.filter(username=lg).exists():
                 return render(request, 'jsprob/ujuse.html')
-                # user = authenticate(request, username=lg, password='4591423')
-                # if user is not None:
-                #     login(request, user)
-                # return redirect('home')
             else:
                 DataUser(log=lg, scores=0, fik=f + ' ' + n + ' ' + k).save()
                 user = User.objects.create_user(lg, '', '4591423', first_name=f + '$#$%' + n + '$#$%' + k)
@@ -124,43 +120,241 @@ def itog(request):
     if ud[0] != 'e':
         if float(ud[0]) < float(ud[1]):
             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl5=ud[1])
-
     usna = request.session['ustns4usen']
     if (usna == None): return redirect('home')
     tts = request.COOKIES.get('totsumm').split('(#)$)')
-    print('tts', tts)
     bonz = int(float(tts[2]) * 100)
     sum = int(float(tts[0])) + bonz
     bon = ' 100 X ' + str(int(float(tts[2]))) + ':'
-    tx = ['неплохо', 'совсем неплохо', 'очень хорошо', 'прекрасно', 'просто превосходно'][min(sum // 50000, 4)]
+    tx = ['неплохо', 'совсем неплохо', 'очень хорошо', 'прекрасно', 'просто превосходно'][min(sum // 70000, 4)]
     tt = DataUser.objects.get(log=usna)
+    if tt.pole2 == '0':
+        tt.pop = tt.pop + 1
+        tt.poptd = tt.poptd + 1
+        popmas = tt.pole1.split('$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
+        popmas[1] = str(int(float(popmas[1]) + 1))
+        tt.pole1 = '$'.join(popmas)
+        tt.save()
+
+    txt = txt1 = txt2 = txt3 = txt4 = txt5 = txt6 = ''
     ds = 0
+    dsd = 0
     scold = 0
+    scoldd = 0
     t = ' очков'
     if (sum // 10) % 10 != 1:
         if sum % 10 == 2 or sum % 10 == 3 or sum % 10 == 4: t = ' очка'
         if sum % 10 == 1: t = ' очко'
-    if tt.pop != 1:
-        scold = tt.scores
-        ds = int(float(sum) - scold)
-        if ds > 0:
-            fl = 1
-            DataUser.objects.filter(log=usna).update(scores=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
-                                                     bezosh=tts[2])
-        if ds < 0:
-            fl = 2
-        if ds == 0:
-            fl = 3
-    else:
-        if sum > 0:
-            fl = 4
-            DataUser.objects.filter(log=usna).update(scores=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
-                                                     bezosh=tts[2])
-        else:
-            DataUser.objects.filter(log=usna).update(scores=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
-                                                     bezosh=tts[2])
-            fl = 5
+    txx = 'что — '
+    if tt.pop == 1: txx = 'что, для первого раза — '
 
+    if sum > 0:
+        txt1 = "Вы набрали " + str(sum) + t + ', ' + txx + tx + '.'
+    scolddt = tt.scorTD
+    scoldd = tt.res1
+    scold = tt.scores  # в этапах sclvus
+    ds = int(float(sum) - scold)  # сравнение с рекордом сезона
+    dsd = int(float(sum) - scoldd)  # сравнение с абсолютным рекордом
+
+    if tt.pole2 == '0' and sum > 0 and tt.pop != 1 and popmas[1] != '1':
+        mas0 = [i for i in
+                DataUser.objects.filter(scores__gt=scold).order_by('-scores').values_list('scores', 'fik')]
+        mas1 = [i for i in
+                DataUser.objects.filter(scores__gt=sum).order_by('-scores').values_list('scores', 'fik')]
+        print('0mas0=', mas0, 'mas1=', mas1)
+        txt = ''
+        txt1 = "Вы набрали " + str(sum) + t + ', ' + txx + tx
+        if ds > 0 and dsd > 0:
+            DataUser.objects.filter(log=usna).update(scores=sum, res1=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
+                                                     bezosh=tts[2])
+            txt = "ПОЗДРАВЛЯЕМ!!!!!"
+            if ds == dsd: txt2 = "Тем самым побили свои рекорды, как абсолютный, так и Ваш рекорд в текущем" \
+                                 " сезоне на " + str(ds) + ". (" + str(scoldd) + " --> " + str(sum) + ")"
+            else: txt2 = "Тем самым побили свой абсолютный рекорд на " + str(dsd) + " и Ваш рекорд в текущем" \
+                                 " сезоне на " + str(ds) + "."
+        if ds > 0 and dsd == 0:
+            DataUser.objects.filter(log=usna).update(scores=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
+                                                     bezosh=tts[2])
+            txt = "ПОЗДРАВЛЯЕМ!!!"
+            txt2 = "Тем самым побили свой рекорд текущего сезона на " + str(ds) + ". (" + str(scold) + " --> "\
+                   + str(sum) + "). И повторили свой абсолютный рекорд"
+        if ds > 0 and dsd < 0:
+            DataUser.objects.filter(log=usna).update(scores=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
+                                                     bezosh=tts[2])
+            txt = "ПОЗДРАВЛЯЕМ!!"
+            txt2 = "Тем самым побили свой рекорд текущего сезона на " + str(ds) + ". До Вашего личного рекорда" \
+                " не хватило набрать " + str(abs(dsd)) + '.'
+
+        pos_old = int(len(mas0) + 1)
+        pos_now = int(len(mas1) + 1)
+
+        if ds > 0:
+            if pos_now < 11:
+                if pos_old == pos_now:
+                    if txt == '': txt = "Поздравляем!"
+                    if pos_now != 1:
+                        txt3 = 'и еще прочнее укрепились на ' + str(pos_now) + '-позиции в TOP-10 сезона.'
+                    else:
+                        txt3 = 'и еще сильнее утвердили свое ЛИДЕРСТВО в текущем сезоне.'
+                else:
+                    if pos_old > 10:
+                        if pos_now != 1:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                            txt3 = 'и на данный момент Вы вошли в TOП-10 сезона! \
+                                     ( ' + str(pos_now) + ' место )'
+                        else:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
+                            txt3 = 'и на данный момент Вы врываетесь в ТОП-10 и становитесь ЧЕМПИОНОМ сезона.'
+                    else:
+                        if pos_now != 1:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                            txt3 = 'и улучшили свою позицию в TOП-10 сезона. ( ' + \
+                                   str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                        else:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
+                            txt3 = 'и на данный момент Вы становитесь ЧЕМПИОНОМ сезона!'
+            else:
+                if pos_old != pos_now:
+                    txt3 = ' и Ваше место в TOП-е сезона стало выше. ( ' + \
+                           str(pos_old) + ' --> ' + str(pos_now) + ' )'
+
+            mas0 = [i for i in
+                    DataUser.objects.filter(res1__gt=scoldd).order_by('-res1').values_list('res1', 'fik')]
+            mas1 = [i for i in
+                    DataUser.objects.filter(res1__gt=sum).order_by('-res1').values_list('res1', 'fik')]
+            print('1mas0=',mas0,'mas1=',mas1)
+            pos_old = int(len(mas0) + 1)
+            pos_now = int(len(mas1) + 1)
+
+            if pos_now < 11:
+                if pos_old == pos_now:
+                    if txt == '': txt = "Поздравляем!"
+                    if pos_now != 1:
+                        txt4 = 'также еще прочнее укрепились на ' + str(pos_now) + '-позиции глобального TOP-10.'
+                    else:
+                        txt4 = 'также еще сильнее утвердили свое ЛИДЕРСТВО в игре.'
+                else:
+                    if pos_old > 10:
+                        if pos_now != 1:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                            txt4 = 'также на данный момент Вы вошли абсолютный TOП-10! \
+                                     ( ' + str(pos_now) + ' место )'
+                        else:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
+                            txt4 = 'На данный момент Вы врываетесь в глобальный ТОП-10 и становитесь ЧЕМПИОНОМ!!'
+                    else:
+                        if pos_now != 1:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                            txt4 = 'также улучшили свою позицию в глобальном TOП-10. ( ' + \
+                                   str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                        else:
+                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
+                            txt4 = ' также на данный момент Вы становитесь абсолютным ЧЕМПИОНОМ!'
+            else:
+                if pos_old != pos_now:
+                    txt4 = 'также Ваше место в TOП-е сезона стало выше. ( ' + \
+                           str(pos_old) + ' --> ' + str(pos_now) + ' )'
+
+        else:
+            tvs = ''
+            if float(sum) > scold * .98: tvs = ' совсем чуть-чуть '
+            txt3 = 'Однако, до Вашего рекорда в сезоне не хватило' + tvs + ': ' + str(abs(ds)) + '.'
+            if float(sum) == scold:
+                txt = 'Поздравляем.'
+                txt3 = 'Вы в точности повторили свой рекорд в текущем сезоне.'
+
+        if tt.poptd != 1:
+            scoldtd = tt.scorTD
+            dsTD = int(float(sum) - tt.scorTD)
+            if dsTD > 0:
+
+                DataUser.objects.filter(log=usna).update(scorTD=sum)
+                txt5 = "Вы побили свой рекорд сегодняшнего дня на " + str(dsTD) + ". (" + str(scoldtd) + " --> "\
+                       + str(sum) + ")"
+
+                mas0 = [i for i in
+                        DataUser.objects.filter(scorTD__gt=scolddt).order_by('-scorTD').values_list('scorTD', 'fik')]
+                mas1 = [i for i in
+                        DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
+                print('2mas0=', mas0, 'mas1=', mas1)
+                pos_old = int(len(mas0) + 1)
+                pos_now = int(len(mas1) + 1)
+
+
+                if pos_now < 8:
+                    if pos_old == pos_now:
+                        if txt == '': txt = "Поздравляем!"
+                        if pos_now != 1:
+                            txt6 = 'и еще прочнее укрепились на ' + str(pos_now) + '-позиции TOP-7 дня.'
+                        else:
+                            txt6 = 'и еще сильнее утвердили свое лидерство в ТОР-е дня.'
+                    else:
+                        if pos_old > 7:
+                            if pos_now != 1:
+                                if txt == '': txt = 'Поздравляем!'
+                                txt6 = 'На данный момент Вы вошли в сегодняшний TOП-7! \
+                                                 ( ' + str(pos_now) + ' место )'
+                            else:
+                                if txt == '': txt = 'Поздравляем!'
+                                txt6 = 'На данный момент Вы становитесь лидером ТОП-7 дня.'
+                        else:
+                            if pos_now != 1:
+                                if txt == '': txt = 'Поздравляем!'
+                                txt6 = 'и улучшили свою позицию в сегодняшнем TOП-7. ( ' + \
+                                       str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                            else:
+                                if txt == '': txt = 'Поздравляем!'
+                                txt6 = 'На данный момент Вы становитесь лидером ТОП-7 дня.'
+                else:
+                    if pos_old != pos_now:
+                        txt6 = 'Ваше место в TOП-е дня стало выше. ( ' + \
+                               str(pos_old) + ' --> ' + str(pos_now) + ' )'
+        else:
+            mas1 = [i for i in
+                    DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
+            pos_now = int(len(mas1) + 1)
+            DataUser.objects.filter(log=usna).update(scorTD=sum)
+            if pos_now > 7:
+                txt6 = 'Теперь Ваша позиция в TOП-е дня: ' + str(pos_now) + '.'
+            if 1 < pos_now < 8:
+                if txt == '': txt = 'Поздравляем!'
+                txt6 = 'На данный момент Вы вошли в TOП-7 сегодняшего дня: ( ' + str(pos_now) + ' место )'
+            if pos_now == 1:
+                txt6 = 'На данный момент Вы становитесь лидером ТОП-7 дня.'
+
+
+
+    else:
+        if sum == 0:
+            if tt.pop == 1:
+                txt1 = 'УВЫ. Вам не удалось набрать ни одного балла.'
+                txt2 = 'Однако, так как это Ваша первая попытка, дарим Вам 500 поощрительных очков.'
+                DataUser.objects.filter(log=usna).update(scores=500)
+            else:
+                if popmas[1] == '1':
+                    txt1 = 'УВЫ. Вам не удалось набрать ни одного балла.'
+                    txt2 = 'Однако, так как это Ваша первая попытка в этом сезоне, дарим Вам 500 поощрительных очков.'
+                    DataUser.objects.filter(log=usna).update(scores=500)
+                else:
+                    txt1 = 'УВЫ. Вам не удалось набрать ни одного балла.'
+                    txt2 = 'Полагаем, Вы просто решили проверить, что произойдет?'
+                    txt3 = 'Как видите — ничего особо страшного.'
+        if sum != 0 and tt.pole2 == '0':
+            mas1 = [i for i in
+                    DataUser.objects.filter(scores__gt=sum).order_by('-scores').values_list('scores', 'fik')]
+            pos_now = int(len(mas1) + 1)
+            if pos_now > 10:
+                txt6 = 'В ТОП-е сезона Вы пока занимаете: ' + str(pos_now) + ' позицию.'
+            if 1 < pos_now < 11:
+                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                txt6 = 'На данный момент Вы вошли в TOП-10 текущего сезона: ( ' + str(pos_now) + ' место )'
+            if pos_now == 1:
+                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!!'
+                txt6 = 'На данный момент Вы становитесь лидером ТОП-10 сезона.'
+            if dsd > 0: p = sum
+            else: p = tt.res1
+            DataUser.objects.filter(log=usna).update(scores=sum, scorTD=sum, res1=p, pravil=(int(float(tts[1]) + float(tts[2]))),
+                                                      bezosh=tts[2])
     mp = ['«Скажи мудрости: «Ты сестра моя!» и разум назови родным твоим.» Притчи Соломона 7:4',
           '«Скудоумный высказывает презрение к ближнему своему; но разумный человек молчит.» Притчи Соломона 11:12',
           '«Добрый разум доставляет приятность, путь же беззаконных жесток.» Притчи Соломона 13:15',
@@ -182,7 +376,7 @@ def itog(request):
           '«Помыслы в сердце человека – глубокие воды, но человек разумный вычерпывает их.» Притчи Соломона 20:5',
           '«Кто хранит наставление, тот на пути к жизни; а отвергающий обличение – блуждает.» Притчи Соломона 10:17',
           '«Мерзость перед Господом всякий надменный сердцем; можно поручиться, что он не останется ненаказанным.» Притчи Соломона 16:5',
-          '«Когда мудрость войдет в сердце твое, и знание будет приятно душе твоей, тогда рассудительность будет оберегать тебя, разум будет охранять тебя» Притчи Соломона 2:10-11',
+          '«Когда мудрость войдет в сердце твое, и знание будет приятно душе твоей, тогда рассудительность будет оберегать тебя, разум будет охранять тебя.» Притчи Соломона 2:10-11',
           '«Посему ходи путем добрых и держись стезей праведников.» Притчи Соломона 2:20',
           '«Милость и истина да не оставляют тебя: обвяжи ими шею твою, напиши их на скрижали сердца твоего, и обретешь благоволение в очах Бога и людей.» Притчи Соломона 3:3-4',
           '«Блажен человек, который снискал мудрость, и человек, который приобрел разум,...» Притчи Соломона 3:13',
@@ -309,14 +503,25 @@ def itog(request):
           '«Кротость склоняет к милости вельможа, и мягкий язык переламывает кость.» Притчи Соломона 25:15',
           '«Не учащай входить в дом друга твоего, чтобы он не наскучил тобою и не возненавидел тебя.» Притчи Соломона 25:17',
           '«Что молот и меч и острая стрела, то человек, произносящий ложное свидетельство, против ближнего своего.» Притчи Соломона 25:18',
-          '«Если голоден враг твой, накорми его хлебом; и если он жаждет, напой его водою: ибо, делая сие, ты собираешь горящие угли на голову его и, Госопдь воздаст тебе.» Притчи Соломона 25:21-22',
+          '«Если голоден враг твой, накорми его хлебом; и если он жаждет, напой его водою: ибо, делая сие, ты собираешь горящие угли на голову его и, Господь воздаст тебе.» Притчи Соломона 25:21-22',
           '«Как нехорошо есть много меду, так домогаться славы не есть слава.» Притчи Соломона 25:27',
-          '«Что город разрушенный без стен, то человек, не владеющий духом своим.» Притчи Соломона 25:28'
-          ]
+          '«Что город разрушенный без стен, то человек, не владеющий духом своим.» Притчи Соломона 25:28',
+          '«Как снег летом и дождь во время жатвы, так честь неприлична глупому.» Притчи Соломона 26:1',
+          '«Как воробей вспорхнет, как ласточка улетит, так незаслуженное проклятье не сбудется.» Притчи Соломона 26:2',
+          '«Не отвечай глупому на глупости его, чтобы и тебе не сделаться подобным ему;.» Притчи Соломона 26:4',
+          '«Подрезывает себе ноги, терпит неприятности тот, кто дает словесное поручение глупцу.» Притчи Соломона 26:6',
+          '«Видал ли ты человека, мудрого в глазах его? На глупого больше надежды, нежели на него.» Притчи Соломона 26:12',
+          '«Ленивец в глазах своих мудрее семерых, отвечающих обдуманно.» Притчи Соломона 26:16',
+          '«Как притворяющийся помешанным бросает огонь, стрелы и смерть, так — человек, который коварно вредит другу своему и потом говорит: "Я только пошутил".» Притчи Соломона 26:18-19',
+          'Уголь — для жара и дрова — для огня, а человек сварливый — для разжжения ссоры.» Притчи Соломона 26:21',
 
+          ]
     pr = mp[randint(0, len(mp) - 1)].split('Притчи')
-    return render(request, 'jsprob/itog.html', {'t': t, 'tx': tx, 'ds': str(ds), 'sum': str(sum), 'scold': str(scold),
-                                                'fl': fl, 'txt3': pr[0], 'txt4': 'Притчи' + pr[1],
+    DataUser.objects.filter(log=usna).update(pole2='1')
+
+    return render(request, 'jsprob/itog.html', {'txt': txt, 'txt1': txt1, 'txt2': txt2, 'txt3': txt3,
+                                                'txt4': txt4, 'txt5': txt5, 'txt6': txt6, 'txt7': pr[0],
+                                                'txt8': 'Притчи' + pr[1],
                                                 'pr': int(float(tts[1]) + float(tts[2])),
                                                 'bz': int(float(tts[2])), 'lv1': tts[3], 'lv2': tts[4], 'lv3': tts[5],
                                                 'lv4': tts[6], 'lv5': tts[7],
@@ -406,14 +611,13 @@ def begin(request):
     # ud = request.COOKIES.get('keyshif').split('$')
     # print('ud=', ud)
     tt = DataUser.objects.get(log=usna)
-    if tt.scores > 0:
-        DataUser.objects.filter(log=usna).update(pop=(tt.pop + 1))
+    popmas = tt.pole1.split('$')       # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
+    popmas[0] = str(int(float(popmas[0]) + 1))
+    popmas[2] = str(int(float(popmas[2]) + 1))
+    DataUser.objects.filter(log=usna).update(pole1='$'.join(popmas))
     request.session['ustns4usen'] = usna
     usefio = request.user.first_name.split('$#$%')
     request.session['ustns4usennam'] = usefio[1]
-    tt = DataUser.objects.get(log=usna)
-    if tt.scores > 0:
-        DataUser.objects.filter(log=usna).update(pop=(tt.pop + 1))
     return render(request, 'jsprob/level1.html',
                   {'usp': 'Успеха, ' + usefio[1], 'lv': 'Этап 1.', 'namlv': 'Разминка', 'list': 'list1'})
 
@@ -507,14 +711,14 @@ def itoglv(request):
     usna = request.session['ustns4usen']
     us = DataUser.objects.get(log=usna)
     krit = 'scoresl' + str(ud[0])
-    sclvus = DataUser.objects.filter(log=usna, fik=us.fik).values_list(krit)[0][0]
+    sclvus = DataUser.objects.filter(log=usna, fik=us.fik).values_list(krit)[0][0]   # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
     mn = sclvus
     tx = ' очков.'
     if (mn // 10) % 10 != 1:
         if mn % 10 == 2 or mn % 10 == 3 or mn % 10 == 4: tx = ' очка.'
         if mn % 10 == 1: tx = ' очко.'
-    vstsl = ['На разминке ', 'Во втором этапе ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
-    txt1 = vstsl + 'Вы набрали ' + ud[1] + tx
+    vstsl = ['На разминке ', 'Во втором ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
+    txt1 = vstsl + 'этапе Вы набрали ' + ud[1] + tx
     txt2 = 'Решено правильно: ' + ud[2] + '; из них безошибочно: ' + ud[3] + '. '
     txt5 = ''
     txtpz = ''
@@ -604,7 +808,9 @@ def itoglv(request):
     if request.method == 'GET':
         answer = request.GET
         if 'prod' in answer:
-            if ud[0] == '5': return redirect('itog')  # '5' - количество этапов
+            if ud[0] == '5':                          # '5' - количество этапов
+                DataUser.objects.filter(log=usna).update(pole2='0')
+                return redirect('itog')
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
             mesnam = ['"Сквозь десятки"', "Минуя сотни", '"Хитрое" умножение', '"Life hack"-Деление', 'Назв 6.'][
                 lastlv - 1]

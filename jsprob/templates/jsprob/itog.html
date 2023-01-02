@@ -30,11 +30,27 @@
         <div style="clear: left"></div>
         </br>
 
-        <h2 style="font-style: italic; font-size: 28px;" id = 'txt1'> </h2>
-        <h2 style="font-style: italic; font-size: 28px;" id = 'txt2'> </h2>
+        <h3 style="font-style: italic; font-size: 28px;" id = 'txt'> {{txt}} </h3>
+        <h3 style="font-style: italic; font-size: 28px;" id = 'txt2'> {{txt1}} </h3>
         </br></br>
-        <h2 style="font-style: italic; font-size: 24px; float: center;" > {{txt3}} </h2>
-        <h2 style="font-style: italic; font-size: 20px; float: right;" > {{txt4}} </h2>
+        {% if txt2 != '' %}
+        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt2}} </h3>
+        {% endif %}
+        {% if txt3 != '' %}
+        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt3}} </h3>
+        {% endif %}
+        {% if txt4 != '' %}
+        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt4}} </h3>
+        {% endif %}
+        {% if txt5 != '' %}
+        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt5}} </h3>
+        {% endif %}
+        {% if txt6 != '' %}
+        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt6}} </h3>
+        {% endif %}
+        </br></br>
+        <h2 style="font-style: italic; font-size: 24px; float: center;" > {{txt7}} </h2>
+        <h2 style="font-style: italic; font-size: 20px; float: right;" > {{txt8}} </h2>
         </br></br></br>
         <h4 id = 'wait'> </h4>
         <a href="{% url 'toptab' %}" id = "butt" class="btn btn-success" onclick="Func()"> ТОП ИГРОКОВ </a>
@@ -57,33 +73,8 @@
      </style>
 
     <script>
-    t = '{{t}}';
-    tx = '{{tx}}';
-    sum = '{{sum}}';
-    scold = '{{scold}}';
-    ds = '{{ds}}';
-    fl = {{fl}};
-    localStorage.setItem('key3', Number(localStorage.getItem('key3'))+1);
-    if (localStorage.getItem('key3')>1) {
-    document.getElementById('txt2').style.display='none';}
-    if (fl == 1){
-        txt1 = 'Поздравляем!<br> Вы набрали: ' + sum + t +',<br> что – ' + tx + '.';
-        txt2 = 'и побили свой предыдущий рекорд(' + scold + ')<br> на ' + ds +'.';}
-    if (fl == 2){
-        txt1 = 'Вы набрали: ' + sum + t +', что – ' + tx + '.';
-        txt2 = 'Однако, не смогли побить <br> свой предыдущий рекорд: ' + scold + '.';}
-    if (fl == 3){
-        txt1 = 'Вы набрали: ' + sum + t +', что – ' + tx + '.';
-        txt2 = 'Тем самым повторили свой <br> предыдущий рекорд!';}
-    if (fl == 4){
-        txt1 = 'Поздравляем!<br> Вы набрали: ' + sum + t + '.';
-        txt2 = 'Для первого раза – <br> ' + tx + '!;'}
-    if (fl == 5) {
-        txt1 = 'УВЫ. Вам не удалось набрать ни одного балла.';
-        txt2 = 'Однако, так как это Ваша первая попытка, <br> дарим Вам 500 поощрительных очков.';}
 
-    document.getElementById('txt1').innerHTML = txt1;
-    document.getElementById('txt2').innerHTML = txt2;
+
 
     function Func() {
             document.getElementById('butt').style.display='none';

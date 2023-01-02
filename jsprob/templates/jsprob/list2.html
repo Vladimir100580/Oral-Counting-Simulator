@@ -55,10 +55,14 @@
             ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
             if (Math.abs(ost-ds)>5000) {
             na4 = new Date() - new Date(0) + 120000;
-            alert('Контроль безопасности обнаружил смещение времени! Этап защитан не будет!');
+            alert('Контроль безопасности обнаружил смещение времени! Придется начать сначала!');
             }
             ds = ost;
-            if (kon!=2 || ost>ti) {ost=0;}
+            if (kon!=2 || ost>ti)
+                {
+                if (typeof timerId !== 'undefined') {clearInterval(timerId);}
+                window.location.assign('12');
+                }
             addEventListener("keyup", function(event) {kk=0;});
             addEventListener("keydown", function(event) {
                   if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)

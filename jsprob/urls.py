@@ -10,6 +10,7 @@ from . import forms
 
 urlpatterns = [
     path('', views.hello, name='home'),  # , name = 'home'
+    path('12', views.hello, name='home1'),
     path('list1', views.list1, name='list1'),
     path('list2', views.list2, name='list2'),
     path('list3', views.list3, name='list3'),
