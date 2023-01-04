@@ -1,24 +1,31 @@
 from random import randint
 
-tt = [[] for i in range(5)]
-print(tt)
-mas = [0 for i in range(10)]
-print(mas)
-n = 0
-exp = 10**8
-while n < exp:
-    s = 0
-    k = 0
-    while s <= 9:
-        rn = randint(1, 6)
-        s = s + rn
-        k += 1
-    mas[k-1] += 1
-    n += 1
-    if n%100000 == 0:
-        print(mas)
-p = [i/exp for i in mas]
-print(p)
+l = [1,2,3,4,5]
+l.pop()
+print(l)
+t = [5] + [3] + ['d']
+print(t)
+print('12;23;43'.join(';'))
+
+# tt = [[] for i in range(5)]
+# print(tt)
+# mas = [0 for i in range(10)]
+# print(mas)
+# n = 0
+# exp = 10**8
+# while n < exp:
+#     s = 0
+#     k = 0
+#     while s <= 9:
+#         rn = randint(1, 6)
+#         s = s + rn
+#         k += 1
+#     mas[k-1] += 1
+#     n += 1
+#     if n%100000 == 0:
+#         print(mas)
+# p = [i/exp for i in mas]
+# print(p)
 
 # h=[[5],[1],3,2,8,6]
 # print(h.pop(2))
