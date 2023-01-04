@@ -3,7 +3,7 @@ from .models import DataUser, Indexs
 
 
 class DataUserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'log', 'scores', 'fik', 'scorTD', 'quantwin', 'quanttop', 'pop', 'poptd')
+    list_display = ('id', 'log', 'scores', 'fik', 'scorTD', 'quantwin', 'quanttop', 'pop', 'poptd', 'res1')
     list_display_links = ('log', 'scores')
     search_fields = ('log', 'scores', 'fik')
 

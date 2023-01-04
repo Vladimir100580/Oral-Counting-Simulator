@@ -61,12 +61,14 @@ def hello(request):
         t = 5 / 0
 
     if 'intlg' in answer or 'reg' in answer:
+        dayend()
         request.session['ti_contr'] = time.time() - 3
     else:
         request.session['ti_contr'] = time.time()
 
-    dayend()
     user_id = request.user.username
+    dat = Indexs.objects.get(id=1)
+    datn = datetime.date.today()
     fl0 = '0'
     if (user_id != ''):
         nm = request.user.first_name.split('$#$%')
@@ -77,7 +79,7 @@ def hello(request):
         nm = ''
         fl = 0
     p1 = Indexs.objects.get(id=1).pole1.split('@%>$')
-    if len(p1) != 0:
+    if len(p1) != 0 and dat.curdate == datn:
         fl1 = 1
         prit = ''
         st = ''
@@ -85,8 +87,11 @@ def hello(request):
         prit = Prit4i().pr
         fl1 = 0
         st = 'border: 2px solid green;'
-    if 'reg' in answer: return redirect('regist')
+    if 'reg' in answer:
+        dayend()
+        return redirect('regist')
     if 'intlg' in answer:
+        dayend()
         lg = answer.__getitem__('lg')
         if len(lg) < 3: return redirect('home')
         if User.objects.filter(username=lg).exists() == 1:
@@ -154,7 +159,80 @@ def dayend():
             p.save(update_fields=['poptd'])
 
 
+def progress(request):
+    usna = request.user.username
+    if (usna is None) or (usna == ''):
+        return redirect('home')
+    kar = DataUser.objects.get(log=usna)
+    popt = kar.pop
+    if popt < 1: return render(request, 'jsprob/gogo.html')
+    scl = []
+    scl.append([1, kar.scoresl1])
+    scl.append([2, kar.scoresl2])
+    scl.append([3, kar.scoresl3])
+    scl.append([4, kar.scoresl4])
+    scl.append([5, kar.scoresl5])
+    scl.append([6, kar.scoresl6])
+    na4pops = int(float(kar.pole1.split('$')[0]))    # начато игр в сезоне
+    popsez = int(float(kar.pole1.split('$')[1]))    # проёдено игр в сезоне
+    na4popt = int(float(kar.pole1.split('$')[2]))   # начато игр за все время
+    if kar.scorTD != 0:
+        sctd = str(kar.scorTD) + ' (' + str(len(DataUser.objects.filter(scorTD__gt=kar.scorTD)) + 1) + orf1(kar.scorTD) + ' место)'
+    else:
+        sctd = '—'
+
+    fl = 0
+    if popsez >= 10: fl = 1
+    pot = 0
+    if fl == 1:
+        for p in scl:
+            pot += p[1]
+    data = {
+        'gls': kar.res1,
+        'gls1': orf1(kar.res1),
+        'scl': scl,
+        'sezsc': kar.scores,
+        'sezsc1': orf1(kar.scores),
+        'sctd': sctd,
+        'sctd1': orf1(kar.scorTD),
+        'pozgl': len(DataUser.objects.filter(res1__gt=kar.res1)) + 1,
+        'pozsez': len(DataUser.objects.filter(scores__gt=kar.scores)) + 1,
+        'poztd': len(DataUser.objects.filter(scorTD__gt=kar.scorTD)) + 1,
+        'quantwin': kar.quantwin,
+        'quantwin1': orf(kar.quantwin),
+        'quanttop': kar.quanttop,
+        'quanttop1': orf(kar.quanttop),
+        'pot': pot,
+        'fl': fl,
+        'popt': popt,
+        'na4pops': na4pops,
+        'na4popt': na4popt,
+        'popsez': popsez,
+        'popt1': orf(popt),
+        'na4pops1': orf(na4pops),
+        'na4popt1': orf(na4popt),
+        'popsez1': orf(popsez),
+    }
+    return render(request, 'jsprob/progress.html', data)
+
+
+def orf(sum):
+    t = ' раз'
+    if (sum // 10) % 10 != 1:
+        if sum % 10 == 2 or sum % 10 == 3 or sum % 10 == 4: t = ' раза'
+    return t
+
+
+def orf1(sum):
+    t = ' очков'
+    if (sum // 10) % 10 != 1:
+        if sum % 10 == 2 or sum % 10 == 3 or sum % 10 == 4: t = ' очка'
+        if sum % 10 == 1: t = ' очко'
+    return t
+
+
 def itog(request):
+    dayend()
     ud = request.COOKIES.get('lelrec15').split('$')
     if ud[0] != 'e':
         if float(ud[0]) < float(ud[1]):
@@ -180,10 +258,7 @@ def itog(request):
     dsd = 0
     scold = 0
     scoldd = 0
-    t = ' очков'
-    if (sum // 10) % 10 != 1:
-        if sum % 10 == 2 or sum % 10 == 3 or sum % 10 == 4: t = ' очка'
-        if sum % 10 == 1: t = ' очко'
+    t = orf1(sum)
     txx = 'что — '
     if tt.pop == 1: txx = 'что, для первого раза — '
 
@@ -209,7 +284,6 @@ def itog(request):
         mas12 = [i for i in
                 DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
 
-        print('0mas0=', mas0, 'mas1=', mas1)
         txt = ''
         txt1 = "Вы набрали " + str(sum) + t + ', ' + txx + tx
         if ds > 0 and dsd > 0:
@@ -405,21 +479,21 @@ def itog(request):
                 if txt == '': txt = 'Поздравляем!!!'
                 txt6 = txtdop + ' становитесь лидером ТОП-7 дня.'
 
-            DataUser.objects.filter(log=usna).update(scores=sum, scorTD=sum, res1=p, pravil=(int(float(tts[1]) + float(tts[2]))),
-                                                      bezosh=tts[2])
+            DataUser.objects.filter(log=usna).update(scores=sum, scorTD=sum, res1=p,
+                                pravil=(int(float(tts[1]) + float(tts[2]))), bezosh=tts[2])
 
     pr = Prit4i().pr
     DataUser.objects.filter(log=usna).update(pole2='1')
     return render(request, 'jsprob/itog.html', {'txt': txt, 'txt1': txt1, 'txt2': txt2, 'txt3': txt3,
                                                 'txt4': txt4, 'txt5': txt5, 'txt6': txt6, 'txt7': pr[0],
-                                                'txt8': pr[1],
-                                                'pr': int(float(tts[1]) + float(tts[2])),
+                                                'txt8': pr[1], 'pr': int(float(tts[1]) + float(tts[2])),
                                                 'bz': int(float(tts[2])), 'lv1': tts[3], 'lv2': tts[4], 'lv3': tts[5],
                                                 'lv4': tts[6], 'lv5': tts[7],
                                                 'bon': bon, 'bonz': bonz, 'su': str(sum - bonz)})
 
 
 def toptab(request):
+    dayend()
     tt = []
     try:
         usna = request.user.first_name.replace('$#$%', ' ')
@@ -449,11 +523,11 @@ def toplvl(request):
         m += 1
         tt[m - 1].append(m)
         for r in DataUser.objects.order_by('-scoresl'+str(m)).values_list('fik', 'scoresl'+str(m))[:10]:
-            n += 1
-            if r[0] != usna: col = str(n % 3)
-            else: col = '3'
-            tt[m - 1].append([col, str(n) + ') ' + r[0], r[1]])
-            print(tt)
+            if r[1] != 0:
+                n += 1
+                if r[0] != usna: col = str(n % 3)
+                else: col = '3'
+                tt[m - 1].append([col, str(n) + ') ' + r[0], r[1]])
     return render(request, 'jsprob/toplvl.html', {'tt': tt})
 
 
@@ -465,7 +539,7 @@ def topday(request):
         usna = ''
     n = 0
     for r in DataUser.objects.order_by('-scorTD'):
-        if r.scores != 0:
+        if r.scorTD != 0:
             n += 1
             fio = str(n) + ') ' + r.fik
             if r.fik != usna: col = str(n % 3)
@@ -481,6 +555,7 @@ def topday(request):
 
 
 def topglob(request):
+    dayend()
     tt = []
     try:
         usna = request.user.first_name.replace('$#$%', ' ')
@@ -531,6 +606,7 @@ def reset(request):
 
 
 def begin(request):
+    dayend()
     usna = request.user.username
     # ud = request.COOKIES.get('keyshif').split('$')
     # print('ud=', ud)
@@ -581,51 +657,32 @@ def begin(request):
 
 def list1(request):
     Vyb = Vyborka(0, 10)
-    usefio = request.user.first_name.split('$#$%')
-    fio = usefio[0] + ' ' + usefio[1] + ' ' + usefio[2]
-    # Du = Defuser(fio, 1, request.session['ustns4usen'])
     data = {'ti': 4000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
     return render(request, 'jsprob/list1.html', data)
 
 
 def list2(request):
     Vyb = Vyborka(10, 20)
-    usefio = request.user.first_name.split('$#$%')
-    fio = usefio[0] + ' ' + usefio[1] + ' ' + usefio[2]
-    Du = Defuser(fio, 2, request.session['ustns4usen'])
     return render(request, 'jsprob/list2.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 7000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 7000})
 
 
 def list3(request):
     Vyb = Vyborka(20, 30)
-    usefio = request.user.first_name.split('$#$%')
-    fio = usefio[0] + ' ' + usefio[1] + ' ' + usefio[2]
-    Du = Defuser(fio, 3, request.session['ustns4usen'])
     return render(request, 'jsprob/list3.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 8000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 8000})
 
 
 def list4(request):
     Vyb = Vyborka(30, 40)
-    usefio = request.user.first_name.split('$#$%')
-    fio = usefio[0] + ' ' + usefio[1] + ' ' + usefio[2]
-    Du = Defuser(fio, 4, request.session['ustns4usen'])
     return render(request, 'jsprob/list4.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 10000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 10000})
 
 
 def list5(request):
     Vyb = Vyborka(40, 50)
-    usefio = request.user.first_name.split('$#$%')
-    fio = usefio[0] + ' ' + usefio[1] + ' ' + usefio[2]
-    Du = Defuser(fio, 5, request.session['ustns4usen'])
     return render(request, 'jsprob/list5.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'minsc': Du.minsc, 'scnow': Du.scnow,
-                   'ti': 9000, 'sclvus': Du.sclvus, 'fl00': Du.fl00})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 9000})
 
 
 def itoglv(request):
@@ -637,10 +694,10 @@ def itoglv(request):
     krit = 'scoresl' + str(ud[0])
     sclvus = DataUser.objects.filter(log=usna, fik=us.fik).values_list(krit)[0][0]   # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
     mn = sclvus
-    tx = ' очков.'
-    if (mn // 10) % 10 != 1:
-        if mn % 10 == 2 or mn % 10 == 3 or mn % 10 == 4: tx = ' очка.'
-        if mn % 10 == 1: tx = ' очко.'
+    tx = orf1(mn) + '.'
+    # if (mn // 10) % 10 != 1:
+    #     if mn % 10 == 2 or mn % 10 == 3 or mn % 10 == 4: tx = ' очка.'
+    #     if mn % 10 == 1: tx = ' очко.'
     vstsl = ['На разминке ', 'Во втором ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
     txt1 = vstsl + 'этапе Вы набрали ' + ud[1] + tx
     txt2 = 'Решено правильно: ' + ud[2] + '; из них безошибочно: ' + ud[3] + '. '
@@ -747,8 +804,8 @@ def itoglv(request):
 
 class Examples:
     def __init__(self, rab, mm):
-        otvs = [[''] * 1 for i in range(50)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
-        tasks = [[''] * 1 for i in range(50)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
+        otvs = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
+        tasks = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
 
         for r in range(0, rab):
             # Устный счет
@@ -1045,6 +1102,53 @@ class Examples:
                             otvs[y + z][r] = str(a)
                             break
 
+            if mm == 50:
+                # деление числа 10n*k/k
+                provsov = [[0] * 2 for i in range(11)]
+                for z in range(50, 45):
+                    while True:
+                        fl = 0
+                        a = randint(1, 9)
+                        a = 100 + a + 100 * randint(int((z - 40) * 0.4), int((z - 40) * 0.8))
+                        b = randint(2, 9)
+                        prst = str(a)
+                        for d in range(0, 10):
+                            if prst.find(str(d) + str(d)) != -1: fl = -1
+                        mas = provsov
+                        for d in range(0, 5):  # все 5 используя предыдущие
+                            if (mas[d][0] == a) or (mas[d][1] == b) or (mas[d][0] == b) or (mas[d][1] == a):
+                                fl = 1
+                        if fl == 0:
+                            provsov[z - 40][0] = a
+                            provsov[z - 40][1] = b
+                            tasks[y + z][r] = str(a * b) + ':' + str(b) + '='
+                            otvs[y + z][r] = str(a)
+                            break
+
+                # деление числа (100-n)*k/k
+                provsov = [[0] * 2 for i in range(11)]
+                for z in range(45, 50):
+                    while True:
+                        fl = 0
+                        a = randint(1, 5)
+                        a = 100 - a + 100 * randint(int((z - 45) * 0.4), int((z - 45) * 0.8))
+                        b = randint(2, 9)
+                        prst = str(a)
+                        for d in range(0, 10):
+                            if prst.find(str(d) + str(d)) != -1: fl = -1
+                        mas = provsov
+                        for d in range(0, 5):  # все 5 используя предыдущие
+                            if (mas[d][0] == a) or (mas[d][1] == b) or (mas[d][0] == b) or (mas[d][1] == a):
+                                fl = 1
+                        if fl == 0:
+                            provsov[z - 45][0] = a
+                            provsov[z - 45][1] = b
+                            tasks[y + z][r] = str(a * b) + ':' + str(b) + '='
+                            otvs[y + z][r] = str(a)
+                            break
+
+
+
         self.tas = tasks
         self.ot = otvs
 
@@ -1067,9 +1171,6 @@ class Vyborka:
                     tasks1.append(float(tasks[r][:x]) + otvs + (r - m) ** 2)
                     tasksz.append(z)
                     tasks2.append(float(tasks[r][x + 1:len(tasks[r]) - 1]))
-        # otvs = []
-        # for i in range(m, n):
-        #     otvs.append(float(Ex.ot[i][0]))
 
         self.t1 = tasks1
         self.t2 = tasks2
