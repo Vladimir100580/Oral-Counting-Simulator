@@ -1,11 +1,61 @@
 from random import randint
 
-l = [1,2,3,4,5]
-l.pop()
-print(l)
-t = [5] + [3] + ['d']
-print(t)
-print('12;23;43'.join(';'))
+
+def gene(pol):
+    while True:
+        s = []
+        for i in range(6):
+            while True:
+                k = randint(1, 9) * (2 * randint(0, 1) - 1)
+                if k not in s and -k not in s:
+                    s.append(k)
+                    break
+        su = sum([p for p in s])
+        if sum([p / abs(p) for p in s if p > 0]) == pol and su != 0:
+            break
+    return s, su
+
+
+s = [0 for i in range(3)]
+r = [0 for i in range(3)]
+while True:
+    for d in range(3):
+        q = gene(d + 2)
+        r[d] = q[0]
+        s[d] = q[1]
+    if sum([p / abs(p) for p in s if p > 0]) == 1 \
+            and abs(s[0]) != abs(s[1]) and abs(s[0]) != abs(s[2]) and abs(s[1]) != abs(s[2]):
+        break
+st = ['' for i in range(3)]
+for n in range(3):
+    for m in r[n]:
+        if m > 0 and m != r[n][0]:
+            st[n] = st[n] + '+' + str(m)
+        else:
+            st[n] = st[n] + str(m)
+
+print(st, s)
+
+# t = [randint(1,9)*(2*randint(0, 1)-1) for i in range(10)]
+# z = sum([p/abs(p) for p in t if p > 0])
+# print(t, z)
+#
+# st = [str(i) for i in t if i < 0 and '+' + str(i) for i in t if i > 0]
+#
+# print('st=',st)
+#
+# print(''.join(t))
+#
+#
+# l = [1,2,3,4,5]
+# l.pop()
+# print(l)
+# t = [5] + [3] + ['d']
+# print(t)
+# print('12;23;43'.join(';'))
+#
+# a = 'sdferty54'
+# print(a.split('d'))
 
 # tt = [[] for i in range(5)]
 # print(tt)

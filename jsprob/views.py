@@ -8,7 +8,6 @@ from django.contrib.auth import authenticate, login
 import json
 
 
-
 # def setcookie(request):
 #
 #     response = HttpResponse()
@@ -173,11 +172,12 @@ def progress(request):
     scl.append([4, kar.scoresl4])
     scl.append([5, kar.scoresl5])
     scl.append([6, kar.scoresl6])
-    na4pops = int(float(kar.pole1.split('$')[0]))    # начато игр в сезоне
-    popsez = int(float(kar.pole1.split('$')[1]))    # проёдено игр в сезоне
-    na4popt = int(float(kar.pole1.split('$')[2]))   # начато игр за все время
+    na4pops = int(float(kar.pole1.split('$')[0]))  # начато игр в сезоне
+    popsez = int(float(kar.pole1.split('$')[1]))  # проёдено игр в сезоне
+    na4popt = int(float(kar.pole1.split('$')[2]))  # начато игр за все время
     if kar.scorTD != 0:
-        sctd = str(kar.scorTD) + ' (' + str(len(DataUser.objects.filter(scorTD__gt=kar.scorTD)) + 1) + orf1(kar.scorTD) + ' место)'
+        sctd = str(kar.scorTD) + ' (' + str(len(DataUser.objects.filter(scorTD__gt=kar.scorTD)) + 1) + orf1(
+            kar.scorTD) + ' место)'
     else:
         sctd = '—'
 
@@ -248,7 +248,8 @@ def itog(request):
     if tt.pole2 == '0':
         tt.pop = tt.pop + 1
         tt.poptd = tt.poptd + 1
-        popmas = tt.pole1.split('$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
+        popmas = tt.pole1.split(
+            '$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
         popmas[1] = str(int(float(popmas[1]) + 1))
         tt.pole1 = '$'.join(popmas)
         tt.save()
@@ -276,13 +277,13 @@ def itog(request):
                 DataUser.objects.filter(scores__gt=sum).order_by('-scores').values_list('scores', 'fik')]
 
         mas01 = [i for i in
-                DataUser.objects.filter(res1__gt=scoldd).order_by('-res1').values_list('res1', 'fik')]
+                 DataUser.objects.filter(res1__gt=scoldd).order_by('-res1').values_list('res1', 'fik')]
         mas11 = [i for i in
-                DataUser.objects.filter(res1__gt=sum).order_by('-res1').values_list('res1', 'fik')]
+                 DataUser.objects.filter(res1__gt=sum).order_by('-res1').values_list('res1', 'fik')]
         mas02 = [i for i in
-                DataUser.objects.filter(scorTD__gt=scolddt).order_by('-scorTD').values_list('scorTD', 'fik')]
+                 DataUser.objects.filter(scorTD__gt=scolddt).order_by('-scorTD').values_list('scorTD', 'fik')]
         mas12 = [i for i in
-                DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
+                 DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
 
         txt = ''
         txt1 = "Вы набрали " + str(sum) + t + ', ' + txx + tx
@@ -290,22 +291,25 @@ def itog(request):
             DataUser.objects.filter(log=usna).update(scores=sum, res1=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
                                                      bezosh=tts[2])
             txt = "ПОЗДРАВЛЯЕМ!!!!!"
-            if ds == dsd: txt2 = "Тем самым побили свои рекорды, как абсолютный, так и Ваш рекорд в текущем" \
-                                 " сезоне на " + str(ds) + ". (" + str(scoldd) + " --> " + str(sum) + ")"
-            else: txt2 = "Тем самым побили свой абсолютный рекорд на " + str(dsd) + " и Ваш рекорд в текущем" \
-                                 " сезоне на " + str(ds) + "."
+            if ds == dsd:
+                txt2 = "Тем самым побили свои рекорды, как абсолютный, так и Ваш рекорд в текущем" \
+                       " сезоне на " + str(ds) + ". (" + str(scoldd) + " --> " + str(sum) + ")"
+            else:
+                txt2 = "Тем самым побили свой абсолютный рекорд на " + str(dsd) + " и Ваш рекорд в текущем" \
+                                                                                  " сезоне на " + str(ds) + "."
         if ds > 0 and dsd == 0:
             DataUser.objects.filter(log=usna).update(scores=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
                                                      bezosh=tts[2])
             txt = "ПОЗДРАВЛЯЕМ!!!"
-            txt2 = "Тем самым побили свой рекорд текущего сезона на " + str(ds) + ". (" + str(scold) + " --> "\
+            txt2 = "Тем самым побили свой рекорд текущего сезона на " + str(ds) + ". (" + str(scold) + " --> " \
                    + str(sum) + "). И повторили свой абсолютный рекорд"
         if ds > 0 and dsd < 0:
             DataUser.objects.filter(log=usna).update(scores=sum, pravil=(int(float(tts[1]) + float(tts[2]))),
                                                      bezosh=tts[2])
             txt = "ПОЗДРАВЛЯЕМ!!"
             txt2 = "Тем самым побили свой рекорд текущего сезона на " + str(ds) + ". До Вашего личного рекорда" \
-                " не хватило набрать " + str(abs(dsd)) + '.'
+                                                                                  " не хватило набрать " + str(
+                abs(dsd)) + '.'
 
         pos_old = int(len(mas0) + 1)
         pos_now = int(len(mas1) + 1)
@@ -386,7 +390,7 @@ def itog(request):
             if dsTD > 0:
 
                 DataUser.objects.filter(log=usna).update(scorTD=sum)
-                txt5 = "Вы побили свой рекорд сегодняшнего дня на " + str(dsTD) + ". (" + str(scoldtd) + " --> "\
+                txt5 = "Вы побили свой рекорд сегодняшнего дня на " + str(dsTD) + ". (" + str(scoldtd) + " --> " \
                        + str(sum) + ")"
 
                 pos_old = int(len(mas02) + 1)
@@ -461,15 +465,19 @@ def itog(request):
             if pos_now == 1:
                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!!'
                 txt5 = 'На данный момент Вы становитесь лидером ТОП-10 сезона.'
-            if dsd > 0: p = sum
-            else: p = tt.res1
+            if dsd > 0:
+                p = sum
+            else:
+                p = tt.res1
 
             mas1 = [i for i in
                     DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
             pos_now = int(len(mas1) + 1)
             DataUser.objects.filter(log=usna).update(scorTD=sum)
-            if txt5 != '': txtdop = 'и '
-            else: txtdop = 'На данный момент Вы '
+            if txt5 != '':
+                txtdop = 'и '
+            else:
+                txtdop = 'На данный момент Вы '
             if pos_now > 7:
                 txt6 = 'Теперь Ваша позиция в TOП-е дня: ' + str(pos_now) + '.'
             if 1 < pos_now < 8:
@@ -480,7 +488,7 @@ def itog(request):
                 txt6 = txtdop + ' становитесь лидером ТОП-7 дня.'
 
             DataUser.objects.filter(log=usna).update(scores=sum, scorTD=sum, res1=p,
-                                pravil=(int(float(tts[1]) + float(tts[2]))), bezosh=tts[2])
+                                                     pravil=(int(float(tts[1]) + float(tts[2]))), bezosh=tts[2])
 
     pr = Prit4i().pr
     DataUser.objects.filter(log=usna).update(pole2='1')
@@ -504,8 +512,10 @@ def toptab(request):
         if r.scores != 0:
             n += 1
             fio = str(n) + ') ' + r.fik
-            if r.fik != usna: col = str(n % 3)
-            else: col = '3'
+            if r.fik != usna:
+                col = str(n % 3)
+            else:
+                col = '3'
             tt.append([col, fio, r.scores, str(r.pravil) + '/' + str(r.bezosh)])
     return render(request, 'jsprob/toptab.html', {'tt': tt})
 
@@ -522,11 +532,13 @@ def toplvl(request):
         n = 0
         m += 1
         tt[m - 1].append(m)
-        for r in DataUser.objects.order_by('-scoresl'+str(m)).values_list('fik', 'scoresl'+str(m))[:10]:
+        for r in DataUser.objects.order_by('-scoresl' + str(m)).values_list('fik', 'scoresl' + str(m))[:10]:
             if r[1] != 0:
                 n += 1
-                if r[0] != usna: col = str(n % 3)
-                else: col = '3'
+                if r[0] != usna:
+                    col = str(n % 3)
+                else:
+                    col = '3'
                 tt[m - 1].append([col, str(n) + ') ' + r[0], r[1]])
     return render(request, 'jsprob/toplvl.html', {'tt': tt})
 
@@ -542,8 +554,10 @@ def topday(request):
         if r.scorTD != 0:
             n += 1
             fio = str(n) + ') ' + r.fik
-            if r.fik != usna: col = str(n % 3)
-            else: col = '3'
+            if r.fik != usna:
+                col = str(n % 3)
+            else:
+                col = '3'
             tt.append([col, fio, r.scorTD])
     data = {
         'tt': tt,
@@ -566,8 +580,10 @@ def topglob(request):
         if r.scores != 0:
             n += 1
             fio = str(n) + ') ' + r.fik
-            if r.fik != usna: col = str(n % 3)
-            else: col = '3'
+            if r.fik != usna:
+                col = str(n % 3)
+            else:
+                col = '3'
             tt.append([col, fio, r.res1])
     data = {
         'tt': tt,
@@ -611,7 +627,8 @@ def begin(request):
     # ud = request.COOKIES.get('keyshif').split('$')
     # print('ud=', ud)
     tt = DataUser.objects.get(log=usna)
-    popmas = tt.pole1.split('$')       # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
+    popmas = tt.pole1.split(
+        '$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
     popmas[0] = str(int(float(popmas[0]) + 1))
     popmas[2] = str(int(float(popmas[2]) + 1))
     DataUser.objects.filter(log=usna).update(pole1='$'.join(popmas))
@@ -692,7 +709,8 @@ def itoglv(request):
     usna = request.session['ustns4usen']
     us = DataUser.objects.get(log=usna)
     krit = 'scoresl' + str(ud[0])
-    sclvus = DataUser.objects.filter(log=usna, fik=us.fik).values_list(krit)[0][0]   # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
+    sclvus = DataUser.objects.filter(log=usna, fik=us.fik).values_list(krit)[0][
+        0]  # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
     mn = sclvus
     tx = orf1(mn) + '.'
     # if (mn // 10) % 10 != 1:
@@ -789,7 +807,7 @@ def itoglv(request):
     if request.method == 'GET':
         answer = request.GET
         if 'prod' in answer:
-            if ud[0] == '5':                          # '5' - количество этапов
+            if ud[0] == '5':  # '5' - количество этапов
                 DataUser.objects.filter(log=usna).update(pole2='0')
                 return redirect('itog')
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
@@ -809,7 +827,6 @@ class Examples:
 
         for r in range(0, rab):
             # Устный счет
-            y = 0
             # сложение
             if mm == 0:
                 provsov = [[0] * 3 for i in range(11)]  # обнуление массива контроля повторений
@@ -827,8 +844,8 @@ class Examples:
                             provsov[z][0] = a
                             provsov[z][1] = b
                             provsov[z][2] = a + b
-                            tasks[y + z][r] = str(a) + '+' + str(b) + '='
-                            otvs[y + z][r] = '0'  # otvs[y + z][r] = str(a + b)
+                            tasks[z][r] = str(a) + '+' + str(b) + '='
+                            otvs[z][r] = '0'  # otvs[y + z][r] = str(a + b)
                             break
 
                 # вычитание
@@ -847,8 +864,8 @@ class Examples:
                             provsov[z - 5][0] = a
                             provsov[z - 5][1] = b
                             provsov[z - 5][2] = a - b
-                            tasks[y + z][r] = str(a) + '–' + str(b) + '='
-                            otvs[y + z][r] = '0'  # otvs[y + z][r] = str(a - b)
+                            tasks[z][r] = str(a) + '–' + str(b) + '='
+                            otvs[z][r] = '0'  # otvs[y + z][r] = str(a - b)
                             break
 
             if mm == 10:
@@ -884,11 +901,11 @@ class Examples:
                                         b = b % 10
                                         fl0 = 1
                                 if fl0 == 0: break
-                            tasks[y + z][r] = str(a) + '+' + str(b) + '='
-                            otvs[y + z][r] = str(a + b)
+                            tasks[z][r] = str(a) + '+' + str(b) + '='
+                            otvs[z][r] = str(a + b)
                             break
-                lg = y + 11
-                pg = y + 14
+                lg = 11
+                pg = 14
                 rb = r
                 k = randint(20, 25)
                 for z in range(1, k):
@@ -937,11 +954,11 @@ class Examples:
                                             fl0 = 1
                                 if fl0 == 0: break
                             if (i == 0):
-                                tasks[y + z][r] = str(a + b) + '–' + str(b) + '='
-                                otvs[y + z][r] = str(a)
+                                tasks[z][r] = str(a + b) + '–' + str(b) + '='
+                                otvs[z][r] = str(a)
                             else:
-                                tasks[y + z][r] = str(a + b) + '–' + str(a) + '='
-                                otvs[y + z][r] = str(b)
+                                tasks[z][r] = str(a + b) + '–' + str(a) + '='
+                                otvs[z][r] = str(b)
                             break
 
             if mm == 20:
@@ -972,10 +989,10 @@ class Examples:
                             provsov[z - 20][2] = a + b
                             a = a + i - 100
                             if (randint(0, 1) == 0):
-                                tasks[y + z][r] = str(a) + '+' + str(b) + '='
+                                tasks[z][r] = str(a) + '+' + str(b) + '='
                             else:
-                                tasks[y + z][r] = str(b) + '+' + str(a) + '='
-                            otvs[y + z][r] = str(a + b)
+                                tasks[z][r] = str(b) + '+' + str(a) + '='
+                            otvs[z][r] = str(a + b)
                             break
 
                 # вычитание через сотню
@@ -1002,8 +1019,8 @@ class Examples:
                             provsov[z - 25][0] = a
                             provsov[z - 25][1] = b
                             a = a + i - 100
-                            tasks[y + z][r] = str(a + b) + '–' + str(a) + '='
-                            otvs[y + z][r] = str(b)
+                            tasks[z][r] = str(a + b) + '–' + str(a) + '='
+                            otvs[z][r] = str(b)
                             break
 
             if mm == 30:
@@ -1026,10 +1043,10 @@ class Examples:
                             provsov[z - 30][0] = a
                             provsov[z - 30][1] = b
                             if (randint(0, 1) == 0):
-                                tasks[y + z][r] = str(a) + '•' + str(b) + '='
+                                tasks[z][r] = str(a) + '•' + str(b) + '='
                             else:
-                                tasks[y + z][r] = str(b) + '•' + str(a) + '='
-                            otvs[y + z][r] = str(a * b)
+                                tasks[z][r] = str(b) + '•' + str(a) + '='
+                            otvs[z][r] = str(a * b)
                             break
 
                 # умножение на 100-n
@@ -1051,10 +1068,10 @@ class Examples:
                             provsov[z - 35][0] = a
                             provsov[z - 35][1] = b
                             if (randint(0, 1) == 0):
-                                tasks[y + z][r] = str(a) + '•' + str(b) + '='
+                                tasks[z][r] = str(a) + '•' + str(b) + '='
                             else:
-                                tasks[y + z][r] = str(b) + '•' + str(a) + '='
-                            otvs[y + z][r] = str(a * b)
+                                tasks[z][r] = str(b) + '•' + str(a) + '='
+                            otvs[z][r] = str(a * b)
                             break
 
             if mm == 40:
@@ -1076,8 +1093,8 @@ class Examples:
                         if fl == 0:
                             provsov[z - 40][0] = a
                             provsov[z - 40][1] = b
-                            tasks[y + z][r] = str(a * b) + ':' + str(b) + '='
-                            otvs[y + z][r] = str(a)
+                            tasks[z][r] = str(a * b) + ':' + str(b) + '='
+                            otvs[z][r] = str(a)
                             break
 
                 # деление числа (100-n)*k/k
@@ -1098,32 +1115,72 @@ class Examples:
                         if fl == 0:
                             provsov[z - 45][0] = a
                             provsov[z - 45][1] = b
-                            tasks[y + z][r] = str(a * b) + ':' + str(b) + '='
-                            otvs[y + z][r] = str(a)
+                            tasks[z][r] = str(a * b) + ':' + str(b) + '='
+                            otvs[z][r] = str(a)
                             break
 
             if mm == 50:
-                # деление числа 10n*k/k
-                provsov = [[0] * 2 for i in range(11)]
-                for z in range(50, 45):
-                    while True:
-                        fl = 0
-                        a = randint(1, 9)
-                        a = 100 + a + 100 * randint(int((z - 40) * 0.4), int((z - 40) * 0.8))
-                        b = randint(2, 9)
-                        prst = str(a)
-                        for d in range(0, 10):
-                            if prst.find(str(d) + str(d)) != -1: fl = -1
-                        mas = provsov
-                        for d in range(0, 5):  # все 5 используя предыдущие
-                            if (mas[d][0] == a) or (mas[d][1] == b) or (mas[d][0] == b) or (mas[d][1] == a):
-                                fl = 1
-                        if fl == 0:
-                            provsov[z - 40][0] = a
-                            provsov[z - 40][1] = b
-                            tasks[y + z][r] = str(a * b) + ':' + str(b) + '='
-                            otvs[y + z][r] = str(a)
-                            break
+                # разность квадратов
+                a = randint(112, 149)
+                tasks[50][r] = str(a) + '²–' + str(a - 100) + '²='
+                otvs[50][r] = str(((a - 100) * 2 + 100) * 100)
+                # разность квадратов через симметричные множители
+                a = randint(2, 9) * 10
+                b = randint(1, 3)
+                while True:
+                    c = randint(2, 9) * 10
+                    if a != c: break
+                d = randint(4,7)
+                if randint(0, 1) == 0:
+                    tasks[51][r] = str(a - b) + '•' + str(a + b) + '='
+                else:
+                    tasks[51][r] = str(a + b) + '•' + str(a - b) + '='
+                otvs[51][r] = str(a * a - b * b)
+                if randint(0, 1) == 0:
+                    tasks[52][r] = str(c - d) + '•' + str(c + d) + '='
+                else:
+                    tasks[52][r] = str(c + d) + '•' + str(c - d) + '='
+                otvs[52][r] = str(c * c - d * d)
+
+                # 6 разнознаковых
+                s = [0 for i in range(3)]
+                r = [0 for i in range(3)]
+                while True:
+                    for d in range(3):
+                        q = gene(d+2)
+                        r[d] = q[0]
+                        s[d] = q[1]
+                    if sum([p / abs(p) for p in s if p > 0]) == 1 \
+                            and abs(s[0]) != abs(s[1]) and abs(s[0]) != abs(s[2]) and abs(s[1]) != abs(s[2]):
+                        break
+                st = ['' for i in range(3)]
+                for n in range(3):
+                    for m in r[n]:
+                        if m > 0 and m != r[n][0]:
+                            st[n] = st[n] + '+' + str(m)
+                        else:
+                            st[n] = st[n] + str(m)
+
+
+
+
+                    fl = 0
+                    a = randint(1, 9)
+                    a = 100 + a + 100 * randint(int((z - 40) * 0.4), int((z - 40) * 0.8))
+                    b = randint(2, 9)
+                    prst = str(a)
+                    for d in range(0, 10):
+                        if prst.find(str(d) + str(d)) != -1: fl = -1
+                    mas = provsov
+                    for d in range(0, 5):  # все 5 используя предыдущие
+                        if (mas[d][0] == a) or (mas[d][1] == b) or (mas[d][0] == b) or (mas[d][1] == a):
+                            fl = 1
+                    if fl == 0:
+                        provsov[z - 40][0] = a
+                        provsov[z - 40][1] = b
+                        tasks[z][r] = str(a * b) + ':' + str(b) + '='
+                        otvs[z][r] = str(a)
+                        break
 
                 # деление числа (100-n)*k/k
                 provsov = [[0] * 2 for i in range(11)]
@@ -1143,14 +1200,27 @@ class Examples:
                         if fl == 0:
                             provsov[z - 45][0] = a
                             provsov[z - 45][1] = b
-                            tasks[y + z][r] = str(a * b) + ':' + str(b) + '='
-                            otvs[y + z][r] = str(a)
+                            tasks[z][r] = str(a * b) + ':' + str(b) + '='
+                            otvs[z][r] = str(a)
                             break
-
-
 
         self.tas = tasks
         self.ot = otvs
+
+
+def gene(pol):
+    while True:
+        s = []
+        for i in range(6):
+            while True:
+                k = randint(1, 9) * (2 * randint(0, 1) - 1)
+                if k not in s and -k not in s:
+                    s.append(k)
+                    break
+        su = sum([p for p in s])
+        if sum([p / abs(p) for p in s if p > 0]) == pol and su != 0:
+            break
+    return s, su
 
 
 class Vyborka:
@@ -1280,6 +1350,7 @@ class UpInttabl:
 
 def instr(request):
     return render(request, 'jsprob/instr.html')
+
 
 class Prit4i:
     def __init__(self):
