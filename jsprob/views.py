@@ -236,7 +236,7 @@ def itog(request):
     ud = request.COOKIES.get('lelrec15').split('$')
     if ud[0] != 'e':
         if float(ud[0]) < float(ud[1]):
-            DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl5=ud[1])
+            DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl6=ud[1])
     usna = request.session['ustns4usen']
     if (usna == None): return redirect('home')
     tts = request.COOKIES.get('totsumm').split('(#)$)')
@@ -248,8 +248,7 @@ def itog(request):
     if tt.pole2 == '0':
         tt.pop = tt.pop + 1
         tt.poptd = tt.poptd + 1
-        popmas = tt.pole1.split(
-            '$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
+        popmas = tt.pole1.split('$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
         popmas[1] = str(int(float(popmas[1]) + 1))
         tt.pole1 = '$'.join(popmas)
         tt.save()
@@ -453,28 +452,43 @@ def itog(request):
                     txt1 = 'УВЫ. Вам не удалось набрать ни одного балла.'
                     txt2 = 'Полагаем, Вы просто решили проверить, что произойдет?'
                     txt3 = 'Как видите — ничего особо страшного.'
+
         if sum != 0 and tt.pole2 == '0':
             mas1 = [i for i in
-                    DataUser.objects.filter(scores__gt=sum).order_by('-scores').values_list('scores', 'fik')]
+                    DataUser.objects.filter(rez1__gt=sum).order_by('-res1').values_list('res1', 'fik')]
             pos_now = int(len(mas1) + 1)
             if pos_now > 10:
-                txt5 = 'В ТОП-е сезона Вы пока занимаете: ' + str(pos_now) + ' позицию.'
+                txt4 = 'В абсолютном ТОП-е Вы пока занимаете: ' + str(pos_now) + ' позицию.'
             if 1 < pos_now < 11:
                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                txt5 = 'На данный момент Вы вошли в TOП-10 текущего сезона: ( ' + str(pos_now) + ' место )'
+                txt4 = 'На данный момент Вы вошли в глобальный TOП-10: ( ' + str(pos_now) + ' место )'
             if pos_now == 1:
                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!!'
-                txt5 = 'На данный момент Вы становитесь лидером ТОП-10 сезона.'
+                txt4 = 'На данный момент Вы становитесь ЛИДЕРОМ игры!!!'
             if dsd > 0:
                 p = sum
             else:
                 p = tt.res1
 
             mas1 = [i for i in
+                    DataUser.objects.filter(scores__gt=sum).order_by('-scores').values_list('scores', 'fik')]
+            pos_now = int(len(mas1) + 1)
+            txtdop = 'В '
+            if txt4 != '': txtdop = 'также в '
+            if pos_now > 10:
+                txt5 = txtdop + 'ТОП-е сезона Вы пока занимаете: ' + str(pos_now) + ' позицию.'
+            if 1 < pos_now < 11:
+                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                txt5 = txtdop + ' данный момент Вы вошли в TOП-10 текущего сезона: ( ' + str(pos_now) + ' место )'
+            if pos_now == 1:
+                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!!'
+                txt5 = txtdop + ' данный момент Вы становитесь лидером ТОП-10 сезона.'
+
+            mas1 = [i for i in
                     DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
             pos_now = int(len(mas1) + 1)
             DataUser.objects.filter(log=usna).update(scorTD=sum)
-            if txt5 != '':
+            if txt5 != '' or txt4 != '':
                 txtdop = 'и '
             else:
                 txtdop = 'На данный момент Вы '
@@ -639,67 +653,40 @@ def begin(request):
                   {'usp': 'Успеха, ' + usefio[1], 'lv': 'Этап 1.', 'namlv': 'Разминка', 'list': 'list1'})
 
 
-# def level2(request):
-#     ud = request.COOKIES.get('lelrec15').split('$')
-#     usefio = request.user.first_name.split('$#$%')
-#     if ud[0] != 'e':
-#         if float(ud[0]) < float(ud[1]):
-#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl1=ud[1])
-#     return render(request, 'jsprob/level2.html', {'nm': usefio[1]})
-#
-#
-# def level3(request):
-#     ud = request.COOKIES.get('lelrec15').split('$')
-#     if ud[0] != 'e':
-#         if float(ud[0]) < float(ud[1]):
-#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl2=ud[1])
-#     return render(request, 'jsprob/level3.html')
-#
-#
-# def level4(request):
-#     ud = request.COOKIES.get('lelrec15').split('$')
-#     if ud[0] != 'e':
-#         if float(ud[0]) < float(ud[1]):
-#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl3=ud[1])
-#     return render(request, 'jsprob/level4.html')
-#
-#
-# def level5(request):
-#     ud = request.COOKIES.get('lelrec15').split('$')
-#     if ud[0] != 'e':
-#         if float(ud[0]) < float(ud[1]):
-#             DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl4=ud[1])
-#     return render(request, 'jsprob/level5.html')
-
-
 def list1(request):
-    Vyb = Vyborka(0, 10)
+    Vyb = Vyborka(request, 0, 10)
     data = {'ti': 4000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
     return render(request, 'jsprob/list1.html', data)
 
 
 def list2(request):
-    Vyb = Vyborka(10, 20)
+    Vyb = Vyborka(request, 10, 20)
     return render(request, 'jsprob/list2.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 7000})
 
 
 def list3(request):
-    Vyb = Vyborka(20, 30)
+    Vyb = Vyborka(request, 20, 30)
     return render(request, 'jsprob/list3.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 8000})
 
 
 def list4(request):
-    Vyb = Vyborka(30, 40)
+    Vyb = Vyborka(request, 30, 40)
     return render(request, 'jsprob/list4.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 10000})
 
 
 def list5(request):
-    Vyb = Vyborka(40, 50)
+    Vyb = Vyborka(request, 40, 50)
     return render(request, 'jsprob/list5.html',
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 9000})
+
+
+def list6(request):
+    Vyb = Vyborka(request, 50, 60)
+    return render(request, 'jsprob/list6.html',
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 20000})
 
 
 def itoglv(request):
@@ -713,9 +700,6 @@ def itoglv(request):
         0]  # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
     mn = sclvus
     tx = orf1(mn) + '.'
-    # if (mn // 10) % 10 != 1:
-    #     if mn % 10 == 2 or mn % 10 == 3 or mn % 10 == 4: tx = ' очка.'
-    #     if mn % 10 == 1: tx = ' очко.'
     vstsl = ['На разминке ', 'Во втором ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
     txt1 = vstsl + 'этапе Вы набрали ' + ud[1] + tx
     txt2 = 'Решено правильно: ' + ud[2] + '; из них безошибочно: ' + ud[3] + '. '
@@ -796,7 +780,7 @@ def itoglv(request):
                        str(pos_old) + ' --> ' + str(pos_now) + ' )'
     else:
         if float(ud[1]) < float(sclvus) * .8:
-            txt6 = 'Соберитесь. Ваш личный рекорд пройденного этапа куда выше.'
+            txt6 = 'Надо поднажать. Ваш личный рекорд пройденного этапа куда выше.'
         if float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
             txt6 = 'Еще немного и Ваш рекорд пройденного этапа ( ' + str(int(float(sclvus))) + ' ) был бы побит.'
 
@@ -807,12 +791,12 @@ def itoglv(request):
     if request.method == 'GET':
         answer = request.GET
         if 'prod' in answer:
-            if ud[0] == '5':  # '5' - количество этапов
+            if ud[0] == '6':  # '6' - количество этапов
                 DataUser.objects.filter(log=usna).update(pole2='0')
                 return redirect('itog')
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
-            mesnam = ['"Сквозь десятки"', "Минуя сотни", '"Хитрое" умножение', '"Life hack"-Деление', 'Назв 6.'][
-                lastlv - 1]
+            mesnam = ['"Сквозь десятки"', "Минуя сотни",
+                      '"Хитрое" умножение', '"Life hack"-Деление', '"высший пилотаж"'][lastlv - 1]
             usp = ['Удачи, ' + request.session['ustns4usennam'] + '!', '', '', '', '', ''][lastlv - 1]
             return render(request, 'jsprob/level1.html',
                           {'usp': usp, 'lv': meslv, 'namlv': mesnam, 'list': 'list' + str(lastlv + 1)})
@@ -1268,7 +1252,6 @@ class Examples:
                     tasks[k1][r], tasks[k2][r] = tasks[k2][r], tasks[k1][r]
                     otvs[k1][r], otvs[k2][r] = otvs[k2][r], otvs[k1][r]
 
-
         self.tas = tasks
         self.ot = otvs
 
@@ -1288,29 +1271,44 @@ def gene(pol):
     return s, su
 
 
-class Vyborka:
-    def __init__(self, m, n):
+class Vyborka():
+    def __init__(self, request, m, n):
         rab = 1
+        kod = request.COOKIES.get('keyshif').split('$')
+        print(kod)
         Ex = Examples(rab, m)
-        tasks = []
-        for i in range(len(Ex.tas)): tasks.append(Ex.tas[i][0])
-        simv = ['+', '–', '•', ':']
-        tasks1 = []
-        tasksz = []
-        tasks2 = []
-        otvs = randint(12, 98)
-        for r in range(m, n):
-            for z in range(4):
-                if tasks[r].find(simv[z]) != -1:
-                    x = tasks[r].find(simv[z])
-                    tasks1.append(float(tasks[r][:x]) + otvs + (r - m) ** 2)
-                    tasksz.append(z)
-                    tasks2.append(float(tasks[r][x + 1:len(tasks[r]) - 1]))
+        if m < 50:
+            tasks = []
+            for i in range(len(Ex.tas)): tasks.append(Ex.tas[i][0])
+            simv = ['+', '–', '•', ':']
+            tasks1 = []
+            tasksz = []
+            tasks2 = []
+            otvs = randint(12, 98)
+            for r in range(m, n):
+                for z in range(4):
+                    if tasks[r].find(simv[z]) != -1:
+                        x = tasks[r].find(simv[z])
+                        tasks1.append(float(tasks[r][:x]) + otvs + (r - m) ** 2)
+                        tasksz.append(z)
+                        tasks2.append(float(tasks[r][x + 1:len(tasks[r]) - 1]))
 
-        self.t1 = tasks1
-        self.t2 = tasks2
-        self.tz = tasksz
-        self.ot = otvs
+            self.t1 = tasks1
+            self.t2 = tasks2
+            self.tz = tasksz
+            self.ot = otvs
+        else:
+            kod = request.COOKIES.get('keyshif').split('$')
+            tasks = []
+            for k in range(m, n):
+                for i in Ex.tas[k][0]:
+                    if 47 < ord(i) < 58:
+                        print
+
+
+
+
+
 
 
 class Defuser:
@@ -1318,7 +1316,6 @@ class Defuser:
         krit = 'scoresl' + str(lv)
         mas = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik')][:10]
         sclvus = DataUser.objects.filter(log=usna, fik=fio).values_list(krit)[0][0]
-        print('sclvus', sclvus)
         # mas = [i for i in DataUser.objects.filter(scores__gt=84000).order_by(krit).values_list('scoresl1')]
         sctop = [i[0] for i in mas]
         fiktop = [i[1] for i in mas]
