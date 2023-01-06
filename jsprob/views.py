@@ -1120,11 +1120,12 @@ class Examples:
                             break
 
             if mm == 50:
-                # разность квадратов
+                # 50 разность квадратов
                 a = randint(112, 149)
                 tasks[50][r] = str(a) + '²–' + str(a - 100) + '²='
                 otvs[50][r] = str(((a - 100) * 2 + 100) * 100)
-                # разность квадратов через симметричные множители
+
+                # 51-52 разность квадратов через симметричные множители
                 a = randint(2, 9) * 10
                 b = randint(1, 3)
                 while True:
@@ -1142,7 +1143,7 @@ class Examples:
                     tasks[52][r] = str(c + d) + '•' + str(c - d) + '='
                 otvs[52][r] = str(c * c - d * d)
 
-                # 6 разнознаковых
+                # 53-55 6 разнознаковых
                 s = [0 for i in range(3)]
                 r = [0 for i in range(3)]
                 while True:
@@ -1160,49 +1161,113 @@ class Examples:
                             st[n] = st[n] + '+' + str(m)
                         else:
                             st[n] = st[n] + str(m)
+                tasks[53][r] = st[0]
+                otvs[53][r] = s[0]
+                tasks[54][r] = st[1]
+                otvs[54][r] = s[1]
+                tasks[55][r] = st[2]
+                otvs[55][r] = s[2]
 
-
-
-
-                    fl = 0
-                    a = randint(1, 9)
-                    a = 100 + a + 100 * randint(int((z - 40) * 0.4), int((z - 40) * 0.8))
-                    b = randint(2, 9)
-                    prst = str(a)
-                    for d in range(0, 10):
-                        if prst.find(str(d) + str(d)) != -1: fl = -1
-                    mas = provsov
-                    for d in range(0, 5):  # все 5 используя предыдущие
-                        if (mas[d][0] == a) or (mas[d][1] == b) or (mas[d][0] == b) or (mas[d][1] == a):
-                            fl = 1
-                    if fl == 0:
-                        provsov[z - 40][0] = a
-                        provsov[z - 40][1] = b
-                        tasks[z][r] = str(a * b) + ':' + str(b) + '='
-                        otvs[z][r] = str(a)
-                        break
-
-                # деление числа (100-n)*k/k
-                provsov = [[0] * 2 for i in range(11)]
-                for z in range(45, 50):
+                # 56-57 (125 25)
+                i = randint(1, 4)  # (1-125,125 2-25,25 3-125,25(8) 4-125,25(4))
+                if i == 1 or i == 2:
                     while True:
-                        fl = 0
-                        a = randint(1, 5)
-                        a = 100 - a + 100 * randint(int((z - 45) * 0.4), int((z - 45) * 0.8))
-                        b = randint(2, 9)
-                        prst = str(a)
-                        for d in range(0, 10):
-                            if prst.find(str(d) + str(d)) != -1: fl = -1
-                        mas = provsov
-                        for d in range(0, 5):  # все 5 используя предыдущие
-                            if (mas[d][0] == a) or (mas[d][1] == b) or (mas[d][0] == b) or (mas[d][1] == a):
-                                fl = 1
-                        if fl == 0:
-                            provsov[z - 45][0] = a
-                            provsov[z - 45][1] = b
-                            tasks[z][r] = str(a * b) + ':' + str(b) + '='
-                            otvs[z][r] = str(a)
+                        a = randint(2, 24)
+                        b = randint(2, 24)
+                        if a != b: break
+                    while True:
+                        a1 = randint(2, 12)
+                        b1 = randint(2, 12)
+                        if a1 != b1: break
+                    d = [[a, b], [a1, b1]]
+                    e = [4, 8]
+                    c = 25 + (i - 1) * 100
+                    if randint(0, 1) == 0:
+                        tasks[56][r] = str(c) + '•' + str(400 + d[i - 1][0] * e[i - 1]) + '='
+                    else:
+                        tasks[56][r] = str(400 + d[i - 1][0] * e[i - 1]) + '•' + str(c) + '='
+                    otvs[56][r] = str((400 + d[i - 1][0] * e[i - 1]) * c)
+
+                    if randint(0, 1) == 0:
+                        tasks[57][r] = str(c) + '•' + str(800 + d[i - 1][1] * e[i - 1]) + '='
+                    else:
+                        tasks[57][r] = str(800 + d[i - 1][1] * e[i - 1]) + '•' + str(c) + '='
+                    otvs[57][r] = str((800 + d[i - 1][1] * e[i - 1]) * c)
+
+                if i == 3:
+                    while True:
+                        a = randint(2, 24)
+                        b = randint(2, 12)
+                        if a != 2 * b and a != b:
                             break
+                    for k in range(56, 58):
+                        d = [a, b]
+                        e = [4, 8]
+                        c = (57 - k) * 100 + 25
+                        if randint(0, 1) == 0:
+                            tasks[k][r] = str(c) + '•' + str(800 + d[57 - k] * e[57 - k]) + '='
+                        else:
+                            tasks[k][r] = str(800 + d[57 - k] * e[57 - k]) + '•' + str(c) + '='
+                        otvs[k][r] = str((800 + d[57 - k] * e[57 - k]) * c)
+
+                if i == 4:
+                    while True:
+                        a = randint(2, 24)
+                        b = randint(2, 12)
+                        if a != 2 * b and a != b:
+                            break
+                    for k in range(56, 58):
+                        d = [a, b]
+                        e = [4, 8]
+                        c = (57 - k) * 100 + 25
+                        if randint(0, 1) == 0:
+                            tasks[k][r] = str(c) + '•' + str(400 + d[57 - k] * e[57 - k]) + '='
+                        else:
+                            tasks[k][r] = str(400 + d[57 - k] * e[57 - k]) + '•' + str(c) + '='
+                        otvs[k][r] = str((400 + d[57 - k] * e[57 - k]) * c)
+
+                # 58 (распределит99)
+                while True:
+                    a = randint(1, 8) * 10 + randint(1, 8)
+                    b = 99 - a
+                    c = randint(1, 8) * 10 + randint(1, 9)
+                    if a != b and a != c and b != c: break
+                if randint(0, 1) == 0:
+                    f = str(a) + '•' + str(c)
+                else:
+                    f = str(c) + '•' + str(a)
+                if randint(0, 1) == 0:
+                    g = str(b) + '•' + str(c)
+                else:
+                    g = str(c) + '•' + str(b)
+                tasks[58][r] = f + '+' + g
+                otvs[58][r] = str(a * c + b * c)
+
+                # 59 (распределит101)
+                while True:
+                    a1 = randint(1, 8) * 10 + randint(2, 9)
+                    b1 = 101 - a
+                    c1 = randint(1, 8) * 10 + randint(1, 9)
+                    if a1 != b1 and a1 != c1 and b1 != c1 and a1 != a and c1 != c: break
+                if randint(0, 1) == 0:
+                    f = str(a1) + '•' + str(c1)
+                else:
+                    f = str(c1) + '•' + str(a1)
+                if randint(0, 1) == 0:
+                    g = str(b1) + '•' + str(c1)
+                else:
+                    g = str(c1) + '•' + str(b1)
+                tasks[59][r] = f + '+' + g
+                otvs[59][r] = str(a1 * c1 + b1 * c1)
+
+                for i in range(1, randint(20, 25)):
+                    while True:
+                        k1 = randint(50, 59)
+                        k2 = randint(50, 59)
+                        if k1 != k2: break
+                    tasks[k1][r], tasks[k2][r] = tasks[k2][r], tasks[k1][r]
+                    otvs[k1][r], otvs[k2][r] = otvs[k2][r], otvs[k1][r]
+
 
         self.tas = tasks
         self.ot = otvs
