@@ -33,27 +33,27 @@
         <div style="clear: left"></div>
         </br>
 
-        <h3 style="font-style: italic; font-size: 28px;" id = 'txt'> {{txt}} </h3>
-        <h3 style="font-style: italic; font-size: 28px;" id = 'txt2'> {{txt1}} </h3>
+        <h3 style="font-size: max(16px, 1.6vw); font-style: italic; float: center;"> {{txt}} </h3>
+        <h3 style="font-size: max(16px, 1.6vw); font-style: italic; float: center;"> {{txt1}} </h3>
         </br></br>
         {% if txt2 != '' %}
-        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt2}} </h3>
+        <h3 style="font-size: max(14px, 1.4vw); font-style: italic; float: center;" > {{txt2}} </h3>
         {% endif %}
         {% if txt3 != '' %}
-        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt3}} </h3>
+        <h3 style="font-size: max(14px, 1.4vw); font-style: italic; float: center;" > {{txt3}} </h3>
         {% endif %}
         {% if txt4 != '' %}
-        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt4}} </h3>
+        <h3 style="font-size: max(14px, 1.4vw); font-style: italic; float: center;" > {{txt4}} </h3>
         {% endif %}
         {% if txt5 != '' %}
-        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt5}} </h3>
+        <h3 style="font-size: max(14px, 1.4vw); font-style: italic; float: center;" > {{txt5}} </h3>
         {% endif %}
         {% if txt6 != '' %}
-        <h3 style="font-style: italic; font-size: 24px; float: center;" > {{txt6}} </h3>
+        <h3 style="font-size: max(14px, 1.4vw); font-style: italic; float: center;" > {{txt6}} </h3>
         {% endif %}
         </br></br>
-        <h2 style="font-style: italic; font-size: 24px; float: center;" > {{txt7}} </h2>
-        <h2 style="font-style: italic; font-size: 20px; float: right;" > {{txt8}} </h2>
+        <h2 style='font-size: max(15px, 1.5vw); font-style: italic' > {{txt7}} </h2>
+        <h2 style='font-size: max(13px, 1.3vw); float: right;' > {{txt8}} </h2>
         </br></br></br>
         <h4 id = 'wait'> </h4>
         <a href="{% url 'toptab' %}" id = "butt" class="btn btn-success" onclick="Func()"> ТОП ИГРОКОВ </a>

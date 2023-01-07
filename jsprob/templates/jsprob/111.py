@@ -1,5 +1,10 @@
 from random import randint
 
+p1 = ['gtnz']
+
+print('@%>$'.join(p1))
+
+
 
 o = [['sdfsdfs', '039'],['r5324yh','ds2']]
 for i in o[0][1]:

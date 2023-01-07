@@ -24,6 +24,10 @@ aside button {
     }
 
 
+main {
+min-height: 100vh;
+}
+
 main .features {
     float: left;
     background: #40E0D0;

@@ -1,11 +1,9 @@
 import time, datetime
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.models import User
 from random import randint
 from .models import DataUser, Indexs
 from django.contrib.auth import authenticate, login
-import json
 
 
 # def setcookie(request):
@@ -78,7 +76,7 @@ def hello(request):
         nm = ''
         fl = 0
     p1 = Indexs.objects.get(id=1).pole1.split('@%>$')
-    if len(p1) != 0 and dat.curdate == datn:
+    if len(p1) != 0 and dat.curdate == datn and p1 != ['0']:
         fl1 = 1
         prit = ''
         st = ''
@@ -118,7 +116,7 @@ def regist(request):
             if User.objects.filter(username=lg).exists():
                 return render(request, 'jsprob/ujuse.html')
             else:
-                DataUser(log=lg, scores=0, fik=f + ' ' + n + ' ' + k).save()
+                DataUser(log=lg, scores=0, pop=0, fik=f + ' ' + n + ' ' + k, pole1='0$0$0').save()
                 user = User.objects.create_user(lg, '', '4591423', first_name=f + '$#$%' + n + '$#$%' + k)
                 user.save()
                 user = authenticate(request, username=lg, password='4591423')
@@ -146,7 +144,10 @@ def dayend():
                     p1.pop()
                     p1 = '@%>$'.join([lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')'] + p1)
                 else:
-                    p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')' + '@%>$' + '@%>$'.join(p1)
+                    if p1 == ['0']:
+                        p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')'
+                    else:
+                        p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')' + '@%>$' + '@%>$'.join(p1)
                 Indexs.objects.filter(id=1).update(pole1=p1)
             kar.scorTD = 0
             kar.save()
@@ -455,7 +456,7 @@ def itog(request):
 
         if sum != 0 and tt.pole2 == '0':
             mas1 = [i for i in
-                    DataUser.objects.filter(rez1__gt=sum).order_by('-res1').values_list('res1', 'fik')]
+                    DataUser.objects.filter(res1__gt=sum).order_by('-res1').values_list('res1', 'fik')]
             pos_now = int(len(mas1) + 1)
             if pos_now > 10:
                 txt4 = 'В абсолютном ТОП-е Вы пока занимаете: ' + str(pos_now) + ' позицию.'
@@ -623,7 +624,7 @@ def reset(request):
                 allp.pole2 = '0$' + po + '$0$' + p2[3] + '$' + p2[4] + '$' + p2[5] + '$' + p2[6] + '$' + p2[7]
                 allp.scores = 0
                 allp.save()
-            allpolz = TopTabllev.objects.all()
+            allpolz = DataUser.objects.all()
             i = 0
             for allp in allpolz:
                 i += 1
@@ -706,8 +707,9 @@ def itoglv(request):
     txt6 = ''
 
     if float(ud[1]) > float(sclvus):
-        txt5 = 'Вы улучшили собственный рекорд пройденного этапа на ' + str(int(float(ud[1]) - float(sclvus))) + '. ' \
-               + ' (' + str(int(float(sclvus))) + ' --> ' + str(int(float(ud[1]))) + ')'
+        if float(sclvus) != 0:
+            txt5 = 'Вы улучшили собственный рекорд пройденного этапа на ' + str(int(float(ud[1]) - float(sclvus)))\
+                   + '. ' + ' (' + str(int(float(sclvus))) + ' --> ' + str(int(float(ud[1]))) + ')'
 
         mas0 = [i for i in DataUser.objects.filter(scoresl1__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
         if ud[0] == '1':
