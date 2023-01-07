@@ -53,8 +53,8 @@
 
         function Func() {
             ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
-            if (Math.abs(ost-ds)>7000) {
-            na4 = new Date() - new Date(0) + 120000;
+            if (Math.abs(ost-ds)>11000) {
+            na4 = new Date() - new Date(0) + 200000;
             alert('Контроль безопасности обнаружил смещение времени! Придется начать сначала!');
             }
             ds = ost;
@@ -277,15 +277,6 @@
             localStorage.setItem('lvl5', ost);
             document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = "lelrec15=" + 5 + '$' + ost + '$' + (p0 + p1) + '$' + p0;
-            //var txt2 = document.getElementById('wait');
-            //txt2.innerHTML = 'ПОЖАЛУЙСТА, ПОДОЖДИТЕ';
-            //txt2.style.fontStyle = 'Italic';
-            //document.cookie = "totsumm=" + localStorage.getItem('totsum') + '(#)$)'
-            // + localStorage.getItem('pravresh') + '(#)$)' + localStorage.getItem('bezosh') + '(#)$)'
-            // + localStorage.getItem('lvl1') + '(#)$)' + localStorage.getItem('lvl2') + '(#)$)'
-            //  + localStorage.getItem('lvl3') + '(#)$)' + localStorage.getItem('lvl4') + '(#)$)'
-            //   + localStorage.getItem('lvl5');
-            //localStorage.setItem('key1', 0);
             clearInterval(timerId);
             window.location.assign('itoglv');
             }

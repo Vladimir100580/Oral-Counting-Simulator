@@ -5,6 +5,9 @@ o = [['sdfsdfs', '039'],['r5324yh','ds2']]
 for i in o[0][1]:
     print(i, type(i), ord(i))
 
+s = []
+s.append(7)
+print(s)
 
 # def gene(pol):
 #     while True:

@@ -510,7 +510,7 @@ def itog(request):
                                                 'txt4': txt4, 'txt5': txt5, 'txt6': txt6, 'txt7': pr[0],
                                                 'txt8': pr[1], 'pr': int(float(tts[1]) + float(tts[2])),
                                                 'bz': int(float(tts[2])), 'lv1': tts[3], 'lv2': tts[4], 'lv3': tts[5],
-                                                'lv4': tts[6], 'lv5': tts[7],
+                                                'lv4': tts[6], 'lv5': tts[7], 'lv6': tts[8],
                                                 'bon': bon, 'bonz': bonz, 'su': str(sum - bonz)})
 
 
@@ -638,11 +638,9 @@ def reset(request):
 def begin(request):
     dayend()
     usna = request.user.username
-    # ud = request.COOKIES.get('keyshif').split('$')
-    # print('ud=', ud)
     tt = DataUser.objects.get(log=usna)
-    popmas = tt.pole1.split(
-        '$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
+    popmas = tt.pole1.split('$')
+    # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
     popmas[0] = str(int(float(popmas[0]) + 1))
     popmas[2] = str(int(float(popmas[2]) + 1))
     DataUser.objects.filter(log=usna).update(pole1='$'.join(popmas))
@@ -655,38 +653,38 @@ def begin(request):
 
 def list1(request):
     Vyb = Vyborka(request, 0, 10)
-    data = {'ti': 4000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
+    data = {'ti': 50000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
     return render(request, 'jsprob/list1.html', data)
 
 
 def list2(request):
     Vyb = Vyborka(request, 10, 20)
     return render(request, 'jsprob/list2.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 7000})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 100000})
 
 
 def list3(request):
     Vyb = Vyborka(request, 20, 30)
     return render(request, 'jsprob/list3.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 8000})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 120000})
 
 
 def list4(request):
     Vyb = Vyborka(request, 30, 40)
     return render(request, 'jsprob/list4.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 10000})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 150000})
 
 
 def list5(request):
     Vyb = Vyborka(request, 40, 50)
     return render(request, 'jsprob/list5.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 9000})
+                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 130000})
 
 
 def list6(request):
     Vyb = Vyborka(request, 50, 60)
     return render(request, 'jsprob/list6.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 20000})
+                  {'tas': Vyb.tas, 'ot': Vyb.ot, 'ti': 180000})
 
 
 def itoglv(request):
@@ -787,6 +785,9 @@ def itoglv(request):
         # print('sclvus:', sclvus, '  ud[1]:', ud[1])
         #
         # print('mas0:', mas0, len(mas0), '   mas1:', mas1, len(mas1))
+    pr = ['', '']
+    if txtpz != '':
+        pr = Prit4i().pr
 
     if request.method == 'GET':
         answer = request.GET
@@ -796,12 +797,13 @@ def itoglv(request):
                 return redirect('itog')
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
             mesnam = ['"Сквозь десятки"', "Минуя сотни",
-                      '"Хитрое" умножение', '"Life hack"-Деление', '"высший пилотаж"'][lastlv - 1]
+                      '"Хитрое" умножение', '"Life hack"-Деление', '"Высший пилотаж"'][lastlv - 1]
             usp = ['Удачи, ' + request.session['ustns4usennam'] + '!', '', '', '', '', ''][lastlv - 1]
             return render(request, 'jsprob/level1.html',
                           {'usp': usp, 'lv': meslv, 'namlv': mesnam, 'list': 'list' + str(lastlv + 1)})
     return render(request, 'jsprob/itoglv.html',
-                  {'txt1': txt1, 'txt2': txt2, 'txt5': txt5, 'txt6': txt6, 'txtpz': txtpz})
+                  {'txt1': txt1, 'txt2': txt2, 'txt5': txt5, 'txt6': txt6, 'txtpz': txtpz, 'txt7': pr[0],
+                                                'txt8': pr[1]})
 
 
 class Examples:
@@ -1106,7 +1108,7 @@ class Examples:
             if mm == 50:
                 # 50 разность квадратов
                 a = randint(112, 149)
-                tasks[50][r] = str(a) + '²–' + str(a - 100) + '²='
+                tasks[50][r] = str(a) + '²–' + str(a - 100) + '²'
                 otvs[50][r] = str(((a - 100) * 2 + 100) * 100)
 
                 # 51-52 разность квадратов через симметричные множители
@@ -1117,40 +1119,40 @@ class Examples:
                     if a != c: break
                 d = randint(4,7)
                 if randint(0, 1) == 0:
-                    tasks[51][r] = str(a - b) + '•' + str(a + b) + '='
+                    tasks[51][r] = str(a - b) + '•' + str(a + b)
                 else:
-                    tasks[51][r] = str(a + b) + '•' + str(a - b) + '='
+                    tasks[51][r] = str(a + b) + '•' + str(a - b)
                 otvs[51][r] = str(a * a - b * b)
                 if randint(0, 1) == 0:
-                    tasks[52][r] = str(c - d) + '•' + str(c + d) + '='
+                    tasks[52][r] = str(c - d) + '•' + str(c + d)
                 else:
-                    tasks[52][r] = str(c + d) + '•' + str(c - d) + '='
+                    tasks[52][r] = str(c + d) + '•' + str(c - d)
                 otvs[52][r] = str(c * c - d * d)
 
                 # 53-55 6 разнознаковых
                 s = [0 for i in range(3)]
-                r = [0 for i in range(3)]
+                r1 = [0 for i in range(3)]
                 while True:
                     for d in range(3):
-                        q = gene(d+2)
-                        r[d] = q[0]
+                        q = gene(d + 2)
+                        r1[d] = q[0]
                         s[d] = q[1]
                     if sum([p / abs(p) for p in s if p > 0]) == 1 \
                             and abs(s[0]) != abs(s[1]) and abs(s[0]) != abs(s[2]) and abs(s[1]) != abs(s[2]):
                         break
                 st = ['' for i in range(3)]
                 for n in range(3):
-                    for m in r[n]:
-                        if m > 0 and m != r[n][0]:
+                    for m in r1[n]:
+                        if m > 0 and m != r1[n][0]:
                             st[n] = st[n] + '+' + str(m)
                         else:
                             st[n] = st[n] + str(m)
                 tasks[53][r] = st[0]
-                otvs[53][r] = s[0]
+                otvs[53][r] = str(s[0])
                 tasks[54][r] = st[1]
-                otvs[54][r] = s[1]
+                otvs[54][r] = str(s[1])
                 tasks[55][r] = st[2]
-                otvs[55][r] = s[2]
+                otvs[55][r] = str(s[2])
 
                 # 56-57 (125 25)
                 i = randint(1, 4)  # (1-125,125 2-25,25 3-125,25(8) 4-125,25(4))
@@ -1167,15 +1169,15 @@ class Examples:
                     e = [4, 8]
                     c = 25 + (i - 1) * 100
                     if randint(0, 1) == 0:
-                        tasks[56][r] = str(c) + '•' + str(400 + d[i - 1][0] * e[i - 1]) + '='
+                        tasks[56][r] = str(c) + '•' + str(400 + d[i - 1][0] * e[i - 1])
                     else:
-                        tasks[56][r] = str(400 + d[i - 1][0] * e[i - 1]) + '•' + str(c) + '='
+                        tasks[56][r] = str(400 + d[i - 1][0] * e[i - 1]) + '•' + str(c)
                     otvs[56][r] = str((400 + d[i - 1][0] * e[i - 1]) * c)
 
                     if randint(0, 1) == 0:
-                        tasks[57][r] = str(c) + '•' + str(800 + d[i - 1][1] * e[i - 1]) + '='
+                        tasks[57][r] = str(c) + '•' + str(800 + d[i - 1][1] * e[i - 1])
                     else:
-                        tasks[57][r] = str(800 + d[i - 1][1] * e[i - 1]) + '•' + str(c) + '='
+                        tasks[57][r] = str(800 + d[i - 1][1] * e[i - 1]) + '•' + str(c)
                     otvs[57][r] = str((800 + d[i - 1][1] * e[i - 1]) * c)
 
                 if i == 3:
@@ -1189,9 +1191,9 @@ class Examples:
                         e = [4, 8]
                         c = (57 - k) * 100 + 25
                         if randint(0, 1) == 0:
-                            tasks[k][r] = str(c) + '•' + str(800 + d[57 - k] * e[57 - k]) + '='
+                            tasks[k][r] = str(c) + '•' + str(800 + d[57 - k] * e[57 - k])
                         else:
-                            tasks[k][r] = str(800 + d[57 - k] * e[57 - k]) + '•' + str(c) + '='
+                            tasks[k][r] = str(800 + d[57 - k] * e[57 - k]) + '•' + str(c)
                         otvs[k][r] = str((800 + d[57 - k] * e[57 - k]) * c)
 
                 if i == 4:
@@ -1205,9 +1207,9 @@ class Examples:
                         e = [4, 8]
                         c = (57 - k) * 100 + 25
                         if randint(0, 1) == 0:
-                            tasks[k][r] = str(c) + '•' + str(400 + d[57 - k] * e[57 - k]) + '='
+                            tasks[k][r] = str(c) + '•' + str(400 + d[57 - k] * e[57 - k])
                         else:
-                            tasks[k][r] = str(400 + d[57 - k] * e[57 - k]) + '•' + str(c) + '='
+                            tasks[k][r] = str(400 + d[57 - k] * e[57 - k]) + '•' + str(c)
                         otvs[k][r] = str((400 + d[57 - k] * e[57 - k]) * c)
 
                 # 58 (распределит99)
@@ -1230,7 +1232,7 @@ class Examples:
                 # 59 (распределит101)
                 while True:
                     a1 = randint(1, 8) * 10 + randint(2, 9)
-                    b1 = 101 - a
+                    b1 = 101 - a1
                     c1 = randint(1, 8) * 10 + randint(1, 9)
                     if a1 != b1 and a1 != c1 and b1 != c1 and a1 != a and c1 != c: break
                 if randint(0, 1) == 0:
@@ -1300,14 +1302,22 @@ class Vyborka():
         else:
             kod = request.COOKIES.get('keyshif').split('$')
             tasks = []
+            otvs = []
+            l = 0
             for k in range(m, n):
+                s = []
                 for i in Ex.tas[k][0]:
-                    if 47 < ord(i) < 58:
-                        print
-
-
-
-
+                    s.append(ord(i) + float(kod[l]))
+                    l += 1
+                tasks.append(s)
+                s = []
+                for i in Ex.ot[k][0]:
+                    s.append(ord(i) + float(kod[l]))
+                    l += 1
+                otvs.append(s)
+                print(tasks, otvs)
+            self.tas = tasks
+            self.ot = otvs
 
 
 

@@ -18,6 +18,13 @@
          <h4> {{txt5}} </h4><br>
          <h3> {{txt6}} </h3><br>
          <h5> {{txt2}} </h5>
+
+        {% if txtpz != '' %}
+        </br></br></br>
+        <h2 style="font-style: italic; font-size: 24px; float: center;" > {{txt7}} </h2>
+        <h2 style="font-style: italic; font-size: 20px; float: right;" > {{txt8}} </h2>
+        </br>
+        {% endif %}
         </br>
         <h2 id ='wt' style="font-style: italic"></h2>
         <button class="btn btn-danger btn" id = 'butt' type="submit" name="prod" onclick="Func()"> ПРОДОЛЖИТЬ </button></br></br>

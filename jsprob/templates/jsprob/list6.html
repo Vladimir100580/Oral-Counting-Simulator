@@ -20,21 +20,40 @@
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn7' onclick="Func7()"> &nbsp;7&nbsp; </button>
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn8' onclick="Func8()"> &nbsp;8&nbsp; </button>
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn9' onclick="Func9()"> &nbsp;9&nbsp; </button></br>
-        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn0' onclick="Func0()"> &nbsp;0&nbsp; </button>
-        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnd' onclick="Funcd()"> &nbsp;<-&nbsp; </button></br></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn0' onclick="Funcm()"> &nbsp;-&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnm' onclick="Func0()"> &nbsp;0&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnd' onclick="Funcd()"> &nbsp;<- </button></br></br>
         <h2 style="font-style: italic" id = "prnpr"> </h2>
         <h2 style="font-style: italic" id = "timer"> </h2>
         <a href="{% url 'home' %}" id = "byni" class="btn btn-danger btn-sm"> ЗАВЕРШИТЬ! Перейти в главное меню. </a>
     </div>
     <script>
-
-
-        tas1 ={{tas1}};
-        tas2 ={{tas2}};
-        tasz ={{tasz}};
-        otv = {{otv}};
+        tas = {{tas}};
+        ot1 = {{ot}};
+        tass = [];
+        ots = [];
+        sh = localStorage.getItem('shifr').split('$');
+        l = 0
+        for (i = 0; i < tas.length; i++)
+            {
+            s = ''
+            for (k = 0; k < tas[i].length; k++)
+                {
+                s += String.fromCharCode(tas[i][k] - sh[l])
+                l++
+                }
+            tass.push(s)
+            s = ''
+            for (k = 0; k < ot1[i].length; k++)
+                {
+                s += String.fromCharCode(ot1[i][k] - sh[l])
+                l++
+                }
+            ots.push(s)
+            }
+        //alert(tass);
+        //alert(ots);
         ti = {{ti}};
-        simv = ['+', '–', '•', ':'];
         prim=-1;
         kon = Number(localStorage.getItem('kontr'))+1;
         localStorage.setItem('kontr', kon);
@@ -55,12 +74,12 @@
 
         function Func() {
             ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
-            if (Math.abs(ost-ds)>7000) {
-            na4 = new Date() - new Date(0) + 120000;
+            if (Math.abs(ost-ds)>16000) {
+            na4 = new Date() - new Date(0) + 200000;
             alert('Контроль безопасности обнаружил смещение времени! Придется начать сначала!');
             }
             ds = ost;
-            if (kon!=5 || ost>ti)
+            if (kon!=6 || ost>ti)
                 {
                 if (typeof timerId !== 'undefined') {clearInterval(timerId);}
                 window.location.assign('12');
@@ -70,6 +89,11 @@
                   if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)
                      {fl1=1;
                      ot = ot + String(event.keyCode-48);
+                     kk = event.keyCode;
+                     Funcnj();}
+                  if (event.keyCode==109 && event.keyCode!=kk || event.keyCode==189 && event.keyCode!=kk)
+                     {fl1=1;
+                     ot = ot + '-';
                      kk = event.keyCode;
                      Funcnj();}
                   if (event.keyCode>95 && event.keyCode<106 && event.keyCode!=kk)
@@ -93,6 +117,7 @@
                 document.getElementById('btn8').style.display='none';
                 document.getElementById('btn9').style.display='none';
                 document.getElementById('btn0').style.display='none';
+                document.getElementById('btnm').style.display='none';
                 document.getElementById('btnd').style.display='none';
                 document.getElementById('vy4').style.display='none';
                 document.getElementById('prim').style.display='none';
@@ -131,6 +156,7 @@
                 document.getElementById('btn8').style.display='';
                 document.getElementById('btn9').style.display='';
                 document.getElementById('btn0').style.display='';
+                document.getElementById('btnm').style.display='';
                 document.getElementById('btnd').style.display='';
                 document.getElementById('vy4').style.display='';
                 document.getElementById('prim').style.display='';
@@ -152,7 +178,7 @@
             if (fl2==0) {
                 prim++;
                 ot='';
-                pr=(tas1[prim]-prim**2-otv)+simv[tasz[prim]]+tas2[prim];
+                pr=tass[prim];
                 document.getElementById('prim').innerHTML = pr + '=';
                 fl2=1;}
             if (fl1==1) {
@@ -163,7 +189,7 @@
                     }
 
         function Funcnj() {
-            sr = (tas1[prim] - prim**2 - otv) / (tas2[prim]);
+            sr = ots[prim];
             if (ot.length == String(sr).length) {
                 if (ot == sr) {
                 fl2 = 0;
@@ -246,6 +272,12 @@
             Funcnj();
             }
 
+        function Funcm() {
+            fl1=1;
+            ot = ot + '-';
+            Funcnj();
+            }
+
         function Funcd() {
             fl1=1;
             if (ot.length == 1) {ot = '';}
@@ -266,6 +298,7 @@
             document.getElementById('btn8').style.display='none';
             document.getElementById('btn9').style.display='none';
             document.getElementById('btn0').style.display='none';
+            document.getElementById('btnm').style.display='none';
             document.getElementById('btnd').style.display='none';
             document.getElementById('vy4').style.display='none';
             document.getElementById('prim').style.display='';

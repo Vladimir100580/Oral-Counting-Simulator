@@ -21,6 +21,7 @@ urlpatterns = [
     path('list3', views.list3, name='list3'),
     path('list4', views.list4, name='list4'),
     path('list5', views.list5, name='list5'),
+    path('list6', views.list6, name='list6'),
     path('progress', views.progress, name='progress'),
     # path('level2', views.level2, name='level2'),
     # path('level3', views.level3, name='level3'),

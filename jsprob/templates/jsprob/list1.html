@@ -28,20 +28,6 @@
 
     </div>
     <script>
-        as = 'a0s-d7as6fds8/';
-        for (i = 0; i < as.length; i++)
-            {
-             u = 0;
-             sg = Number(as[i])
-             if (Number.isInteger(sg))
-                  {
-                  u = 1;
-                  console.log(sg);
-                  }
-             //console.log(sg, as[i], u, Number.isInteger(Number(sg)));
-             if (u == 1) {console.log(Number(sg)%3)}
-            }
-        alert('dfd');
         tas1 = {{tas1}};
         tas2 = {{tas2}};
         tasz = {{tasz}};
@@ -130,18 +116,7 @@
                 if (ost<=0 && fl3==0 || prim>=10 && fl3==0)  {
                     if (ost<0) {ost=0}
                     Funcend();
-<!--                    localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ost);-->
-<!--                    localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);-->
-<!--                    localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);-->
-<!--                    localStorage.setItem('lvl1', ost);-->
-<!--                    document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';-->
-<!--                    document.cookie = "lelrec15=" + 1 + '$' + ost + '$' + (p0 + p1) + '$' + p0;-->
-<!--                    clearInterval(timerId);-->
-<!--                    fl3=1-->
-<!--                    fl2=1-->
-<!--                    fl1=1-->
-<!--                    window.location.assign('itoglv');-->
-            }
+                      }
 
             if (fl4==1 && new Date() - new Date(0) - Number(tt) > (2000*po - 1000)) {
                 document.getElementById('byni').style.display='';
@@ -170,72 +145,6 @@
                 ot='';
                 if (po==2) {po=0;}
                 }
-
-<!--            if (ost<=0 && fl3==0 || prim>=10 && fl3==0)  {-->
-<!--                if (ost<0) {ost=0}-->
-<!--&lt;!&ndash;                document.getElementById('byni').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn1').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn2').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn3').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn4').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn5').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn6').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn7').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn8').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn9').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btn0').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('btnd').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('vy4').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('prim').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('prnpr').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('timer').style.display='none';&ndash;&gt;-->
-<!--&lt;!&ndash;                if (kon==1) {&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('end1').innerHTML = 'На разминке набрано очков: ' + ost + '.';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('end1').style.cssText = 'margin-top: 70px; font-style: italic;';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('end2').innerHTML = document.getElementById('prnpr').innerHTML = 'Решено правильно: '+ (p0 + p1) + ' <br> из них безошибочно: ' + p0 + '<br> двойных ошибок: ' + n;}&ndash;&gt;-->
-<!--&lt;!&ndash;                fl3=1;&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('end2').style.cssText = 'font-style: italic;';&ndash;&gt;-->
-<!--&lt;!&ndash;                ostf = ost;&ndash;&gt;-->
-<!--&lt;!&ndash;                fl00={{fl00}};&ndash;&gt;-->
-<!--&lt;!&ndash;                sclvus={{sclvus}};&ndash;&gt;-->
-<!--&lt;!&ndash;                minsc={{minsc}};&ndash;&gt;-->
-<!--&lt;!&ndash;                scnow={{scnow}};&ndash;&gt;-->
-<!--&lt;!&ndash;                txta = '';&ndash;&gt;-->
-<!--&lt;!&ndash;                txtb = '';&ndash;&gt;-->
-<!--&lt;!&ndash;                pz=0;&ndash;&gt;-->
-<!--&lt;!&ndash;                pz1=0;&ndash;&gt;-->
-<!--&lt;!&ndash;                pz0=0;&ndash;&gt;-->
-<!--&lt;!&ndash;                if (ostf>Number(sclvus)){&ndash;&gt;-->
-<!--&lt;!&ndash;                pz0=1;&ndash;&gt;-->
-<!--&lt;!&ndash;                if (Number(sclvus)>0) { pz=1;&ndash;&gt;-->
-<!--&lt;!&ndash;                txta = 'Вы улучшили собственный рекорд в этом этапе на ' + (ostf-Number(sclvus)) + '.<br>';}&ndash;&gt;-->
-<!--&lt;!&ndash;                }&ndash;&gt;-->
-<!--&lt;!&ndash;                if (ostf<Number(sclvus)*0.8) {&ndash;&gt;-->
-<!--&lt;!&ndash;                txtb = 'Ваш личный рекорд пройденного этапа куда выше. Соберитесь.<br>';&ndash;&gt;-->
-<!--&lt;!&ndash;                } if (fl00==0 && ostf>Number(minsc)) {&ndash;&gt;-->
-<!--&lt;!&ndash;                pz1=1;&ndash;&gt;-->
-<!--&lt;!&ndash;                txta = txta + 'Вы попадате в ТОП-10 первого этапа. (На данный момент) <br>';&ndash;&gt;-->
-<!--&lt;!&ndash;                } if (fl00==1 && ostf>Number(scnow)) {&ndash;&gt;-->
-<!--&lt;!&ndash;                pz1=2;&ndash;&gt;-->
-<!--&lt;!&ndash;                txta = txta + 'Ваш результат в ТОП-10 пройденного этапа на данный момент улучшен! <br>';&ndash;&gt;-->
-<!--&lt;!&ndash;                }&ndash;&gt;-->
-<!--&lt;!&ndash;                if (pz!=0 || pz1!=0) { txta = '<br>Поздравляем!<br>' + txta;}&ndash;&gt;-->
-<!--&lt;!&ndash;                if (pz0!=0 || pz1!=0) {&ndash;&gt;-->
-<!--&lt;!&ndash;                document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';&ndash;&gt;-->
-<!--&lt;!&ndash;                document.cookie = "lelrec15=" + sclvus + '$' + ostf;}&ndash;&gt;-->
-<!--&lt;!&ndash;                txta=txtb+txta&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('end3').innerHTML = txta;&ndash;&gt;-->
-<!--&lt;!&ndash;                document.getElementById('butt').style.display='';&ndash;&gt;-->
-<!--                    localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ost);-->
-<!--                    localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);-->
-<!--                    localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);-->
-<!--                    localStorage.setItem('lvl1', ost);-->
-<!--                    document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';-->
-<!--                    document.cookie = "lelrec15=" + 1 + '$' + ost + '$' + (p0 + p1) + '$' + p0;-->
-<!--                    clearInterval(timerId);-->
-<!--                    fl3=1-->
-<!--                    window.location.assign('itoglv');-->
-<!--            }-->
             if (fl3==0)
             {
             document.getElementById('timer').innerHTML = Math.floor(ost/1000);
@@ -270,10 +179,8 @@
                     fl4=1;
                     fl3=1;
                     po++;
-                }
-                //document.getElementById('prnpr').innerHTML = 'Верных ответов: '+ p0 + p1 + ', <br> из них безошибочных: ' + p0 + '<br> двойных ошибок: ' + n;
-                //fl2 = 0;
                     }
+                }
             else {document.getElementById('prim').innerHTML = pr + ot;}
                 }
 
@@ -373,7 +280,6 @@
             clearInterval(timerId);
             window.location.assign('itoglv');
               }
-
         Func();
         timerId = setInterval(() => Func(), 10);
 

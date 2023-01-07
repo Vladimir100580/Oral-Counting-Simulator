@@ -52,8 +52,8 @@
 
         function Func() {
             ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
-            if (Math.abs(ost-ds)>6000) {
-            na4 = new Date() - new Date(0) + 120000;
+            if (Math.abs(ost-ds)>10000) {
+            na4 = new Date() - new Date(0) + 200000;
             alert('Контроль безопасности обнаружил смещение времени! Придется начать сначала!');
             }
             ds = ost;
