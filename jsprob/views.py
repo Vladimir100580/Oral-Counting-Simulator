@@ -244,7 +244,8 @@ def itog(request):
     bonz = int(float(tts[2]) * 100)
     sum = int(float(tts[0])) + bonz
     bon = ' 100 X ' + str(int(float(tts[2]))) + ':'
-    tx = ['неплохо', 'совсем неплохо', 'очень хорошо', 'прекрасно', 'просто превосходно'][min(sum // 70000, 4)]
+    tx = ['неплохо', 'весьма неплохо', 'довольно хорошо', 'очень хорошо',
+          'прекрасно', 'просто превосходно'][min(sum // 120000, 5)]
     tt = DataUser.objects.get(log=usna)
     if tt.pole2 == '0':
         tt.pop = tt.pop + 1
@@ -334,15 +335,15 @@ def itog(request):
                     else:
                         if pos_now != 1:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                            txt3 = 'и улучшили свою позицию в TOП-10 сезона. ( ' + \
-                                   str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                            txt3 = 'и улучшили свою позицию в TOП-10 сезона. (' + \
+                                   str(pos_old) + ' --> ' + str(pos_now) + ')'
                         else:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
                             txt3 = 'и на данный момент Вы становитесь ЧЕМПИОНОМ сезона!'
             else:
                 if pos_old != pos_now:
-                    txt3 = ' и Ваше место в TOП-е сезона стало выше. ( ' + \
-                           str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                    txt3 = ' и Ваше место в TOП-е сезона стало выше. (' + \
+                           str(pos_old) + ' --> ' + str(pos_now) + ')'
 
             pos_old = int(len(mas01) + 1)
             pos_now = int(len(mas11) + 1)
@@ -359,22 +360,22 @@ def itog(request):
                         if pos_now != 1:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
                             txt4 = 'также на данный момент Вы вошли абсолютный TOП-10! \
-                                     ( ' + str(pos_now) + ' место )'
+                                     (' + str(pos_now) + ' место )'
                         else:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
                             txt4 = 'На данный момент Вы врываетесь в глобальный ТОП-10 и становитесь ЧЕМПИОНОМ!!'
                     else:
                         if pos_now != 1:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                            txt4 = 'также улучшили свою позицию в глобальном TOП-10. ( ' + \
-                                   str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                            txt4 = 'также улучшили свою позицию в глобальном TOП-10. (' + \
+                                   str(pos_old) + ' --> ' + str(pos_now) + ')'
                         else:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
                             txt4 = ' также на данный момент Вы становитесь абсолютным ЧЕМПИОНОМ!'
             else:
                 if pos_old != pos_now:
-                    txt4 = 'также Ваше место в TOП-е сезона стало выше. ( ' + \
-                           str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                    txt4 = 'также Ваше место в TOП-е сезона стало выше. (' + \
+                           str(pos_old) + ' --> ' + str(pos_now) + ')'
 
         else:
             tvs = ''
@@ -408,22 +409,22 @@ def itog(request):
                             if pos_now != 1:
                                 if txt == '': txt = 'Поздравляем!'
                                 txt6 = 'На данный момент Вы вошли в сегодняшний TOП-7! \
-                                                 ( ' + str(pos_now) + ' место )'
+                                                 (' + str(pos_now) + ' место)'
                             else:
                                 if txt == '': txt = 'Поздравляем!'
                                 txt6 = 'На данный момент Вы становитесь лидером ТОП-7 дня.'
                         else:
                             if pos_now != 1:
                                 if txt == '': txt = 'Поздравляем!'
-                                txt6 = 'и улучшили свою позицию в сегодняшнем TOП-7. ( ' + \
-                                       str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                                txt6 = 'и улучшили свою позицию в сегодняшнем TOП-7. (' + \
+                                       str(pos_old) + ' --> ' + str(pos_now) + ')'
                             else:
                                 if txt == '': txt = 'Поздравляем!'
                                 txt6 = 'На данный момент Вы становитесь лидером ТОП-7 дня.'
                 else:
                     if pos_old != pos_now:
-                        txt6 = 'Ваше место в TOП-е дня стало выше. ( ' + \
-                               str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                        txt6 = 'Ваше место в TOП-е дня стало выше. (' + \
+                               str(pos_old) + ' --> ' + str(pos_now) + ')'
         else:
             mas1 = [i for i in
                     DataUser.objects.filter(scorTD__gt=sum).order_by('-scorTD').values_list('scorTD', 'fik')]
@@ -433,7 +434,7 @@ def itog(request):
                 txt6 = 'Теперь Ваша позиция в TOП-е дня: ' + str(pos_now) + '.'
             if 1 < pos_now < 8:
                 if txt == '': txt = 'Поздравляем!'
-                txt6 = 'На данный момент Вы вошли в TOП-7 сегодняшего дня: ( ' + str(pos_now) + ' место )'
+                txt6 = 'На данный момент Вы вошли в TOП-7 сегодняшего дня: (' + str(pos_now) + ' место)'
             if pos_now == 1:
                 if txt == '': txt = 'Поздравляем!!!'
                 txt6 = 'На данный момент Вы становитесь лидером ТОП-7 дня.'
@@ -462,7 +463,7 @@ def itog(request):
                 txt4 = 'В абсолютном ТОП-е Вы пока занимаете: ' + str(pos_now) + ' позицию.'
             if 1 < pos_now < 11:
                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                txt4 = 'На данный момент Вы вошли в глобальный TOП-10: ( ' + str(pos_now) + ' место )'
+                txt4 = 'На данный момент Вы вошли в глобальный TOП-10: (' + str(pos_now) + ' место)'
             if pos_now == 1:
                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!!'
                 txt4 = 'На данный момент Вы становитесь ЛИДЕРОМ игры!!!'
@@ -480,7 +481,7 @@ def itog(request):
                 txt5 = txtdop + 'ТОП-е сезона Вы пока занимаете: ' + str(pos_now) + ' позицию.'
             if 1 < pos_now < 11:
                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                txt5 = txtdop + ' данный момент Вы вошли в TOП-10 текущего сезона: ( ' + str(pos_now) + ' место )'
+                txt5 = txtdop + ' данный момент Вы вошли в TOП-10 текущего сезона: (' + str(pos_now) + ' место)'
             if pos_now == 1:
                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!!'
                 txt5 = txtdop + ' данный момент Вы становитесь лидером ТОП-10 сезона.'
@@ -497,7 +498,7 @@ def itog(request):
                 txt6 = 'Теперь Ваша позиция в TOП-е дня: ' + str(pos_now) + '.'
             if 1 < pos_now < 8:
                 if txt == '': txt = 'Поздравляем!'
-                txt6 = txtdop + ' вошли в TOП-7 сегодняшего дня: ( ' + str(pos_now) + ' место )'
+                txt6 = txtdop + ' вошли в TOП-7 сегодняшего дня: (' + str(pos_now) + ' место)'
             if pos_now == 1:
                 if txt == '': txt = 'Поздравляем!!!'
                 txt6 = txtdop + ' становитесь лидером ТОП-7 дня.'
@@ -762,27 +763,27 @@ def itoglv(request):
                     if pos_now != 1:
                         txtpz = 'ПОЗДРАВЛЯЕМ!'
                         txt6 = 'На данный момент Вы вошли в TOП-10 пройденного уровня! \
-                                 ( ' + str(pos_now) + ' место )'
+                                 (' + str(pos_now) + ' место)'
                     else:
                         txtpz = 'ПОЗДРАВЛЯЕМ!!!'
                         txt6 = 'На данный момент Вы врываетесь в ТОП-10 и становитесь ЧЕМПИОНОМ пройденного уровня.'
                 else:
                     if pos_now != 1:
                         txtpz = 'ПОЗДРАВЛЯЕМ!'
-                        txt6 = 'Вы улучшили свою позицию в TOП-10 пройденного этапа. ( ' + \
-                               str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                        txt6 = 'Вы улучшили свою позицию в TOП-10 пройденного этапа. (' + \
+                               str(pos_old) + ' --> ' + str(pos_now) + ')'
                     else:
                         txtpz = 'ПОЗДРАВЛЯЕМ!!!'
                         txt6 = 'На данный момент Вы становитесь ЧЕМПИОНОМ пройденного уровня!'
         else:
             if pos_old != pos_now:
-                txt6 = 'В TOП-е пройденного этапа Ваше место стало выше. ( ' + \
-                       str(pos_old) + ' --> ' + str(pos_now) + ' )'
+                txt6 = 'В TOП-е пройденного этапа Ваше место стало выше. (' + \
+                       str(pos_old) + ' --> ' + str(pos_now) + ')'
     else:
         if float(ud[1]) < float(sclvus) * .8:
             txt6 = 'Надо поднажать. Ваш личный рекорд пройденного этапа куда выше.'
         if float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
-            txt6 = 'Еще немного и Ваш рекорд пройденного этапа ( ' + str(int(float(sclvus))) + ' ) был бы побит.'
+            txt6 = 'Еще немного и Ваш рекорд пройденного этапа (' + str(int(float(sclvus))) + ') был бы побит.'
 
         # print('sclvus:', sclvus, '  ud[1]:', ud[1])
         #
@@ -1322,43 +1323,43 @@ class Vyborka():
             self.ot = otvs
 
 
-
-class Defuser:
-    def __init__(self, fio, lv, usna):
-        krit = 'scoresl' + str(lv)
-        mas = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik')][:10]
-        sclvus = DataUser.objects.filter(log=usna, fik=fio).values_list(krit)[0][0]
-        # mas = [i for i in DataUser.objects.filter(scores__gt=84000).order_by(krit).values_list('scoresl1')]
-        sctop = [i[0] for i in mas]
-        fiktop = [i[1] for i in mas]
-        if fio in fiktop:
-            fl0 = 1
-            scnow = sclvus
-        else:
-            fl0 = 0
-            scnow = 0  # сколько очков у игрока в ТОП-е
-
-        self.minsc = sctop[9]
-        self.fl00 = fl0
-        self.scnow = scnow
-        self.sclvus = sclvus
-
-
-class Upuserez:
-    def __init__(self, fio, lv, re, usna):
-        tabsc = DataUser.objects.get(pole1=fio, log=usna)
-        sclvus = tabsc.pole2.split('$')
-        p2 = ''
-        i = 0
-        for sc in sclvus:
-            i += 1
-            if i == (lv + 3):
-                p2 = p2 + re + '$'
-            else:
-                p2 = p2 + sc + '$'
-        p2 = p2[:(len(p2) - 1)]
-        tabsc.pole2 = p2
-        tabsc.save(update_fields=['pole2'])
+#
+# class Defuser:
+#     def __init__(self, fio, lv, usna):
+#         krit = 'scoresl' + str(lv)
+#         mas = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik')][:10]
+#         sclvus = DataUser.objects.filter(log=usna, fik=fio).values_list(krit)[0][0]
+#         # mas = [i for i in DataUser.objects.filter(scores__gt=84000).order_by(krit).values_list('scoresl1')]
+#         sctop = [i[0] for i in mas]
+#         fiktop = [i[1] for i in mas]
+#         if fio in fiktop:
+#             fl0 = 1
+#             scnow = sclvus
+#         else:
+#             fl0 = 0
+#             scnow = 0  # сколько очков у игрока в ТОП-е
+#
+#         self.minsc = sctop[9]
+#         self.fl00 = fl0
+#         self.scnow = scnow
+#         self.sclvus = sclvus
+#
+#
+# class Upuserez:
+#     def __init__(self, fio, lv, re, usna):
+#         tabsc = DataUser.objects.get(pole1=fio, log=usna)
+#         sclvus = tabsc.pole2.split('$')
+#         p2 = ''
+#         i = 0
+#         for sc in sclvus:
+#             i += 1
+#             if i == (lv + 3):
+#                 p2 = p2 + re + '$'
+#             else:
+#                 p2 = p2 + sc + '$'
+#         p2 = p2[:(len(p2) - 1)]
+#         tabsc.pole2 = p2
+#         tabsc.save(update_fields=['pole2'])
 
 
 class Inttabl:
