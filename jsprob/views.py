@@ -76,14 +76,14 @@ def hello(request):
         nm = ''
         fl = 0
     p1 = Indexs.objects.get(id=1).pole1.split('@%>$')
-    if len(p1) != 0 and dat.curdate == datn and p1 != ['0']:
-        fl1 = 1
-        prit = ''
-        st = ''
-    else:
+    if not (len(p1) != 0 and dat.curdate == datn and p1 != ['0']) or randint(1, 3) == 3:
         prit = Prit4i().pr
         fl1 = 0
         st = 'border: 2px solid green;'
+    else:
+        fl1 = 1
+        prit = ''
+        st = ''
     if 'reg' in answer:
         dayend()
         return redirect('regist')
