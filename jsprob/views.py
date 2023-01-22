@@ -6,17 +6,6 @@ from .models import DataUser, Indexs
 from django.contrib.auth import authenticate, login
 
 
-# def setcookie(request):
-#
-#     response = HttpResponse()
-#     response.set_cookie('bookname0', 'Sherlock Holmes0')
-#     response.set_cookie('bookname2', 'Sherlock Holmes2')
-#     response.delete_cookie('bookname')
-#     tts = request.COOKIES.get('bookname')
-#     print(tts)
-#     print('cookie', request.COOKIES)
-#     return response
-
 
 def hello(request):
     answer = request.GET
@@ -102,6 +91,7 @@ def hello(request):
 
 
 def regist(request):
+    dayend()
     # return redirect('logout')
     if request.method == 'GET':
         answer = request.GET
@@ -160,6 +150,7 @@ def dayend():
 
 
 def progress(request):
+    dayend()
     usna = request.user.username
     if (usna is None) or (usna == ''):
         return redirect('home')
@@ -235,9 +226,7 @@ def orf1(sum):
 def itog(request):
     dayend()
     ud = request.COOKIES.get('lelrec15').split('$')
-    if ud[0] != 'e':
-        if float(ud[0]) < float(ud[1]):
-            DataUser.objects.filter(log=request.session['ustns4usen']).update(scoresl6=ud[1])
+    if ud[0] == 'e': return redirect('home')
     usna = request.session['ustns4usen']
     if (usna == None): return redirect('home')
     tts = request.COOKIES.get('totsumm').split('(#)$)')
@@ -700,7 +689,7 @@ def itoglv(request):
         0]  # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
     mn = sclvus
     tx = orf1(mn) + '.'
-    vstsl = ['На разминке ', 'Во втором ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
+    vstsl = ['На разминочном ', 'Во втором ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
     txt1 = vstsl + 'этапе Вы набрали ' + ud[1] + tx
     txt2 = 'Решено правильно: ' + ud[2] + '; из них безошибочно: ' + ud[3] + '. '
     txt5 = ''
@@ -776,9 +765,16 @@ def itoglv(request):
                         txtpz = 'ПОЗДРАВЛЯЕМ!!!'
                         txt6 = 'На данный момент Вы становитесь ЧЕМПИОНОМ пройденного уровня!'
         else:
-            if pos_old != pos_now:
-                txt6 = 'В TOП-е пройденного этапа Ваше место стало выше. (' + \
-                       str(pos_old) + ' --> ' + str(pos_now) + ')'
+            if float(sclvus) != 0:
+                if pos_old != pos_now:
+                    txt6 = 'В TOП-е пройденного этапа Ваше место стало выше. (' + \
+                           str(pos_old) + ' --> ' + str(pos_now) + ')'
+                else:
+                    txt6 = 'В TOП-е пройденного этапа Вы удерживаете ' + \
+                           str(pos_now) + ' позицию.'
+            else:
+                txt6 = 'В TOП-е пройденного этапа пока Вы  занимаете ' + \
+                       str(pos_now) + ' позицию.'
     else:
         if float(ud[1]) < float(sclvus) * .8:
             txt6 = 'Надо поднажать. Ваш личный рекорд пройденного этапа куда выше.'

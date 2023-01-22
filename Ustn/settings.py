@@ -92,8 +92,8 @@ WSGI_APPLICATION = 'Ustn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cg63383_us',
-        'USER': 'cg63383_us',
+        'NAME': 'cg63383_uslh',
+        'USER': 'cg63383_uslh',
         'PASSWORD': 'LordOnlyus4',
         'HOST': '5.23.50.121',
         'PORT': '3306',
