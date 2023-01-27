@@ -30,6 +30,7 @@ urlpatterns = [
     path('regist', views.regist, name='regist'),
     path('reset', views.reset, name='reset'),
     path('topday', views.topday, name='topday'),
+    path('topdays', views.topdays, name='topdays'),
     path('toptab', views.toptab, name='toptab'),
     path('toplvl', views.toplvl, name='toplvl'),
     path('topglob', views.topglob, name='topglob'),

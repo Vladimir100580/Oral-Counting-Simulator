@@ -1,18 +1,44 @@
 from random import randint
 
-p1 = ['gtnz']
+print(5 in range(1,5))
+st = '45,   -23 37'
+f = 0
+s = ''
+mas = []
+st = st + ' '
+for i in st:
+    if i.isdigit() or i == '-':
+        print('здесь ', i, s)
+        s += i
+        f = 1
+    else:
+        if f == 1:
+            mas.append(s)
+            s = ''
+            f = 0
+print(mas)
 
-print('@%>$'.join(p1))
 
 
 
-o = [['sdfsdfs', '039'],['r5324yh','ds2']]
-for i in o[0][1]:
-    print(i, type(i), ord(i))
 
-s = []
-s.append(7)
-print(s)
+
+
+
+
+# p1 = ['gtnz']
+#
+# print('@%>$'.join(p1))
+#
+#
+#
+# o = [['sdfsdfs', '039'],['r5324yh','ds2']]
+# for i in o[0][1]:
+#     print(i, type(i), ord(i))
+#
+# s = []
+# s.append(7)
+# print(s)
 
 # def gene(pol):
 #     while True:
