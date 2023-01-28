@@ -1,5 +1,10 @@
 from random import randint
 
+a = 6
+
+y = 1 if a == 5 else 0
+print('y=', y)
+
 print(5 in range(1,5))
 st = '45,   -23 37'
 f = 0

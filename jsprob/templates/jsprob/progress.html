@@ -3,36 +3,36 @@
 {% block content %}
 
 <aside>
-    <h5 class="featuress" id = 'nomb' style="font-style: italic; font-size: max(20px, 2.5vw);"> Ваши личные достижения </h5>
-    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: max(17px, 2.2vw);"> {{kar.srores}} </h5>
+    <h5 class="featuress" id = 'nomb' style="font-style: italic; font-size: min(35px, 4.8vw);"> Ваши личные достижения </h5>
+    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(28px, 2.2vw);"> {{kar.srores}} </h5>
 </aside>
 
     <div class="features">
-        <h5 style="font-style: italic; font-size: max(18px, 2.3vw);"> Абсолютный рекорд: {{gls}} {{gls1}} ({{pozgl}} место)</h5>
-        <h5 style="font-style: italic; font-size: max(17px, 2.1vw);"> Рекорд в сезоне: {{sezsc}} {{sezsc1}} ({{pozsez}} место)</h5>
-        <h5 style="font-style: italic; font-size: max(15px, 1.8vw);"> Лучший результат сегодня: {{sctd}} </h5>
+        <h5 style="font-style: italic; font-size: min(35px, 4vw);"> Абсолютный рекорд: {{gls}} {{gls1}} ({{pozgl}} место)</h5>
+        <h5 style="font-style: italic; font-size: min(32px, 3.7vw);"> Рекорд в сезоне: {{sezsc}} {{sezsc1}} ({{pozsez}} место)</h5>
+        <h5 style="font-style: italic; font-size: min(30px, 3.5vw);"> Лучший результат сегодня: {{sctd}} </h5>
 
         <div class="column-left">
-        </br>
-        <h5 style="font-style: italic; font-size: max(15px, 1.8vw);"> Рекорды по каждому этапу в сезоне: </h5>
+
+        <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Рекорды по каждому этапу в сезоне: </h5>
            {% for sc in scl %}
-                <h6 style='color:blue; font-size: max(14px, 1.5vw); font-style: italic'> Этап. {{sc.0}}: {{sc.1}} </h6>
+                <h6 style="color:blue; font-style: italic; font-size: min(27px, 3.2vw);"> Этап. {{sc.0}}: {{sc.1}} </h6>
            {% endfor %}
            {% if fl == 1 %}
-           <h6 style='color:blue; font-size: max(13px, 1.4vw); font-style: italic'> Потенциал: {{pot}} </h6>
+           <h6 style="color:blue; font-style: italic; font-size: min(28px, 2.9vw);"> Потенциал: {{pot}} </h6>
            {% endif %}
         </div>
 
         <div class="column-right">
-            <h5 style="font-style: italic; font-size: max(15px, 1.8vw);"> Дневные состязания: </h5>
-            <h5 style="color:blue; font-style: italic; font-size: max(13px, 1.4vw);"> ПОБЕД: {{quantwin}} {{quantwin1}}</h5>
-            <h5 style="color:blue; font-style: italic; font-size: max(13px, 1.4vw);"> В ТОП-7: {{quanttop}} {{quanttop1}}</h5>
-            <h5 style="font-style: italic; font-size: max(15px, 1.8vw);"> Запусков игры: </h5>
-            <h5 style="color:blue; font-style: italic; font-size: max(13px, 1.4vw);"> В сезоне: {{na4pops}} {{na4pops1}}</h5>
-            <h5 style="color:blue; font-style: italic; font-size: max(13px, 1.4vw);"> Всего: {{na4popt}} {{na4popt1}}</h5>
-            <h5 style="font-style: italic; font-size: max(15px, 1.8vw);"> Игра пройдена: </h5>
-            <h5 style="color:blue; font-style: italic; font-size: max(13px, 1.4vw);"> В сезоне: {{popsez}} {{popsez1}}</h5>
-            <h5 style="color:blue; font-style: italic; font-size: max(13px, 1.4vw);"> Всего: {{popt}} {{popt1}}</h5>
+            <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Дневные состязания: </h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> ПОБЕД: {{quantwin}} {{quantwin1}}</h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> В ТОП-7: {{quanttop}} {{quanttop1}}</h5>
+            <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Запусков игры: </h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> В сезоне: {{na4pops}} {{na4pops1}}</h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> Всего: {{na4popt}} {{na4popt1}}</h5>
+            <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Игра пройдена: </h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> В сезоне: {{popsez}} {{popsez1}}</h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> Всего: {{popt}} {{popt1}}</h5>
 
         </div>
         <div style="clear: left"></div>
@@ -40,9 +40,9 @@
 
         </br>
         <h3 id ='wt' style="font-style: italic"></h3>
-        <a style="font-size: max(13px, 1.2vw);" href="{% url 'home' %}" id = 'butt1' class="btn btn-success" onclick="Func()"> СТАРТОВОЕ МЕНЮ </a>
-        <a style="font-size: max(13px, 1.2vw);" href="{% url 'topglob' %}" id = 'butt2' class="btn btn-success" onclick="Func()"> АБСОЛЮТНЫЙ ТОП </a>
-        <a style="font-size: max(13px, 1.2vw);" href="{% url 'topdays' %}" id = 'butt3' class="btn btn-success" onclick="Func()"> ТОП ТОПов ДНЯ </a>
+        <a style="font-size: min(20px, 2.5vw);" href="{% url 'home' %}" id = 'butt1' class="btn btn-success" onclick="Func()"> СТАРТОВОЕ МЕНЮ </a>
+        <a style="font-size: min(20px, 2.5vw);" href="{% url 'topglob' %}" id = 'butt2' class="btn btn-success" onclick="Func()"> АБСОЛЮТНЫЙ ТОП </a>
+        <a style="font-size: min(20px, 2.5vw);" href="{% url 'topdays' %}" id = 'butt3' class="btn btn-success" onclick="Func()"> ТОП ТОПов ДНЯ </a>
         </br></br>
 
     </div>
