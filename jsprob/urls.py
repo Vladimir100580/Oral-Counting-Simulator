@@ -23,10 +23,6 @@ urlpatterns = [
     path('list5', views.list5, name='list5'),
     path('list6', views.list6, name='list6'),
     path('progress', views.progress, name='progress'),
-    # path('level2', views.level2, name='level2'),
-    # path('level3', views.level3, name='level3'),
-    # path('level4', views.level4, name='level4'),
-    # path('level5', views.level5, name='level5'),
     path('regist', views.regist, name='regist'),
     path('reset', views.reset, name='reset'),
     path('topday', views.topday, name='topday'),
@@ -34,7 +30,6 @@ urlpatterns = [
     path('toptab', views.toptab, name='toptab'),
     path('toplvl', views.toplvl, name='toplvl'),
     path('topglob', views.topglob, name='topglob'),
-    # path('setcookie', views.setcookie, name='setcookie'),
 
     path('login/',
          LoginView.as_view

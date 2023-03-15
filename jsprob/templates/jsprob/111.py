@@ -1,27 +1,30 @@
 from random import randint
 
-a = 6
+print((1 or 1) and 0)
 
-y = 1 if a == 5 else 0
-print('y=', y)
 
-print(5 in range(1,5))
-st = '45,   -23 37'
-f = 0
-s = ''
-mas = []
-st = st + ' '
-for i in st:
-    if i.isdigit() or i == '-':
-        print('здесь ', i, s)
-        s += i
-        f = 1
-    else:
-        if f == 1:
-            mas.append(s)
-            s = ''
-            f = 0
-print(mas)
+# a = 6
+#
+# y = 1 if a == 5 else 0
+# print('y=', y)
+#
+# print(5 in range(1,5))
+# st = '45,   -23 37'
+# f = 0
+# s = ''
+# mas = []
+# st = st + ' '
+# for i in st:
+#     if i.isdigit() or i == '-':
+#         print('здесь ', i, s)
+#         s += i
+#         f = 1
+#     else:
+#         if f == 1:
+#             mas.append(s)
+#             s = ''
+#             f = 0
+# print(mas)
 
 
 

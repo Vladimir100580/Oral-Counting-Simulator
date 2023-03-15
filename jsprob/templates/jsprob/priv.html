@@ -3,37 +3,34 @@
 {% block content %}
 
 <aside>
-    <h5 class="featuress" id = 'nomb' style="font-style: italic; font-size: min(35px, 4.5vw);"> Здравствуйте{{nm}}! </h5>
-    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(32px, 3.7vw);"> Тренажер устного счета приветствует Вас! </h5>
-    <h5 class="featuress" id = 'wait1' style="font-style: italic; font-size: min(28px, 3.2vw);"> Участвовать могут все: от мала до велика. </h5>
+    <h5 class="featuress" id = 'nomb' style="font-style: italic; font-size: min(35px, 5.5vw);"> Здравствуйте{{nm}}! </h5>
+    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(32px, 4.2vw);"> Тренажер устного счета приветствует Вас! </h5>
+    <h5 class="featuress" id = 'wait1' style="font-style: italic; font-size: min(28px, 3.7vw);"> Участвовать могут все: от мала до велика. </h5>
 </aside>
 
     <div class="features">
-
         <div class="column-left" style='{{st}}'>
           {% if fl1 == 1 %}
-             <h5 class='leftstr' style='color:blue; font-size: max(13px, 1.4vw)'> Лидеры последних дней: </h5>
+             <h5 class='leftstr' style='color:blue; font-size: min(28px, 3.2vw);'> Лидеры последних дней: </h5>
              {% for p in p1 %}
-             <h6 class='leftstr 'style='color:blue; font-size: max(11px, 1.2vw)'> {{p}} </h6>
+             <h6 class='leftstr' style="color:blue; font-size: min(22px, 2.5vw);"> {{p}} </h6>
              {% endfor %}
           {% else %}
-             <h5 class='leftstr' style='color:blue; font-size: max(14px, 1.6vw)' align="left"> {{prit.0}} </h5>
-             <h6 class='leftstr' style='color:blue; font-size: max(12px, 1.4vw)' align="right"> {{prit.1}} </h6>
+             <h5 class='leftstr' style='color:blue; font-size: min(22px, 3vw);' align="left"> {{prit.0}} </h5>
+             <h6 class='leftstr' style='color:blue; font-size: min(20px, 2.7vw);' align="right"> {{prit.1}} </h6>
           {% endif %}
         </div>
 
-
          <div class="column-right">
-         <a style="font-size: max(12px, 1.1vw);" href="{% url 'toptab' %}" id = "butt3" class="btn btn-success btn-sm" onclick="Func()"> ТОП-ы ИГРОКОВ </a>
+         <a style="font-size: min(22px, 2.7vw);" href="{% url 'toptab' %}" id = "butt3" class="btn btn-success btn-sm" onclick="Func()"> ТОП-ы ИГРОКОВ </a>
          <div style="height:10px"></div>
-         <a style="font-size: max(12px, 1.1vw);" href="{% url 'instr' %}" id = "butt6" class="btn btn-success btn-sm" onclick="Func()"> ИНСТРУКЦИЯ </a></br>
+         <a style="font-size: min(22px, 2.7vw);" href="{% url 'instr' %}" id = "butt6" class="btn btn-success btn-sm" onclick="Func()"> ИНСТРУКЦИЯ </a></br>
          {% if user.is_authenticated %}
          <div style="height:10px"></div>
-         <a style="font-size: max(12px, 1.1vw);" href="{% url 'progress' %}" id = "butt7" class="btn btn-success btn-sm" onclick="Func()"> Достижения </a>
+         <a style="font-size: min(22px, 2.7vw);" href="{% url 'progress' %}" id = "butt7" class="btn btn-success btn-sm" onclick="Func()"> Достижения </a>
          {% endif %}
          </div>
-
-        <div style="clear: left"></div>
+         <div style="clear: left"></div>
 
 
          <form action="" method="get">
@@ -41,13 +38,13 @@
          <h4 id = 'wait'> </h4>
         {% if not user.is_authenticated %}
         <h4> <input type="text" id="inpu" name="lg" placeholder='Ваш уникальный Логин' maxlength="40"  size="20"> </h4></br>
-        <button style="font-size: max(13px, 1.2vw);" class="btn btn-success btn" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ВВЕСТИ </button></br>
+        <button style="font-size: min(25px, 3vw);" class="btn btn-success btn" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ВВЕСТИ </button></br>
              <div style="height:10px"></div>
-        <button style="font-size: max(13px, 1.2vw);" class="btn btn-danger btn" id = 'butt2' type="submit" name="reg" onclick="Func()"> Зарегистрироваться </button></br></br>
+        <button style="font-size: min(25px, 3vw);" class="btn btn-danger btn" id = 'butt2' type="submit" name="reg" onclick="Func()"> Зарегистрироваться </button></br></br>
         {% else %}
         </br>
         {% if fl0 == '0' %}
-        <a style="font-size: max(13px, 1.3vw);" href="{% url 'begin' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a></br>
+        <a style="font-size: min(25px, 3vw);" href="{% url 'begin' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a></br>
              <div style="height:10px"></div>
         {% else %}
         <h4> ПОСМОТРИТЕ, ПОЖАЛУЙТСА, ОБЪЯВЛЕНИЕ НИЖЕ! </h4></br>
@@ -61,24 +58,19 @@
         {% endif %}
         {% endif %}
 
-
-
-        <h4 style='font-size: max(13px, 1.4vw)'> Четвертый турнир окончен 28.01.2023 </h4>
-        <h4 style='font-size: max(13px, 1.4vw)'> ПОЗДРАВЛЯЕМ победителей и призеров! </h4>
-        <h5 style="font-size: max(12px, 1.2vw)"> Информацию по победителям, призерам и призам можно узнать в комментарии <a href="https://vk.com/vovartus?w=wall4764971_3685%2Fall" target="_blank"> к данному посту. </a> </h5>
-		<h4 style="color: red; font-size: max(13px, 1.4vw)"> ВНИМАНИЕ! </h4>
-        <h5 style="font-size: max(12px, 1.2vw)"> Если Вы неправильно внесли свои данные при регистрации и желаете сохранить свои достижения в ТОП-е, </h5>
-        <h5 style="font-size: max(12px, 1.2vw)"> <a href="https://vk.com/vovartus" target="_blank"> обозначьте свои истинные ФИО в ЛС </a> . Участники с некорректными ФИО(ФИК) удаляются! </h5>
-        <h5 style="font-size: max(12px, 1.2vw)"> Попыток по улучшению своего результата можно совершать неограниченное число раз. </h5>
-        <h5 style="font-size: max(12px, 1.2vw)"> Следующий турнир запланирован на май 2023 года. Пока тренируйтесь. </h5>
-
+            <h4 style='font-size: min(32px, 4vw);'> Четвертый турнир окончен 28.01.2023 </h4>
+            <h4 style="font-size: min(32px, 4vw);"> ПОЗДРАВЛЯЕМ победителей и призеров! </h4>
+            <h5 style="font-size: min(25px, 3.2vw);"> Информацию по победителям, призерам и призам можно узнать в комментарии <a href="https://vk.com/vovartus?w=wall4764971_3685%2Fall" target="_blank"> к данному посту. </a> </h5>
+            <h4 style="color: red; font-size: min(32px, 4vw);"> ВНИМАНИЕ! </h4>
+            <h5 style="font-size: min(25px, 3.2vw);"> Если Вы неправильно внесли свои данные при регистрации и желаете сохранить свои достижения в ТОП-е, </h5>
+            <h5 style="font-size: min(25px, 3.2vw);"> <a href="https://vk.com/vovartus" target="_blank"> обозначьте свои истинные ФИО в ЛС </a>.</h5>
+            <h5 style="font-size: min(25px, 3.2vw);"> Участники с некорректными ФИО(ФИК) удаляются! </h5>
+            <h5 style="font-size: min(25px, 3.2vw);"> Попыток по улучшению своего результата можно совершать неограниченное число раз. </h5>
+            <h5 style="font-size: min(25px, 3.2vw);"> Следующий турнир запланирован на май 2023 года. Пока тренируйтесь. </h5>
 
         <!--<h5 style="font-size: max(12px, 1.2vw)"> Десять участников, занявшие первые места в ТОП-е игроков, получат символические вознаграждения: </h5>
         <h5 style="font-size: max(12px, 1.2vw)"> 1-3е места – 200рублей, 4-10е места – 100р. Кроме того: по 100р. получат те, кто попадет не менее 10 раз в ТОП-7 дня, </h5>
         <h5 style="font-size: max(12px, 1.2vw)"> и по 200рублей, те кто не менее 5 раз станет лидером дня.</h5>
-
-
-
         <h4> Производится коррекция. Результат лукавых ТОП-ов будет удален.</h4>
         <h4 style="color: red"> ВНИМАНИЕ! </h4>
         <h5> Если Вы неправильно внесли свои данные при регистрации и желаете сохранить свои достижения в ТОП-е, </h5>

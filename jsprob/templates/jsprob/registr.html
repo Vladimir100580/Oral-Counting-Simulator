@@ -3,8 +3,8 @@
 {% block content %}
 
 <aside>
-    <h2 class="featuress" style="font-style: italic" id = 'nomb'> Зарегистрируйтесь, пожалуйста, заполнив 4 поля </h2>
-    <h4 class="featuress" style="font-style: italic" id = 'wait'> Логин должен быть уникальным, по нему Вы будете входить в приложение, не забудьте его </h4>
+    <h2 class="featuress" style="font-style: italic; font-size: min(37px, 4vw);" id = 'nomb'> Зарегистрируйтесь, пожалуйста, заполнив 4 поля </h2>
+    <h4 class="featuress" style="font-style: italic; font-size: min(32px, 3.5vw);" id = 'wait'> Логин должен быть уникальным, по нему Вы будете входить в приложение, не забудьте его </h4>
 </aside>
 
 
@@ -16,12 +16,13 @@
         <h4> <input type="text" id="inpu2" name="name" placeholder='Ваше Имя' maxlength="25"  size="20"> </h4>
         <h4> <input type="text" id="inpu3" name="kl" placeholder='Ваш класс (или отчество)' maxlength="25"  size="20"> </h4>
 
-             <h4 style="font-style: italic"> Логин должен быть довольно сложным, чтобы его не смогли повторить другие игроки. </h4>
-             <h4 style="font-style: italic"> Если введенный логин уже будет в базе данных, придется заполнить форму заново. </h4>
-             <h4 style="font-style: italic"> В ТОП таблице будут указаны Ваши ФИК (или ФИО)) </h4>
+             <h4 style="font-style: italic; font-size: min(32px, 4vw);"> Логин должен быть довольно сложным, чтобы его не смогли повторить другие игроки. </h4>
+             <h4 style="font-style: italic; font-size: min(32px, 4vw);"> Если введенный логин уже будет в базе данных, придется заполнить форму заново. </h4>
+             <h4 style="font-style: italic; font-size: min(25px, 3.2vw);"> В ТОП таблице будут указаны Ваши ФИК (или ФИО)) </h4>
         <h4 id = 'wait0'> </h4>
-        <button class="btn btn-success btn" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ВВЕСТИ </button></br></br>
-        <a href="{% url 'home' %}" id = 'butt2' class="btn btn-success btn-sm"> Начальное меню </a></br></br>
+        </br>
+        <button class="btn btn-success btn" style="font-size: min(25px, 3vw);" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ВВЕСТИ </button></br></br>
+        <a href="{% url 'home' %}" style="font-size: min(25px, 3vw);" id = 'butt2' class="btn btn-success btn-sm"> Начальное меню </a></br></br>
 
     </form>
     </div>
