@@ -14,12 +14,32 @@
 
     <div class="features">
 
-         <h4 style='font-size: max(17px, 1.7vw)'> {{txt5}} </h4><br>
+         <h4 style='font-size: max(17px, 1.7vw)'> {{txt5}} </h4>
+         {% if txt0 != '' %}
+         <h4 style='font-size: max(17px, 1.7vw)'> {{txt0}} </h4>
+         {% endif %}
+         <br>
          <h3 style='font-size: max(18px, 1.8vw)'> {{txt6}} </h3><br>
          <h5 style='font-size: max(16px, 1.6vw)'> {{txt2}} </h5>
 
         {% if txtpz != '' %}
-        </br></br></br>
+        </br>
+        <h3 style='font-size: max(20px, 2vw)'> {{txtpz}} </h3>
+        {% endif %}
+        </br>
+        <div style="text-align: center;">
+        <div style="display: inline-block; text-align: left;">
+        {% for t in tab %}
+        {% if t.1 == 0 %}
+        <h5 style='font-size: max(12px, 1.2vw); color:blue;' align="left"> {{t.0}} </h5>
+        {% else %}
+        <h5 style='font-size: max(14px, 1.4vw); color:white;' align="left" > {{t.0}} </h5>
+        {% endif %}
+        {% endfor %}
+        </div>
+        </div>
+        {% if txtpz != '' %}
+        </br></br>
         <h2 style='font-size: max(17px, 1.7vw); font-style: italic' > {{txt7}} </h2>
         <h2 style='font-size: max(14px, 1.4vw); float: right;' > {{txt8}} </h2>
         </br>
@@ -29,7 +49,6 @@
         <button class="btn btn-danger btn" id = 'butt' type="submit" name="prod" onclick="Func()"> ПРОДОЛЖИТЬ </button></br></br>
     </div>
     </form>
-
 
 
 

@@ -31,17 +31,17 @@ urlpatterns = [
     path('toplvl', views.toplvl, name='toplvl'),
     path('topglob', views.topglob, name='topglob'),
 
-    path('login/',
-         LoginView.as_view
-             (
-             template_name='jsprob/login.html',
-             authentication_form=forms.BootstrapAuthenticationForm,
-             extra_context=
-             {
-                 'title': 'Log in',
-                 'year': datetime.now().year,
-             }
-         ),
-         name='login'),
+    # path('login/',
+    #      LoginView.as_view
+    #          (
+    #          template_name='jsprob/login.html',
+    #          authentication_form=forms.BootstrapAuthenticationForm,
+    #          extra_context=
+    #          {
+    #              'title': 'Log in',
+    #              'year': datetime.now().year,
+    #          }
+    #      ),
+    #      name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
 ]

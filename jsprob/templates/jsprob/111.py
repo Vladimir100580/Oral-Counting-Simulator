@@ -1,8 +1,32 @@
 from random import randint
 
-print((1 or 1) and 0)
+# print((1 or 1) and 0)
+#
+# print('Введите Фамилию, Имя, номер телефона, комментарий(в одно слово).')
+# data = input("Через пробелы: ").split()
+# if len(data) == 3:
+#     data.append('-')
+# if len(data) > 4:
+#     data[3] = '_'.join(data[3:])
+#     data = data[:4]
+# data = ' '.join(data) + '\n'
+#
+# print(data)
 
 
+dict1 = {"a": 23, "b": 54}
+
+dict2 = {"d": 242, "c": 245}
+
+dict = {**dict1, **dict2}
+print(dict["a"], dict["c"])
+
+st = [12, 43, 65, 0, 53]
+print("$".join(list(map(lambda x: str(x), st))))
+
+
+strmas = list(map(lambda a: str(a), [1, 5, 6, 0, 0, 0, 0]))
+print(strmas)
 # a = 6
 #
 # y = 1 if a == 5 else 0
