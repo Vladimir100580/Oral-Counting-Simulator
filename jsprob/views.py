@@ -686,7 +686,7 @@ def begin(request):
 
 def list1(request):
     Vyb = Vyborka(request, 0, 10)
-    data = {'ti': 90000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
+    data = {'ti': 50000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
     return render(request, 'jsprob/list1.html', data)
 
 def list2(request):
@@ -845,14 +845,16 @@ def itoglv(request):
                     txt6 = 'В TOП-е пройденного этапа Вы удерживаете ' + \
                            str(pos_now) + ' позицию.'
             else:
-                txt6 = 'В TOП-е пройденного этапа пока Вы  занимаете ' + \
+                txt6 = 'В TOП-е пройденного этапа пока Вы занимаете ' + \
                        str(pos_now) + ' позицию.'
     else:
         if float(ud[1]) < float(sclvus) * .8:
             txt6 = 'Надо поднажать. Ваш личный рекорд пройденного этапа куда выше.'
         if float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
             txt6 = 'Еще немного и Ваш рекорд пройденного этапа (' + str(int(float(sclvus))) + ') был бы побит.'
-
+        if float(ud[1]) == float(sclvus):
+            txtpz = 'Поздравляем!'
+            txt6 = 'Уникальный случай! Вы в точности повторили свой рекорд пройденного этапа.'
         # print('sclvus:', sclvus, '  ud[1]:', ud[1])
         #
         # print('mas0:', mas0, len(mas0), '   mas1:', mas1, len(mas1))
