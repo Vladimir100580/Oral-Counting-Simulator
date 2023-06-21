@@ -11,7 +11,8 @@ def hello(request):
         er = request.session['ti_contr']
     except:
         request.session['ti_contr'] = time.time() - 4
-    if abs(float(request.session['ti_contr']) - time.time()) < 3 and 'intlg' not in answer and 'reg' not in answer:
+    if abs(float(request.session['ti_contr']) - time.time()) < 3 and 'intlg' not in answer\
+            and 'reg' not in answer and 'chfik' not in answer:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[-1].strip()
@@ -43,17 +44,17 @@ def hello(request):
         tab.save()
         t = 5 / 0
 
-    if 'intlg' in answer or 'reg' in answer:
+    if 'intlg' in answer or 'reg' in answer or 'chfik' in answer:
         dayend()
         request.session['ti_contr'] = time.time() - 3
     else:
         request.session['ti_contr'] = time.time()
 
-    user_id = request.user.username
+    userLog = request.user.username
     dat = Indexs.objects.get(id=1)
     datn = datetime.date.today()
     fl0 = '0'
-    if (user_id != ''):
+    if (userLog != ''):
         nm = request.user.first_name.split('$#$%')
         if len(nm) == 4: fl0 = '1'
         nm = ', ' + nm[1]
@@ -70,6 +71,11 @@ def hello(request):
         fl1 = 1
         prit = ''
         st = ''
+    if 'chfik' in answer:
+        userFN = request.user.first_name
+        request.session['fik_contr_us'] = userFN
+        request.session['fik_co_us_fl'] = "1"
+        return redirect('changefik')
     if 'reg' in answer:
         dayend()
         return redirect('regist')
@@ -86,7 +92,6 @@ def hello(request):
     return render(request, 'jsprob/index.html', {'nm': nm, 'fl': fl, 'fl0': fl0, 'fl1': fl1,
                                                 'p1': p1, 'prit': prit, 'st': st})
 
-    kar.res2
 
 def regist(request):
     dayend()
@@ -96,7 +101,6 @@ def regist(request):
         if 'fam' in answer and 'name' in answer and 'lg' in answer:
             f = answer.__getitem__('fam').replace(' ', '').capitalize()
             n = answer.__getitem__('name').replace(' ', '').capitalize()
-            if f == '' or n == '': return redirect('regist')
             k = answer.__getitem__('kl').replace(' ', '')
             lg = answer.__getitem__('lg')
             if len(f) < 2 or len(n) < 2 or len(f) > 25 or len(n) > 25 or len(k) > 25 or len(lg) > 30 or len(lg) < 3:
@@ -111,6 +115,34 @@ def regist(request):
                 login(request, user)
                 return render(request, 'jsprob/uspreg.html')
     return render(request, 'jsprob/registr.html')
+
+def changefik(request):
+    dayend()
+    if request.session['fik_co_us_fl'] == "1":
+        fno = request.user.first_name.split('$#$%')
+        ph0, ph1, ph2 = fno[0], fno[1], fno[2]
+    else:
+        fno = request.session['fik_contr_us'].split('$#$%')
+        ph0, ph1, ph2 = fno[0], fno[1], fno[2]
+    # return redirect('logout')
+    if request.method == 'GET':
+        answer = request.GET
+        if 'fam' in answer and 'name' in answer:
+            f = answer.__getitem__('fam').replace(' ', '').capitalize()
+            n = answer.__getitem__('name').replace(' ', '').capitalize()
+            k = answer.__getitem__('kl').replace(' ', '')
+            if len(f) < 2 or len(n) < 2 or len(f) > 25 or len(n) > 25 or len(k) > 25:
+                request.session['fik_co_us_fl'] = "0"
+                request.session['fik_contr_us'] = f + '$#$%' + n + '$#$%' + k
+                return redirect('changefik')
+            usna = request.user.username
+            user = User.objects.get(username=usna)
+            tt = DataUser.objects.get(log=usna)
+            user.first_name = f + '$#$%' + n + '$#$%' + k
+            user.save()
+            DataUser.objects.filter(log=usna).update(fik=f + ' ' + n + ' ' + k)
+            return redirect('home')
+    return render(request, 'jsprob/changefik.html', {"ph0":ph0, "ph1":ph1, "ph2":ph2})
 
 def dayend():
     dat = Indexs.objects.get(id=1)
@@ -146,11 +178,14 @@ def dayend():
             p.save(update_fields=['poptd'])
 
 def progress(request):
-    allpolz = DataUser.objects.all()
-    for polz in allpolz:
-        if polz.scoresl1==0:
-            polz.scoresl1 = 2
-            polz.save(update_fields=['scoresl1'])
+    # user = User.objects.get(username='Frederick_Krause1095')
+    # user.username = "Frederick_Krause 1095"
+    # user.save()
+    # allpolz = DataUser.objects.all()
+    # for polz in allpolz:
+        # if polz.scoresl1==0:
+        #     polz.scoresl1 = 2
+        #     polz.save(update_fields=['scoresl1'])
         # stmas = [str(polz.scoresl1), str(polz.scoresl2), str(polz.scoresl3),        # 0-6 абс оп этапам, 7 кол-во сез
         #             str(polz.scoresl4), str(polz.scoresl5), str(polz.scoresl6),     # 8 Приз-во в сез, 9 Поб в сез
         #             str(polz.scoresl7), "0", "0", "0", "0", "0", "0", "0"]  # 10 поб в днях, 11 ТОП7 в днях,12 луч_поз
@@ -218,8 +253,6 @@ def progress(request):
         return render(request, 'jsprob/progress.html', data)
     else:
         return render(request, 'jsprob/progress.html', data)
-
-
 
 
 def OrfKras(n, l):  #k5, k23, k31 склоняем по количеству в списке l
@@ -725,7 +758,7 @@ def itoglv(request):
     krit = 'scoresl' + str(ud[0])
     sclvus = DataUser.objects.filter(log=usna, fik=us.fik).values_list(krit)[0][
         0]  # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
-    tx = OrfKras(sclvus, ["очков", "очка", "очко"]) + '.'
+    tx = OrfKras(int(float(ud[1])), ["очков", "очка", "очко"]) + '.'
     vstsl = ['На разминочном ', 'Во втором ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
     txt1 = vstsl + 'этапе Вы набрали ' + ud[1] + tx
     txt2 = 'Решено правильно: ' + ud[2] + '; из них безошибочно: ' + ud[3] + '. '
@@ -764,43 +797,43 @@ def itoglv(request):
             maslevs[lastlv - 1] = ud[1]
             us.pole2 = "$".join(maslevs)
             us.save(update_fields=['pole2'])
-        mas0 = [i for i in DataUser.objects.filter(scoresl1__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
+        mas0 = [i for i in DataUser.objects.filter(scoresl1__gt=sclvus).order_by('-' + krit).values_list(krit)]
         if ud[0] == '1':
             mas0 = [i for i in
-                    DataUser.objects.filter(scoresl1__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl1__gt=sclvus).order_by('-' + krit).values_list(krit)]
             DataUser.objects.filter(log=usna).update(scoresl1=ud[1])
             mas1 = [i for i in
-                    DataUser.objects.filter(scoresl1__gt=ud[1]).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl1__gt=ud[1]).order_by('-' + krit).values_list(krit)]
         if ud[0] == '2':
             mas0 = [i for i in
-                    DataUser.objects.filter(scoresl2__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl2__gt=sclvus).order_by('-' + krit).values_list(krit)]
             DataUser.objects.filter(log=usna).update(scoresl2=ud[1])
             mas1 = [i for i in
-                    DataUser.objects.filter(scoresl2__gt=ud[1]).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl2__gt=ud[1]).order_by('-' + krit).values_list(krit)]
         if ud[0] == '3':
             mas0 = [i for i in
-                    DataUser.objects.filter(scoresl3__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl3__gt=sclvus).order_by('-' + krit).values_list(krit)]
             DataUser.objects.filter(log=usna).update(scoresl3=ud[1])
             mas1 = [i for i in
-                    DataUser.objects.filter(scoresl3__gt=ud[1]).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl3__gt=ud[1]).order_by('-' + krit).values_list(krit)]
         if ud[0] == '4':
             mas0 = [i for i in
-                    DataUser.objects.filter(scoresl4__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl4__gt=sclvus).order_by('-' + krit).values_list(krit)]
             DataUser.objects.filter(log=usna).update(scoresl4=ud[1])
             mas1 = [i for i in
-                    DataUser.objects.filter(scoresl4__gt=ud[1]).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl4__gt=ud[1]).order_by('-' + krit).values_list(krit)]
         if ud[0] == '5':
             mas0 = [i for i in
-                    DataUser.objects.filter(scoresl5__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl5__gt=sclvus).order_by('-' + krit).values_list(krit)]
             DataUser.objects.filter(log=usna).update(scoresl5=ud[1])
             mas1 = [i for i in
-                    DataUser.objects.filter(scoresl5__gt=ud[1]).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl5__gt=ud[1]).order_by('-' + krit).values_list(krit)]
         if ud[0] == '6':
             mas0 = [i for i in
-                    DataUser.objects.filter(scoresl6__gt=sclvus).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl6__gt=sclvus).order_by('-' + krit).values_list(krit)]
             DataUser.objects.filter(log=usna).update(scoresl6=ud[1])
             mas1 = [i for i in
-                    DataUser.objects.filter(scoresl6__gt=ud[1]).order_by('-' + krit).values_list(krit, 'fik')]
+                    DataUser.objects.filter(scoresl6__gt=ud[1]).order_by('-' + krit).values_list(krit)]
         pos_old = int(len(mas0) + 1)
         pos_now = int(len(mas1) + 1)
         vsk = min(pos_now - 1, 2)
@@ -811,7 +844,6 @@ def itoglv(request):
         for m in mas2:
             ii += 1
             tab5.append([f'{str(ii)}. {m[1]} ({m[0]})', int(ii == pos_now)])
-        print(tab5)
         if pos_now < 11:
             if pos_old == pos_now:
                 txtpz = 'Поздравляем!'
@@ -850,11 +882,28 @@ def itoglv(request):
     else:
         if float(ud[1]) < float(sclvus) * .8:
             txt6 = 'Надо поднажать. Ваш личный рекорд пройденного этапа куда выше.'
-        if float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
+        elif float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
             txt6 = 'Еще немного и Ваш рекорд пройденного этапа (' + str(int(float(sclvus))) + ') был бы побит.'
-        if float(ud[1]) == float(sclvus):
+        elif float(ud[1]) == float(sclvus):
             txtpz = 'Поздравляем!'
             txt6 = 'Уникальный случай! Вы в точности повторили свой рекорд пройденного этапа.'
+        else:
+            dscore = int(float(sclvus) - float(ud[1]))
+            tx12 = ['минувшего', 'пройденного', 'прошедшего'][randint(0,2)]
+            txt6 = 'До Вашего рекорда ' + tx12 + ' этапа не хватило ' + str(dscore) + OrfKras(dscore, ["очков", "очка", "очко"])
+        mas0 = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik', 'log')]
+        ii = 0
+        for m in mas0:
+            ii += 1
+            if usna == m[2]: pos = ii
+
+        vsk = min(pos - 1, 2)
+        ii = pos - 1 - vsk
+        mas2 = mas0[ii:min(pos + 4 - vsk, len(mas0))]
+        tab5 = []
+        for m in mas2:
+            ii += 1
+            tab5.append([f'{str(ii)}. {m[1]} ({m[0]})', int(ii == pos)])
         # print('sclvus:', sclvus, '  ud[1]:', ud[1])
         #
         # print('mas0:', mas0, len(mas0), '   mas1:', mas1, len(mas1))

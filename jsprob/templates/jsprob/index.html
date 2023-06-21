@@ -34,7 +34,6 @@
          </div>
          <div style="clear: left"></div>
 
-
          <form action="" method="get">
             {% csrf_token %}
          <h4 id = 'wait'> </h4>
@@ -46,7 +45,9 @@
         {% else %}
         </br>
         {% if fl0 == '0' %}
-        <a style="font-size: min(25px, 3vw);" href="{% url 'begin' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a></br>
+        <a style="font-size: min(25px, 3vw);" href="{% url 'begin' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a>
+        <button style="font-size: min(20px, 2.5vw);" type="submit" name="chfik" id = "butt8" class="btn btn-danger" onclick="Func()"> ИЗМЕНИТЬ ФИО </button>
+        </br>
              <div style="height:10px"></div>
         {% else %}
         <h4> ПОСМОТРИТЕ, ПОЖАЛУЙТСА, ОБЪЯВЛЕНИЕ НИЖЕ! </h4></br>
@@ -119,8 +120,9 @@
         document.getElementById('butt1').style.display='none';
         document.getElementById('butt2').style.display='none';
         }
-    if (fl==1)  {document.getElementById('butt4').style.display='none';}
-
+    if (fl==1)  {document.getElementById('butt4').style.display='none';
+                 document.getElementById('butt8').style.display='none';
+                }
     document.getElementById('butt3').style.display='none';
     document.getElementById('butt6').style.display='none';
     document.getElementById('butt7').style.display='none';

@@ -12,6 +12,7 @@ urlpatterns = [
     path('', views.hello, name='home'),  # , name = 'home'
     path('12', views.hello, name='home1'),
     path('begin', views.begin, name='begin'),
+    path('changefik', views.changefik, name='changefik'),
     path('dayend', views.dayend, name='dayend'),
     path('instr', views.instr, name='instr'),
     path('itog', views.itog, name='itog'),
