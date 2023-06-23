@@ -49,7 +49,6 @@ def hello(request):
         request.session['ti_contr'] = time.time() - 3
     else:
         request.session['ti_contr'] = time.time()
-
     userLog = request.user.username
     dat = Indexs.objects.get(id=1)
     datn = datetime.date.today()
@@ -78,6 +77,7 @@ def hello(request):
         return redirect('changefik')
     if 'reg' in answer:
         dayend()
+        request.session['fik_contr_us'] = "$#$%$#$%"
         return redirect('regist')
     if 'intlg' in answer:
         dayend()
@@ -92,9 +92,10 @@ def hello(request):
     return render(request, 'jsprob/index.html', {'nm': nm, 'fl': fl, 'fl0': fl0, 'fl1': fl1,
                                                 'p1': p1, 'prit': prit, 'st': st})
 
-
 def regist(request):
     dayend()
+    fno = request.session['fik_contr_us'].split('$#$%')
+    ph0, ph1, ph2 = fno[0], fno[1], fno[2]
     # return redirect('logout')
     if request.method == 'GET':
         answer = request.GET
@@ -104,8 +105,13 @@ def regist(request):
             k = answer.__getitem__('kl').replace(' ', '')
             lg = answer.__getitem__('lg')
             if len(f) < 2 or len(n) < 2 or len(f) > 25 or len(n) > 25 or len(k) > 25 or len(lg) > 30 or len(lg) < 3:
+                mes1 = "Все поля должны быть заполнены."
+                mes2 = "Причем данные полей не должны быть очень длинными или короткими."
+                return render(request, 'jsprob/message.html', {'link': "regist", 'mess1': mes1, 'mess2': mes2})
+                request.session['fik_contr_us'] = f + '$#$%' + n + '$#$%' + k
                 return redirect('regist')
             if User.objects.filter(username=lg).exists():
+                request.session['fik_contr_us'] = f + '$#$%' + n + '$#$%' + k
                 return render(request, 'jsprob/ujuse.html')
             else:
                 DataUser(log=lg, scores=0, pop=0, fik=f + ' ' + n + ' ' + k, pole1='0$0$0').save()
@@ -114,7 +120,7 @@ def regist(request):
                 user = authenticate(request, username=lg, password='4591423')
                 login(request, user)
                 return render(request, 'jsprob/uspreg.html')
-    return render(request, 'jsprob/registr.html')
+    return render(request, 'jsprob/registr.html', {"ph0":ph0, "ph1":ph1, "ph2":ph2})
 
 def changefik(request):
     dayend()
@@ -261,7 +267,6 @@ def OrfKras(n, l):  #k5, k23, k31 склоняем по количеству в 
         if n % 10 == 2 or n % 10 == 3 or n % 10 == 4: t = ' ' + l[1]  # например 22
         if n % 10 == 1: t = ' ' + l[2]  # например 31
     return t
-
 
 def itog(request):
     dayend()
@@ -743,7 +748,9 @@ def list5(request):
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 130000})
 
 def list6(request):
-    Vyb = Vyborka(request, 50, 60)
+    for i in range(100000):
+        Vyb = Vyborka(request, 50, 60)
+        if i % 1000 == 0: print(i)
     return render(request, 'jsprob/list6.html',
                   {'tas': Vyb.tas, 'ot': Vyb.ot, 'ti': 180000})
 
@@ -915,7 +922,7 @@ def itoglv(request):
         answer = request.GET
         if 'prod' in answer:
             if ud[0] == '6':  # '6' - количество этапов
-                DataUser.objects.filter(log=usna).update(res2=(tt.res2//10)*10)
+                DataUser.objects.filter(log=usna).update(res2=(us.res2//10)*10)
                 return redirect('itog')
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
             mesnam = ['"Сквозь десятки"', "Минуя сотни",
@@ -929,7 +936,7 @@ def itoglv(request):
 
 
 class Examples:
-    def __init__(self, rab, mm):
+    def __init__(self, rab, mm, request):
         otvs = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
         tasks = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
 
@@ -938,16 +945,28 @@ class Examples:
             # сложение
             if mm == 0:
                 provsov = [[0] * 3 for i in range(11)]  # обнуление массива контроля повторений
+                prcoin = [0] * 10 # каждая цифра попадается не более 2 раз
                 for z in range(0, 5):
                     while True:
                         fl = 0
-                        a = randint(2, 8)
-                        b = randint(1, 10 - a)
+                        ff = 0
+                        while (ff == 0):
+                            a = randint(2, 8)
+                            b = randint(1, 10 - a)
+                            if prcoin[a] < 3 and prcoin[b] < 3:
+                                prcoin[a] += 1
+                                prcoin[b] += 1
+                                ff = 1
                         mas = provsov
-                        for d in range(0, 5):  # все 5 используя предыдущие
+                        d = 0
+                        while(d < 5):  # все 5 используя предыдущие
                             if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][0] == b) and (mas[d][1] == a) \
                                     or (mas[d][2] == a + b):
+                                prcoin[a] -= 1
+                                prcoin[b] -= 1
                                 fl = 1
+                                d = 10
+                            d += 1
                         if fl == 0:
                             provsov[z][0] = a
                             provsov[z][1] = b
@@ -958,16 +977,28 @@ class Examples:
 
                 # вычитание
                 provsov = [[0] * 3 for i in range(11)]
+                prcoin = [0] * 10
                 for z in range(5, 10):
                     while True:
                         fl = 0
-                        b = randint(1, 8)
-                        a = randint(b + 1, 9)
+                        ff = 0
+                        while (ff == 0):
+                            b = randint(1, 8)
+                            a = randint(b + 1, 9)
+                            if prcoin[a] < 3 and prcoin[b] < 3:
+                                prcoin[a] += 1
+                                prcoin[b] += 1
+                                ff = 1
                         mas = provsov
-                        for d in range(0, 5):  # все 5 используя предыдущие
+                        d = 0
+                        while(d < 5):  # все 5 используя предыдущие
                             if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][0] == b) and (mas[d][1] == a) or (
                                     mas[d][2] == a - b):
+                                prcoin[a] -= 1
+                                prcoin[b] -= 1
                                 fl = 1
+                                d = 10
+                            d += 1
                         if fl == 0:
                             provsov[z - 5][0] = a
                             provsov[z - 5][1] = b
@@ -979,8 +1010,18 @@ class Examples:
             if mm == 10:
                 # сложение через десяток
                 provsov = [[0] * 3 for i in range(11)]
-                for z in range(10, 15):
+                z = 10
+                kost = 0
+                while (z < 15): # for z in range(10, 15): Костыль!
+                    ff = 0
                     while True:
+                        if (kost == 300):
+                            provsov = [[0] * 3 for i in range(11)]
+                            z = 10
+                            kost = 0
+                            ff = 1
+                        if ff == 1:
+                            break
                         fl = 0
                         while True:
                             a = randint(2, 9)
@@ -988,9 +1029,10 @@ class Examples:
                             if (a + b) % 10 >= int(1.5 * (z - 10)) and (a + b) != 11:
                                 break
                         mas = provsov
-                        for d in range(0, 5):  # все 5 используя предыдущие
-                            if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][0] == b) and (mas[d][1] == a) or (
-                                    mas[d][2] == a + b):
+                        for d in range(0, z-10):  # все 5 используя предыдущие
+                            if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][2] == a + b) or\
+                                    (mas[d][0] == b) and (mas[d][1] == a):
+                                kost += 1
                                 fl = 1
                         if fl == 0:
                             provsov[z - 10][0] = a
@@ -1011,6 +1053,7 @@ class Examples:
                                 if fl0 == 0: break
                             tasks[z][r] = str(a) + '+' + str(b) + '='
                             otvs[z][r] = str(a + b)
+                            z += 1
                             break
                 lg = 11
                 pg = 14
@@ -1024,13 +1067,23 @@ class Examples:
                             break
                     tasks[i][rb], tasks[ii][rb] = tasks[ii][rb], tasks[i][rb]
                     otvs[i][rb], otvs[ii][rb] = otvs[ii][rb], otvs[i][rb]
-
                 # вычитание через десяток
                 provsov = [[0] * 2 for i in range(11)]
-                for z in range(15, 20):
+                z = 15
+                kost = 0
+                while (z < 20):  # for z in range(15, 20): Костыль!
+                    ff = 0
                     while True:
                         fl = 0
                         while True:
+                            if (kost == 300):
+                                provsov = [[0] * 2 for i in range(11)]
+                                z = 15
+                                kost = 0
+                                ff = 1
+                            if ff == 1:
+                                break
+                            fl = 0
                             a = randint(2, 9)
                             b = randint(10 - a, 9)
                             if (a + b) % 10 >= int(1.5 * (z - 15)):
@@ -1039,6 +1092,7 @@ class Examples:
                         for d in range(0, 5):  # все 5 используя предыдущие
                             if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][0] == b) and (mas[d][1] == a):
                                 fl = 1
+                                kost += 1
                         if fl == 0:
                             provsov[z - 15][0] = a
                             provsov[z - 15][1] = b
@@ -1067,8 +1121,8 @@ class Examples:
                             else:
                                 tasks[z][r] = str(a + b) + '–' + str(a) + '='
                                 otvs[z][r] = str(b)
+                            z += 1
                             break
-
             if mm == 20:
                 # сложение через сотню
                 provsov = [[0] * 3 for i in range(11)]
@@ -1397,8 +1451,8 @@ class Vyborka():
     def __init__(self, request, m, n):
         rab = 1
         kod = request.COOKIES.get('keyshif').split('$')
-        print(kod)
-        Ex = Examples(rab, m)
+        # print(kod)
+        Ex = Examples(rab, m, request)
         if m < 50:
             tasks = []
             for i in range(len(Ex.tas)): tasks.append(Ex.tas[i][0])
@@ -1435,7 +1489,6 @@ class Vyborka():
                     s.append(ord(i) + float(kod[l]))
                     l += 1
                 otvs.append(s)
-                print(tasks, otvs)
             self.tas = tasks
             self.ot = otvs
 

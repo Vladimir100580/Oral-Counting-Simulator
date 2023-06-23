@@ -27,7 +27,11 @@
 
     </form>
     </div>
+
     <script>
+    document.getElementById("inpu1").value = '{{ph0}}';
+    document.getElementById("inpu2").value = '{{ph1}}';
+    document.getElementById("inpu3").value = '{{ph2}}';
 
     function Func() {
         localStorage.setItem('vrk', 10000);
@@ -38,7 +42,6 @@
         txt2.innerHTML = 'ПОЖАЛУЙСТА, ПОДОЖДИТЕ';
         txt2.style.fontStyle = 'Italic';
       }
-
 
     </script>
 {% endblock %}
