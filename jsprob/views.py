@@ -107,9 +107,8 @@ def regist(request):
             if len(f) < 2 or len(n) < 2 or len(f) > 25 or len(n) > 25 or len(k) > 25 or len(lg) > 30 or len(lg) < 3:
                 mes1 = "Все поля должны быть заполнены."
                 mes2 = "Причем данные полей не должны быть очень длинными или короткими."
-                return render(request, 'jsprob/message.html', {'link': "regist", 'mess1': mes1, 'mess2': mes2})
                 request.session['fik_contr_us'] = f + '$#$%' + n + '$#$%' + k
-                return redirect('regist')
+                return render(request, 'jsprob/message.html', {'link': "regist", 'mess1': mes1, 'mess2': mes2})
             if User.objects.filter(username=lg).exists():
                 request.session['fik_contr_us'] = f + '$#$%' + n + '$#$%' + k
                 return render(request, 'jsprob/ujuse.html')
@@ -718,6 +717,7 @@ def begin(request):
     request.session['ustns4usen'] = usna
     usefio = request.user.first_name.split('$#$%')
     request.session['ustns4usennam'] = usefio[1]
+    request.session['ustns4use_fiko'] = " ".join(usefio)
     return render(request, 'jsprob/level1.html',
                   {'usp': 'Успеха, ' + usefio[1], 'lv': 'Этап 1.', 'namlv': 'Разминка', 'list': 'list1'})
 
@@ -748,9 +748,7 @@ def list5(request):
                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 130000})
 
 def list6(request):
-    for i in range(100000):
-        Vyb = Vyborka(request, 50, 60)
-        if i % 1000 == 0: print(i)
+    Vyb = Vyborka(request, 50, 60)
     return render(request, 'jsprob/list6.html',
                   {'tas': Vyb.tas, 'ot': Vyb.ot, 'ti': 180000})
 
@@ -774,7 +772,6 @@ def itoglv(request):
     txt6 = ''
     txt0 = ''
     tab5 = ''
-
     if float(ud[1]) > float(sclvus):
         if float(sclvus) != 0:
             txt5 = 'Вы улучшили свой рекорд пройденного этапа в сезоне на ' + str(int(float(ud[1]) - float(sclvus))) \
@@ -843,11 +840,20 @@ def itoglv(request):
                     DataUser.objects.filter(scoresl6__gt=ud[1]).order_by('-' + krit).values_list(krit)]
         pos_old = int(len(mas0) + 1)
         pos_now = int(len(mas1) + 1)
-        vsk = min(pos_now - 1, 2)
-        ii = pos_now - 1 - vsk
         mas0 = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik')]
+        if mas0[pos_now-1][1] != request.session['ustns4use_fiko']:  # Здравстсвуй, костыль 2
+            kk = 0
+            for mm in mas0:
+                kk += 1
+                if mm[1] == request.session['ustns4use_fiko']:
+                    pos_now = kk
+        vsk = min(pos_now - 1, 2)
+        request.session['kontrol_lv'] = 1
+        ii = pos_now - 1 - vsk
         mas2 = mas0[ii:min(pos_now+4-vsk, len(mas0))]
         tab5 = []
+
+
         for m in mas2:
             ii += 1
             tab5.append([f'{str(ii)}. {m[1]} ({m[0]})', int(ii == pos_now)])
@@ -891,10 +897,9 @@ def itoglv(request):
             txt6 = 'Надо поднажать. Ваш личный рекорд пройденного этапа куда выше.'
         elif float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
             txt6 = 'Еще немного и Ваш рекорд пройденного этапа (' + str(int(float(sclvus))) + ') был бы побит.'
-        elif float(ud[1]) == float(sclvus):
-            txtpz = 'Поздравляем!'
+        elif float(ud[1]) == float(sclvus) and request.session['kontrol_lv'] == 0:
             txt6 = 'Уникальный случай! Вы в точности повторили свой рекорд пройденного этапа.'
-        else:
+        elif request.session['kontrol_lv'] == 0:
             dscore = int(float(sclvus) - float(ud[1]))
             tx12 = ['минувшего', 'пройденного', 'прошедшего'][randint(0,2)]
             txt6 = 'До Вашего рекорда ' + tx12 + ' этапа не хватило ' + str(dscore) + OrfKras(dscore, ["очков", "очка", "очко"])
@@ -903,7 +908,6 @@ def itoglv(request):
         for m in mas0:
             ii += 1
             if usna == m[2]: pos = ii
-
         vsk = min(pos - 1, 2)
         ii = pos - 1 - vsk
         mas2 = mas0[ii:min(pos + 4 - vsk, len(mas0))]
@@ -921,8 +925,9 @@ def itoglv(request):
     if request.method == 'GET':
         answer = request.GET
         if 'prod' in answer:
+            DataUser.objects.filter(log=usna).update(res2=(us.res2 // 10) * 10)
             if ud[0] == '6':  # '6' - количество этапов
-                DataUser.objects.filter(log=usna).update(res2=(us.res2//10)*10)
+                # DataUser.objects.filter(log=usna).update(res2=(us.res2//10)*10)
                 return redirect('itog')
             meslv = 'Этап ' + str(int(float(ud[0]) + 1)) + '.'
             mesnam = ['"Сквозь десятки"', "Минуя сотни",
@@ -1449,6 +1454,7 @@ def gene(pol):
 
 class Vyborka():
     def __init__(self, request, m, n):
+        request.session['kontrol_lv'] = 0
         rab = 1
         kod = request.COOKIES.get('keyshif').split('$')
         # print(kod)

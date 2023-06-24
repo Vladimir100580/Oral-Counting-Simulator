@@ -45,8 +45,14 @@
         {% else %}
         </br>
         {% if fl0 == '0' %}
+        <div class="column1-left">
         <a style="font-size: min(25px, 3vw);" href="{% url 'begin' %}" id = "butt4" class="btn btn-success" onclick="Func()"> НАЧАТЬ ИГРУ </a>
-        <button style="font-size: min(20px, 2.5vw);" type="submit" name="chfik" id = "butt8" class="btn btn-danger" onclick="Func()"> ИЗМЕНИТЬ ФИО </button>
+        </div>
+        <div class="column1-center"><h4></h4></div>
+        <div class="column-right">
+        <button style="font-size: min(18px, 2.3vw);" type="submit" name="chfik" id = "butt8" class="btn btn-danger" onclick="Func()"> ИЗМЕНИТЬ ФИО </button>
+        </div>
+        <div style="clear: left"></div>
         </br>
              <div style="height:10px"></div>
         {% else %}
@@ -103,6 +109,19 @@
         text-align: left;
         padding-left: 3vw;
         padding-right: 1vw;
+        }
+
+        .column1-left {
+        float: left;
+        width: 58%;
+        text-align: right;
+        padding-left: 3vw;
+        padding-right: 1vw;
+        }
+
+        .column1-center {
+        float: left;
+        width: 7%;
         }
 
         .column-right {
