@@ -1,0 +1,74 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} Ваши личные достижения {% endblock %}
+{% block content %}
+
+<aside>
+    <h5 class="featuress" id = 'nomb' style="font-style: italic; font-size: min(35px, 4.8vw);"> Ваши личные достижения </h5>
+    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(28px, 2.2vw);"> {{kar.srores}} </h5>
+</aside>
+
+    <div class="features">
+        <h5 style="font-style: italic; font-size: min(35px, 4vw);"> Абсолютный рекорд: {{gls}} {{gls1}} ({{pozgl}} место)</h5>
+        <h5 style="font-style: italic; font-size: min(32px, 3.7vw);"> Рекорд в сезоне: {{sezsc}} {{sezsc1}} ({{pozsez}} место)</h5>
+        <h5 style="font-style: italic; font-size: min(30px, 3.5vw);"> Лучший результат сегодня: {{sctd}} </h5>
+
+        <div class="column-left">
+
+        <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Рекорды по этапам: в сезоне (абсолютный) </h5>
+           {% for sc in scl %}
+                <h6 style="color:blue; font-style: italic; font-size: min(27px, 3.2vw);"> Этап. {{sc.0}}: {{sc.1}} </h6>
+           {% endfor %}
+           {% if fl == 1 %}
+           <h6 style="color:blue; font-style: italic; font-size: min(28px, 2.9vw);"> Потенциал: {{pot}} </h6>
+           {% endif %}
+        </div>
+
+        <div class="column-right">
+            <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Дневные состязания: </h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> ПОБЕД: {{quantwin}} {{quantwin1}}</h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> В ТОП-7: {{quanttop}} {{quanttop1}}</h5>
+            <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Запусков игры: </h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> В сезоне: {{na4pops}} {{na4pops1}}</h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> Всего: {{na4popt}} {{na4popt1}}</h5>
+            <h5 style="font-style: italic; font-size: min(32px, 3.5vw);"> Игра пройдена: </h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> В сезоне: {{popsez}} {{popsez1}}</h5>
+            <h5 style="color:blue; font-style: italic; font-size: min(20px, 3.2vw);"> Всего: {{popt}} {{popt1}}</h5>
+
+        </div>
+        <div style="clear: left"></div>
+
+
+        </br>
+        <h3 id ='wt' style="font-style: italic"></h3>
+        <a style="font-size: min(20px, 2.5vw);" href="{% url 'home' %}" id = 'butt1' class="btn btn-success" onclick="Func()"> СТАРТОВОЕ МЕНЮ </a>
+        <a style="font-size: min(20px, 2.5vw);" href="{% url 'topglob' %}" id = 'butt2' class="btn btn-success" onclick="Func()"> АБСОЛЮТНЫЙ ТОП </a>
+        <a style="font-size: min(20px, 2.5vw);" href="{% url 'topdays' %}" id = 'butt3' class="btn btn-success" onclick="Func()"> ТОП ТОПов ДНЯ </a>
+        </br></br>
+
+    </div>
+    <style>
+
+        .column-left {
+        float: left;
+        width: 56%;
+        text-align: center;
+        padding-left: 3vw;
+        padding-right: 1vw;
+        }
+
+        .column-right {
+        float: left;
+        width: 44%;
+        text-align: center;
+        }
+
+    </style>
+
+    <script>
+    function Func() {
+                document.getElementById('butt1').style.display='none';
+                document.getElementById('butt2').style.display='none';
+                document.getElementById('butt3').style.display='none';
+                document.getElementById('wt').innerHTML = 'Пожалуйста, подождите.';}
+    </script>
+{% endblock %}
