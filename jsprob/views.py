@@ -1,54 +1,57 @@
-import time, datetime
+import time, datetime, re
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from random import randint
 from .models import DataUser, Indexs
 from django.contrib.auth import authenticate, login
+from django.conf import settings
+from django.core.mail import send_mail
+
 
 def hello(request):
     answer = request.GET
-    try:
-        er = request.session['ti_contr']
-    except:
-        request.session['ti_contr'] = time.time() - 4
-    if abs(float(request.session['ti_contr']) - time.time()) < 3 and 'intlg' not in answer\
-            and 'reg' not in answer and 'chfik' not in answer:
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[-1].strip()
-        else:
-            ip = request.META.get('REMOTE_ADDR')
+    # try:
+    #     er = request.session['ti_contr']
+    # except:
+    #     request.session['ti_contr'] = time.time() - 4
+    # if abs(float(request.session['ti_contr']) - time.time()) < 3 and 'intlg' not in answer\
+    #         and 'reg' not in answer and 'chfik' not in answer:
+    #     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    #     if x_forwarded_for:
+    #         ip = x_forwarded_for.split(',')[-1].strip()
+    #     else:
+    #         ip = request.META.get('REMOTE_ADDR')
+    #
+    #     tab = Indexs.objects.get(pk=1)
+    #     koler = tab.ipskol.split('$')
+    #     idus = tab.ips.split('$')
+    #
+    #     if ip in idus:
+    #         koler[idus.index(ip)] = str(int(float(koler[idus.index(ip)]) + 1))
+    #     else:
+    #         idus.append(ip)
+    #         koler.append('1')
+    #     stid = ''
+    #     stkol = ''
+    #     i = 0
+    #     for idu in idus:
+    #         if (i + 1) != len(idus):
+    #             d = '$'
+    #         else:
+    #             d = ''
+    #         stid = stid + str(idu) + d
+    #         stkol = stkol + str(koler[i]) + d
+    #         i += 1
+    #     tab.ips = stid
+    #     tab.ipskol = stkol
+    #     tab.save()
+    #     t = 5 / 0
 
-        tab = Indexs.objects.get(pk=1)
-        koler = tab.ipskol.split('$')
-        idus = tab.ips.split('$')
-
-        if ip in idus:
-            koler[idus.index(ip)] = str(int(float(koler[idus.index(ip)]) + 1))
-        else:
-            idus.append(ip)
-            koler.append('1')
-        stid = ''
-        stkol = ''
-        i = 0
-        for idu in idus:
-            if (i + 1) != len(idus):
-                d = '$'
-            else:
-                d = ''
-            stid = stid + str(idu) + d
-            stkol = stkol + str(koler[i]) + d
-            i += 1
-        tab.ips = stid
-        tab.ipskol = stkol
-        tab.save()
-        t = 5 / 0
-
-    if 'intlg' in answer or 'reg' in answer or 'chfik' in answer:
-        dayend()
-        request.session['ti_contr'] = time.time() - 3
-    else:
-        request.session['ti_contr'] = time.time()
+    # if 'intlg' in answer or 'reg' in answer or 'chfik' in answer:
+    #     dayend()
+    #     request.session['ti_contr'] = time.time() - 3
+    # else:
+    #     request.session['ti_contr'] = time.time()
     userLog = request.user.username
     dat = Indexs.objects.get(id=1)
     datn = datetime.date.today()
@@ -71,6 +74,7 @@ def hello(request):
         prit = ''
         st = ''
     if 'chfik' in answer:
+        dayend()
         userFN = request.user.first_name
         request.session['fik_contr_us'] = userFN
         request.session['fik_co_us_fl'] = "1"
@@ -91,6 +95,7 @@ def hello(request):
             return render(request, 'jsprob/nezar.html')
     return render(request, 'jsprob/index.html', {'nm': nm, 'fl': fl, 'fl0': fl0, 'fl1': fl1,
                                                 'p1': p1, 'prit': prit, 'st': st})
+
 
 def regist(request):
     dayend()
@@ -113,13 +118,14 @@ def regist(request):
                 request.session['fik_contr_us'] = f + '$#$%' + n + '$#$%' + k
                 return render(request, 'jsprob/ujuse.html')
             else:
-                DataUser(log=lg, scores=0, pop=0, fik=f + ' ' + n + ' ' + k, pole1='0$0$0').save()
+                DataUser(log=lg, scores=0, pop=0, fik=f + ' ' + n + ' ' + k, pole1='0$0$0', pole2='0$'*13+'0').save()
                 user = User.objects.create_user(lg, '', '4591423', first_name=f + '$#$%' + n + '$#$%' + k)
                 user.save()
                 user = authenticate(request, username=lg, password='4591423')
                 login(request, user)
                 return render(request, 'jsprob/uspreg.html')
     return render(request, 'jsprob/registr.html', {"ph0":ph0, "ph1":ph1, "ph2":ph2})
+
 
 def changefik(request):
     dayend()
@@ -148,6 +154,7 @@ def changefik(request):
             DataUser.objects.filter(log=usna).update(fik=f + ' ' + n + ' ' + k)
             return redirect('home')
     return render(request, 'jsprob/changefik.html', {"ph0":ph0, "ph1":ph1, "ph2":ph2})
+
 
 def dayend():
     dat = Indexs.objects.get(id=1)
@@ -181,6 +188,7 @@ def dayend():
         for p in DataUser.objects.filter(poptd__gt=0):
             p.poptd = 0
             p.save(update_fields=['poptd'])
+
 
 def progress(request):
     # user = User.objects.get(username='Frederick_Krause1095')
@@ -217,13 +225,13 @@ def progress(request):
     na4popt = int(float(kar.pole1.split('$')[2]))  # начато игр за все время
     sk1 = ["очков", "очка", "очко"]
     if kar.scorTD != 0:
-        sctd = str(kar.scorTD) + ' (' + str(len(DataUser.objects.filter(scorTD__gt=kar.scorTD)) + 1) + OrfKras(
-            kar.scorTD, sk1) + ' место)'
+        sctd = str(kar.scorTD) + OrfKras(
+            kar.scorTD, sk1) + ' (' + str(len(DataUser.objects.filter(scorTD__gt=kar.scorTD)) + 1) + ' место)'
     else:
         sctd = '—'
     fl = 0
     if popsez >= 10: fl = 1
-    pot = 0
+    pot = kar.bezosh * 100
     if fl == 1:
         for p in scl:
             pot += p[1]
@@ -257,7 +265,26 @@ def progress(request):
     if fl1 == 0:
         return render(request, 'jsprob/progress.html', data)
     else:
-        return render(request, 'jsprob/progress.html', data)
+        # MOBILE_AGENT_RE = re.compile(r".*(iphone|mobile|androidtouch)", re.IGNORECASE)
+        # print(MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']))
+        poll = kar.pole2.split('$')[7:]
+        data1 = {
+        'pot' : kar.bezosh * 100 + sum(map(int, kar.pole2.split('$')[0:6])),
+        'pol2': list(enumerate(kar.pole2.split('$')[0:6], 1)),
+        'quantwint': kar.quantwin + int(poll[3]),
+        'quantwint1': OrfKras(kar.quantwin + int(poll[3]), sk),
+        'quanttopt': kar.quanttop + int(poll[4]),
+        'quanttopt1': OrfKras(kar.quanttop + int(poll[4]), sk),
+        'sezquan': poll[0],
+        'sezquan1': OrfKras(int(poll[0]), ["сезонах", "сезонах", "сезоне"]),
+        'bestpoz': poll[5],
+        'winsez': poll[2],
+        'winsez1': OrfKras(int(poll[2]), sk),
+        'prizersez': poll[1],
+        'prizersez1': OrfKras(int(poll[1]), sk),
+        }
+        data.update(data1)
+        return render(request, 'jsprob/progress1.html', data)
 
 
 def OrfKras(n, l):  #k5, k23, k31 склоняем по количеству в списке l
@@ -266,6 +293,7 @@ def OrfKras(n, l):  #k5, k23, k31 склоняем по количеству в 
         if n % 10 == 2 or n % 10 == 3 or n % 10 == 4: t = ' ' + l[1]  # например 22
         if n % 10 == 1: t = ' ' + l[2]  # например 31
     return t
+
 
 def itog(request):
     dayend()
@@ -392,8 +420,8 @@ def itog(request):
                     if pos_old > 10:
                         if pos_now != 1:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                            txt4 = 'также на данный момент Вы вошли абсолютный TOП-10! \
-                                     (' + str(pos_now) + ' место )'
+                            txt4 = 'также на данный момент Вы вошли в Абсолютный TOП-10! \
+                                     ( ' + str(pos_now) + ' место )'
                         else:
                             if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
                             txt4 = 'На данный момент Вы врываетесь в глобальный ТОП-10 и становитесь ЧЕМПИОНОМ!!'
@@ -683,24 +711,45 @@ def reset(request):
     if request.method == 'GET':
         answer = request.GET
         if 'res' in answer:
-            allpolz = DataUser.objects.all()
-            for allp in allpolz:
-                if allp.pole2.count('$') != 7:
-                    allp.pole2 = '0$1$0$0$0$0$0$0'
-                p2 = allp.pole2.split('$')
-                po = '1'
-                if float(p2[3]) + float(p2[4]) + float(p2[5]) + float(p2[6]) + float(p2[7]) > 0: po = '2'
-                allp.pole2 = '0$' + po + '$0$' + p2[3] + '$' + p2[4] + '$' + p2[5] + '$' + p2[6] + '$' + p2[7]
-                allp.scores = 0
-                allp.save()
-            allpolz = DataUser.objects.all()
-            i = 0
-            for allp in allpolz:
-                i += 1
-                if i > 1:
-                    allp.fio = 'Иванов Николай 11Б$^%^Петрова Нина Константиновна$^%^Буренко Алексей Сергеевич$^%^Сидоров Илья 10$^%^Мельников Григорий 8$^%^Светлоусов Женя 6$^%^Муртазина Оля 4$^%^B$^%^F'
-                    allp.scor = '10000_8000_6000_4000_3000_2000_1000_500_300'
-                    allp.save()
+            n = 0
+            for r in DataUser.objects.order_by('-scores'):
+                if r.id > 12:
+                    if r.scores != 0:
+                        n += 1
+                        du = list(map(int, r.pole2.split('$')))
+                        print(r.fik, du)
+                        du[7] += 1                # всего сезонов (участие)
+                        if n < 11: du[8] += 1     # количество призерств
+                        if n == 1: du[9] += 1     # количество чемпионств
+                        du[10] += r.quantwin     # побед в днях во всех предыдущих сезонах
+                        du[11] += r.quanttop     # ТОП-7 в днях во всех предыдущих сезонах
+                        if du[12] == 0 or du[12] > n: du[12] = n   # Лучшее место в ТОПе
+                        r.pole2 = "$".join(map(str, du))
+                        r.res2 = (r.res2 // 10 + 1) * 10 + r.res2 % 10  # res2=диницы - системное, бОльшие разряды - кол-во сезонов.
+                    r.pole1 = '0$0$' + r.pole1.split('$')[2]       # обнуление pole1='запусоков в сезоне$пройдено в сезоне$запусокв всего'
+                    r.scores, r.scoresl1 = 0, 0
+                    r.scoresl2, r.scoresl3, r.scoresl4 = 0, 0, 0
+                    r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
+                    r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
+                    r.save()
+            # allpolz = DataUser.objects.all()
+            # for allp in allpolz:
+            #     if allp.pole2.count('$') != 7:
+            #         allp.pole2 = '0$1$0$0$0$0$0$0'
+            #     p2 = allp.pole2.split('$')
+            #     po = '1'
+            #     if float(p2[3]) + float(p2[4]) + float(p2[5]) + float(p2[6]) + float(p2[7]) > 0: po = '2'
+            #     allp.pole2 = '0$' + po + '$0$' + p2[3] + '$' + p2[4] + '$' + p2[5] + '$' + p2[6] + '$' + p2[7]
+            #     allp.scores = 0
+            #     allp.save()
+            # allpolz = DataUser.objects.all()
+            # i = 0
+            # for allp in allpolz:
+            #     i += 1
+            #     if i > 1:
+            #         allp.fio = 'Иванов Николай 11Б$^%^Петрова Нина Константиновна$^%^Буренко Алексей Сергеевич$^%^Сидоров Илья 10$^%^Мельников Григорий 8$^%^Светлоусов Женя 6$^%^Муртазина Оля 4$^%^B$^%^F'
+            #         allp.scor = '10000_8000_6000_4000_3000_2000_1000_500_300'
+            #         allp.save()
             return redirect('home')
     return render(request, 'jsprob/reset.html')
 
@@ -794,8 +843,8 @@ def itoglv(request):
             if us.res2 // 10 != 0:
                 if float(ud[1]) == float(sclvabs):
                     txt5 = "Вы повторили свой абсолютный рекорд пройденного этапа!"
-                if float(sclvabs) > float(sclvus):
-                    txt5 = "Вы побили совой абсолюный рекорд этапа на " + str(int(float(ud[1]) - float(sclvabs))) \
+                if float(ud[1]) > float(sclvabs):
+                    txt5 = "Вы побили свой абсолюный рекорд этапа на " + str(int(float(ud[1]) - float(sclvabs))) \
                             + '. ' + ' (' + str(int(float(sclvabs))) + ' --> ' + str(int(float(ud[1]))) + ')'
         if float(ud[1]) > float(sclvabs):
             maslevs[lastlv - 1] = ud[1]
@@ -853,7 +902,6 @@ def itoglv(request):
         mas2 = mas0[ii:min(pos_now+4-vsk, len(mas0))]
         tab5 = []
 
-
         for m in mas2:
             ii += 1
             tab5.append([f'{str(ii)}. {m[1]} ({m[0]})', int(ii == pos_now)])
@@ -897,12 +945,12 @@ def itoglv(request):
             txt6 = 'Надо поднажать. Ваш личный рекорд пройденного этапа куда выше.'
         elif float(ud[1]) > float(sclvus) * .97 and float(ud[1]) != float(sclvus):
             txt6 = 'Еще немного и Ваш рекорд пройденного этапа (' + str(int(float(sclvus))) + ') был бы побит.'
-        elif float(ud[1]) == float(sclvus) and request.session['kontrol_lv'] == 0:
+        elif float(ud[1]) == float(sclvus) != 0 and request.session['kontrol_lv'] == 0:
             txt6 = 'Уникальный случай! Вы в точности повторили свой рекорд пройденного этапа.'
         elif request.session['kontrol_lv'] == 0:
             dscore = int(float(sclvus) - float(ud[1]))
             tx12 = ['минувшего', 'пройденного', 'прошедшего'][randint(0,2)]
-            txt6 = 'До Вашего рекорда ' + tx12 + ' этапа не хватило ' + str(dscore) + OrfKras(dscore, ["очков", "очка", "очко"])
+            txt6 = 'До Вашего рекорда ' + tx12 + ' этапа не хватило ' + str(dscore) + OrfKras(dscore, ["очков", "очка", "очка"])
         mas0 = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik', 'log')]
         ii = 0
         for m in mas0:
@@ -939,6 +987,37 @@ def itoglv(request):
                   {'txt1': txt1, 'txt2': txt2, 'txt5': txt5, 'txt0': txt0, 'tab': tab5,
                    'txt6': txt6, 'txtpz': txtpz, 'txt7': pr[0], 'txt8': pr[1]})
 
+
+def unification(request):
+    if (request.user.is_superuser) != True: return redirect('home')
+    if request.method == 'GET':    # id берем из "Данные участника"!!!!
+        answer = request.GET
+        if 'uni' in answer:
+            prosh = DataUser.objects.get(pk=int(answer['prosh']))
+            nast = DataUser.objects.get(pk=int(answer['nast']))
+            print(prosh.fik, nast.fik)
+            prp2 = list(map(int, prosh.pole2.split('$')))   #!!
+            nastp2 = list(map(int, nast.pole2.split('$')))
+            if nast.scoresl1 > prp2[0]: prp2[0] = nast.scoresl1
+            if nast.scoresl2 > prp2[1]: prp2[1] = nast.scoresl2
+            if nast.scoresl3 > prp2[2]: prp2[2] = nast.scoresl3
+            if nast.scoresl4 > prp2[3]: prp2[3] = nast.scoresl4
+            if nast.scoresl5 > prp2[4]: prp2[4] = nast.scoresl5
+            if nast.scoresl6 > prp2[5]: prp2[5] = nast.scoresl6
+            if nast.scoresl7 > prp2[6]: prp2[6] = nast.scoresl7
+            # prp2[7] += 1 уже добавляется в reset
+            if prosh.res1 > nast.res1: nast.res1 = prosh.res1
+            prp1 = list(map(int, prosh.pole1.split('$')))
+            nastp1 = list(map(int, nast.pole1.split('$')))  #!!
+            nastp1[2] += prp1[2]
+            nast.pop += prosh.pop
+            nast.res2 = (nast.res2 // 10 + 1) * 10 + nast.res2 % 10
+            nast.pole2 = "$".join(map(str, prp2))
+            nast.pole1 = "$".join(map(str, nastp1))
+            nast.save()
+            User.objects.get(username=prosh.log).delete()
+            prosh.delete()
+    return render(request, 'jsprob/unification.html')
 
 class Examples:
     def __init__(self, rab, mm, request):
@@ -1457,7 +1536,6 @@ class Vyborka():
         request.session['kontrol_lv'] = 0
         rab = 1
         kod = request.COOKIES.get('keyshif').split('$')
-        # print(kod)
         Ex = Examples(rab, m, request)
         if m < 50:
             tasks = []
@@ -1559,6 +1637,13 @@ class Vyborka():
 #             Inttabl(fio, lv, re)
 
 def instr(request):
+    # send_mail(
+    #     'Проверка',
+    #     'Здравствуйте!',
+    #     'u4help@mail.ru',
+    #     ['vovar3573@mail.ru'],
+    #     fail_silently=False,
+    # )
     return render(request, 'jsprob/instr.html')
 
 class Prit4i:

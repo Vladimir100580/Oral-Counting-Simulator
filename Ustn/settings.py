@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-l0eulzk5)=r4nvv0n$%th#jacwf1tl)91x+nh6i0df6*x#!@wr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -135,6 +135,15 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.mail.ru'
+# EMAIL_PORT = 2525
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# EMAIL_HOST_USER = 'u4help@mail.ru'
+# EMAIL_HOST_PASSWORD = 'f6Hc8DXfiMrtEN5w8YtC'   # пароль запрошен в mail.ru безопасность, пароли для сторонних приложений
+
 
 
 # Static files (CSS, JavaScript, Images)

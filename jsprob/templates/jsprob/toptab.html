@@ -3,8 +3,8 @@
 {% block content %}
 
 <aside>
-    <h2 class="featuress" style="font-style: italic" > Достижения участников в текущем сезоне </h2>
-    <h4 class="featuress" style="font-style: italic" > В таблице отображается Ваш лучший результат </h4>
+    <h2 class="featuress" style="font-style: italic; font-size: min(35px, 4.5vw);" > Достижения участников в текущем сезоне </h2>
+    <h4 class="featuress" style="font-style: italic; font-size: min(28px, 3.7vw);" > В таблице отображается Ваш лучший результат </h4>
 </aside>
 
     <div class="features">
@@ -35,7 +35,7 @@
         </br>
         <h4 style="color: red; font-style: italic"> ВНИМАНИЕ! </h4>
         <h5 style="font-style: italic"> Если Вы неправильно внесли свои данные при регистрации и желаете сохранить свои достижения в ТОП-е, </h5>
-        <h5 style="font-style: italic"> <a href="https://vk.com/vovartus" target="_blank"> обозначьте свои истинные ФИО в ЛС </a> . Участники с некорректными ФИО(ФИК) будут удалены! </h5>
+        <h5 style="font-style: italic">  исправьте, пожалуйста, свои данные ФИО в соответствующем разделе стартового меню. </h5>
 
         </br>
         <h3 id ='wt' style="font-style: italic"></h3>
@@ -65,6 +65,9 @@
      </style>
 
     <script>
+    addEventListener("keydown", function(event) {
+        if (event.keyCode==13 || event.keyCode==32)
+            {document.getElementById('butt1').click();}})
     function Func() {
                 document.getElementById('butt1').style.display='none';
                 document.getElementById('butt2').style.display='none';

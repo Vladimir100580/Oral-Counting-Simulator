@@ -1,9 +1,9 @@
 {% extends 'jsprob/shabl.html' %}
-{% block title %} Редактируем ФИО {% endblock %}
+{% block title %} Объединение {% endblock %}
 {% block content %}
 
 <aside>
-    <h2 class="featuress" style="font-style: italic; font-size: min(37px, 4vw);" id = 'nomb'> Введите измененные данные, заполнив 3 поля </h2>
+    <h2 class="featuress" style="font-style: italic; font-size: min(37px, 4vw);" id = 'nomb'> Введите измененные данные id старое и новое </h2>
 </aside>
 
 
@@ -11,34 +11,15 @@
          <form action="" method="get">
             {% csrf_token %}
         </br></br>
-        <h4> <input type="text" id="inpu1" name="fam" placeholder='Ваша Фамилия' maxlength="25"  size="20"> </h4>
-        <h4> <input type="text" id="inpu2" name="name" placeholder='Ваше Имя' maxlength="25"  size="20"> </h4>
-        <h4> <input type="text" id="inpu3" name="kl" placeholder='Ваш класс (или отчество)' maxlength="25"  size="20"> </h4>
+        <h4> <input type="number" id="inpu1" name="prosh" placeholder='Прошлое ID' maxlength="25"  size="20"> </h4>
+        <h4> <input type="number" id="inpu2" name="nast" placeholder='Новое ID' maxlength="25"  size="20"> </h4>
              </br>
-        <h3 id = 'wait0'> </h3>
 
-        <button class="btn btn-success btn" style="font-size: min(25px, 3vw);" id = 'butt1' type="submit" name="intlg" onclick="Func(1)"> ВВЕСТИ </button></br></br>
-        <a href="{% url 'home' %}" style="font-size: min(25px, 3vw);" id = 'butt2' class="btn btn-success btn-sm" onclick="Func(2)"> Начальное меню </a></br></br>
+
+        <button class="btn btn-success btn" style="font-size: min(25px, 3vw);" type="submit" name="uni" onclick="Func(1)"> ВВЕСТИ </button></br></br>
+        <a href="{% url 'home' %}" style="font-size: min(25px, 3vw);" class="btn btn-success btn-sm" onclick="Func(2)"> Начальное меню </a></br></br>
 
     </form>
     </div>
-    <script>
 
-    document.getElementById("inpu1").value = '{{ph0}}';
-    document.getElementById("inpu2").value = '{{ph1}}';
-    document.getElementById("inpu3").value = '{{ph2}}';
-
-    function Func(t) {
-        localStorage.setItem('vrk', 10000);
-        document.getElementById('butt1').style.display='none';
-        document.getElementById('butt2').style.display='none';
-
-        var txt2 = document.getElementById('wait0');
-        if (t==1) {txt2.innerHTML = 'ИЗМЕНЯЕМ ДАННЫЕ, НЕМНОГО ПОДОЖДИТЕ';}
-        if (t==2) {txt2.innerHTML = 'НЕМНОГО ПОДОЖДИТЕ';}
-        txt2.style.fontStyle = 'Italic';
-      }
-
-
-    </script>
 {% endblock %}

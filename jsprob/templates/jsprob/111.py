@@ -1,5 +1,9 @@
 from random import randint
 
+a = 7
+b = 7
+print (a == b != 7)
+
 # print((1 or 1) and 0)
 #
 # print('Введите Фамилию, Имя, номер телефона, комментарий(в одно слово).')
@@ -29,16 +33,31 @@ from random import randint
 # print(strmas)
 
 
-a = 250
-
-if a>200: print(1)
-elif a>20: print(2)
-elif a>0: print(3)
-else: print(4)
-
-proodin = [0]*5
-print(proodin)
-
+# a = 250
+#
+# if a>200: print(1)
+# elif a>20: print(2)
+# elif a>0: print(3)
+# else: print(4)
+#
+# proodin = [0]*5
+# print(proodin)
+#
+#
+# dic = {"12": 43, "45": "Акфы", "78": 123.6}
+#
+# print(dic)
+# dic["12"] = 56
+# print(dic)
+#
+# dic1 = {"71": "uiw4", "78": 92}
+#
+# dic.update(dic1)
+# print(dic)
+# print([3,4,5,6,7,8,9][2:4])
+# sd = ["3", "4", "5", "6", "7"]
+#
+# print(list(enumerate(sd, 1)))
 
 # a = 6
 #

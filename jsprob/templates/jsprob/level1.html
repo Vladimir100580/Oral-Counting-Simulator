@@ -11,6 +11,9 @@
 
     </div>
     <script>
+    addEventListener("keydown", function(event) {
+        if (event.keyCode==13 || event.keyCode==32)
+            {document.getElementById('butt').click();}})
     function Func() {
             console.log(localStorage.getItem('shifr').split('$'));
             document.getElementById('butt').style.display='none';

@@ -1,11 +1,11 @@
 {% extends 'jsprob/shabl.html' %}
-{% block title %} Достижения игроков {% endblock %}
+{% block title %} Достижения игроков по этапам в сезоне{% endblock %}
 {% block content %}
 
 <aside>
 
-    <h2 class="featuress" style="font-style: italic" > ТОП-10 участников турнира </h2>
-    <h4 class="featuress" style="font-style: italic" > по каждому этапу в отдельности </h4>
+    <h3 class="featuress" style="font-style: italic" > ТОП-10 участников турнира </h3>
+    <h5 class="featuress" style="font-style: italic" > в текущем сезоне, по каждому этапу в отдельности </h5>
 
 </aside>
 
@@ -33,12 +33,10 @@
                      <h6 class='leftstr' style='color: #2E7D32'> {{mas.1}} </h6>
                      <h6 class='centstr'style='color: #2E7D32'> {{mas.2}} </h6>
                      {% endif %}
-
                 {% endfor %}
-                <div style="height:200px"></div>
+                <div style="clear: left"></div>
                 </br>
         {% endfor %}
-        <div style="clear: left"></div>
         <!--</br>
         <h4 style="color: red; font-style: italic"> ВНИМАНИЕ! </h4>
         <h5 style="font-style: italic"> Если Вы неправильно внесли свои данные при регистрации и желаете сохранить свои достижения в ТОП-е, </h5>
