@@ -1,16 +1,15 @@
 {% extends 'jsprob/shabl.html' %}
-{% block title %} Уровень 6 {% endblock %}
+{% block title %} Уровень {{lv}} {% endblock %}
 {% block content %}
 
     <div class="features">
-        <h1 style="font-style: italic" id = 'vy4'> Вычислите:  </h1>
-        <h2 style="font-style: italic; font-size: min(68px, 11vw);" id = 'prim'> </h2>
+ <h1 style="font-style: italic" id = 'vy4'> Вычислите:  </h1>
+        <h2 style="font-style: italic; font-size: min(68px, 16vw);" id = 'prim'> </h2>
         <h2 id = "err"> </h2>
         <h3 id = "end1"> </h3>
         <h3 id = "end2"> </h3>
         <h3 style="font-style: italic" id = "end3"> </h3>
-        <button class="btn btn-success btn" style="margin-top: 50px;" id = 'butt'  onclick="Funcend()"> РЕЗУЛЬТАТ </button>
-        <h3 id = 'wait'> </h3>
+        <button class="btn btn-success btn" style="margin-top: 50px;" id = 'butt'  onclick="Funcend()"> ПРОДОЛЖИТЬ </button>
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn1' onclick="Func1()"> &nbsp;1&nbsp; </button>
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn2' onclick="Func2()"> &nbsp;2&nbsp; </button>
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn3' onclick="Func3()"> &nbsp;3&nbsp; </button></br>
@@ -20,41 +19,22 @@
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn7' onclick="Func7()"> &nbsp;7&nbsp; </button>
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn8' onclick="Func8()"> &nbsp;8&nbsp; </button>
         <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn9' onclick="Func9()"> &nbsp;9&nbsp; </button></br>
-        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn0' onclick="Funcm()"> &nbsp;-&nbsp; </button>
-        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnm' onclick="Func0()"> &nbsp;0&nbsp; </button>
-        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnd' onclick="Funcd()"> &nbsp;<- </button></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn0' onclick="Func0()"> &nbsp;0&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnd' onclick="Funcd()"> &nbsp;<-&nbsp; </button></br>
         <h2 style="font-style: italic" id = "prnpr"> </h2>
         <h2 style="font-style: italic" id = "timer"> </h2>
         <button class="btn btn-danger btn-sm" id='byni' onclick="Funcbr()"> ЗАВЕРШИТЬ! Итог. </button>
-       <!-- <a href="{% url 'home' %}" id = "byni" class="btn btn-danger btn-sm"> ЗАВЕРШИТЬ! Перейти в главное меню. </a>-->
+<!--        <a href="{% url 'home' %}" id = "byni" class="btn btn-danger btn-sm"> ЗАВЕРШИТЬ! Перейти в главное меню. </a>-->
+
     </div>
     <script>
-        tas = {{tas}};
-        ot1 = {{ot}};
-        tass = [];
-        ots = [];
-        sh = localStorage.getItem('shifr').split('$');
-        l = 0
-        for (i = 0; i < tas.length; i++)
-            {
-            s = ''
-            for (k = 0; k < tas[i].length; k++)
-                {
-                s += String.fromCharCode(tas[i][k] - sh[l])
-                l++
-                }
-            tass.push(s)
-            s = ''
-            for (k = 0; k < ot1[i].length; k++)
-                {
-                s += String.fromCharCode(ot1[i][k] - sh[l])
-                l++
-                }
-            ots.push(s)
-            }
-        //alert(tass);
-        //alert(ots);
+        tas1 ={{tas1}};
+        tas2 ={{tas2}};
+        tasz ={{tasz}};
+        otv = {{otv}};
         ti = {{ti}};
+        lv = {{lv}};
+        simv = ['+', '–', '•', ':'];
         prim=-1;
         kon = Number(localStorage.getItem('kontr'))+1;
         localStorage.setItem('kontr', kon);
@@ -74,13 +54,17 @@
         ot='';
 
         function Func() {
+            if (lv == 1) {
+            ost = ti - (new Date() - new Date(0) - Number(na4));
+            } else {
             ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
-            if (Math.abs(ost-ds)>16000) {
+            }
+            if (Math.abs(ost-ds)>(ti/10 - 2000)) {
             na4 = new Date() - new Date(0) + 200000;
             alert('Контроль безопасности обнаружил смещение времени! Придется начать сначала!');
             }
             ds = ost;
-            if (kon!=6 || ost>ti)
+            if (kon!=lv || ost>ti)
                 {
                 if (typeof timerId !== 'undefined') {clearInterval(timerId);}
                 window.location.assign('12');
@@ -90,11 +74,6 @@
                   if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)
                      {fl1=1;
                      ot = ot + String(event.keyCode-48);
-                     kk = event.keyCode;
-                     Funcnj();}
-                  if (event.keyCode==109 && event.keyCode!=kk || event.keyCode==189 && event.keyCode!=kk)
-                     {fl1=1;
-                     ot = ot + '-';
                      kk = event.keyCode;
                      Funcnj();}
                   if (event.keyCode>95 && event.keyCode<106 && event.keyCode!=kk)
@@ -118,7 +97,6 @@
                 document.getElementById('btn8').style.display='none';
                 document.getElementById('btn9').style.display='none';
                 document.getElementById('btn0').style.display='none';
-                document.getElementById('btnm').style.display='none';
                 document.getElementById('btnd').style.display='none';
                 document.getElementById('vy4').style.display='none';
                 document.getElementById('prim').style.display='none';
@@ -162,7 +140,6 @@
                 document.getElementById('btn8').style.display='';
                 document.getElementById('btn9').style.display='';
                 document.getElementById('btn0').style.display='';
-                document.getElementById('btnm').style.display='';
                 document.getElementById('btnd').style.display='';
                 document.getElementById('vy4').style.display='';
                 document.getElementById('prim').style.display='';
@@ -184,7 +161,7 @@
             if (fl2==0) {
                 prim++;
                 ot='';
-                pr=tass[prim];
+                pr=(tas1[prim]-prim**2-otv)+simv[tasz[prim]]+tas2[prim];
                 document.getElementById('prim').innerHTML = pr + '=';
                 fl2=1;}
             if (fl1==1) {
@@ -195,7 +172,12 @@
                     }
 
         function Funcnj() {
-            sr = ots[prim];
+            if (lv < 4) {
+            if (prim<5) {sr = tas1[prim] - prim**2 - otv + tas2[prim];}
+            else {sr = tas1[prim] - prim**2 - otv - tas2[prim]}
+            }
+            if (lv == 4) {sr = (tas1[prim] - prim**2 - otv) * (tas2[prim]);}
+            if (lv == 5) {sr = (tas1[prim] - prim**2 - otv) / (tas2[prim]);}
             if (ot.length == String(sr).length) {
                 if (ot == sr) {
                 fl2 = 0;
@@ -218,7 +200,7 @@
             else {document.getElementById('prim').innerHTML = pr + ot;}
                 }
 
-            function Funcbr() {
+        function Funcbr() {
             document.getElementById('byni').style.display='none';
             document.cookie = "totsummb=" + localStorage.getItem('lvl1') + '(#)$)'
              + localStorage.getItem('lvl2') + '(#)$)' + localStorage.getItem('lvl3') + '(#)$)'
@@ -229,7 +211,6 @@
             clearInterval(timerId);
             window.location.assign('13');
             }
-
 
         function Func1() {
             fl1=1;
@@ -291,12 +272,6 @@
             Funcnj();
             }
 
-        function Funcm() {
-            fl1=1;
-            ot = ot + '-';
-            Funcnj();
-            }
-
         function Funcd() {
             fl1=1;
             if (ot.length == 1) {ot = '';}
@@ -317,7 +292,6 @@
             document.getElementById('btn8').style.display='none';
             document.getElementById('btn9').style.display='none';
             document.getElementById('btn0').style.display='none';
-            document.getElementById('btnm').style.display='none';
             document.getElementById('btnd').style.display='none';
             document.getElementById('vy4').style.display='none';
             document.getElementById('prim').style.display='';
@@ -328,25 +302,16 @@
             localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ost);
             localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);
             localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);
-            localStorage.setItem('lvl6', ost);
+            localStorage.setItem('lvl' + lv, ost);
             document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = "lelrec15=" + 6 + '$' + ost + '$' + (p0 + p1) + '$' + p0;
-            var txt2 = document.getElementById('wait');
-            txt2.innerHTML = 'ПОЖАЛУЙСТА, ПОДОЖДИТЕ';
-            txt2.style.fontStyle = 'Italic';
-            document.cookie = "totsumm=" + localStorage.getItem('totsum') + '(#)$)'
-             + localStorage.getItem('pravresh') + '(#)$)' + localStorage.getItem('bezosh') + '(#)$)'
-             + localStorage.getItem('lvl1') + '(#)$)' + localStorage.getItem('lvl2') + '(#)$)'
-              + localStorage.getItem('lvl3') + '(#)$)' + localStorage.getItem('lvl4') + '(#)$)'
-               + localStorage.getItem('lvl5') + '(#)$)' + localStorage.getItem('lvl6');
-            localStorage.setItem('key1', 0);
+            document.cookie = "lelrec15=" + lv + '$' + ost + '$' + (p0 + p1) + '$' + p0;
             clearInterval(timerId);
             window.location.assign('itoglv');
-            }
-
+              }
         Func();
         timerId = setInterval(() => Func(), 10);
 
+        //document.getElementById('mas').innerHTML=mas[1][2]
 
     </script>
 {% endblock %}

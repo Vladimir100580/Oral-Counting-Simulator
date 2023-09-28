@@ -9,7 +9,12 @@ h1 {
     margin-right: 0;
 }
 
-
+img {
+  height: auto;
+  width: 95%;
+  /* еще больше контроля с max-width */
+  max-width: 920px;
+}
 
 aside {
     float: up;

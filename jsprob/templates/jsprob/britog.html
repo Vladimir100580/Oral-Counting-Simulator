@@ -1,0 +1,33 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} ИТОГ ИГРЫ (ПРЕРВАННОЙ) {% endblock %}
+{% block content %}
+
+<aside>
+    <h3 class="featuress" style="font-style: italic; margin-top: 10px;"> ИГРА БЫЛА ПРЕРВАНА. </h3>
+</aside>
+        <div class="features">
+        <br>
+        <h6> Суммарный результат за пройденные этапы: </h6>
+        <br>
+        <h3> {{tts}} {{t}}. </h3>
+        <br>
+        <br>
+        <h4 id = 'wait'> </h4>
+        <a href="{% url 'home' %}" id = "butt" class="btn btn-success" onclick="Func()"> ГЛАВНОЕ МЕНЮ </a>
+        </div>
+
+
+    <script>
+    addEventListener("keydown", function(event) {
+        if (event.keyCode==13 || event.keyCode==32)
+            {document.getElementById('butt').click();}})
+
+    function Func() {
+            document.getElementById('butt').style.display='none';
+            var txt2 = document.getElementById('wait');
+            txt2.innerHTML = 'ПОЖАЛУЙСТА, ОЖИДАЙТЕ';
+            txt2.style.fontStyle = 'Italic';
+            }
+
+    </script>
+{% endblock %}

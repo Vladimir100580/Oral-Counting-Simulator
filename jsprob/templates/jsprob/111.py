@@ -3,7 +3,11 @@ from random import randint
 a = 7
 b = 7
 print (a == b != 7)
+ls = '34$4$0$0$89'
+lo = ['34', '4', '0', '0', '89']
 
+tts = sum(map(int, map(int, ls.split('$')[:4])))
+print(tts)
 # print((1 or 1) and 0)
 #
 # print('Введите Фамилию, Имя, номер телефона, комментарий(в одно слово).')

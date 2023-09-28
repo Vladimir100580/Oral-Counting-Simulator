@@ -732,24 +732,6 @@ def reset(request):
                     r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
                     r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
                     r.save()
-            # allpolz = DataUser.objects.all()
-            # for allp in allpolz:
-            #     if allp.pole2.count('$') != 7:
-            #         allp.pole2 = '0$1$0$0$0$0$0$0'
-            #     p2 = allp.pole2.split('$')
-            #     po = '1'
-            #     if float(p2[3]) + float(p2[4]) + float(p2[5]) + float(p2[6]) + float(p2[7]) > 0: po = '2'
-            #     allp.pole2 = '0$' + po + '$0$' + p2[3] + '$' + p2[4] + '$' + p2[5] + '$' + p2[6] + '$' + p2[7]
-            #     allp.scores = 0
-            #     allp.save()
-            # allpolz = DataUser.objects.all()
-            # i = 0
-            # for allp in allpolz:
-            #     i += 1
-            #     if i > 1:
-            #         allp.fio = 'Иванов Николай 11Б$^%^Петрова Нина Константиновна$^%^Буренко Алексей Сергеевич$^%^Сидоров Илья 10$^%^Мельников Григорий 8$^%^Светлоусов Женя 6$^%^Муртазина Оля 4$^%^B$^%^F'
-            #         allp.scor = '10000_8000_6000_4000_3000_2000_1000_500_300'
-            #         allp.save()
             return redirect('home')
     return render(request, 'jsprob/reset.html')
 
@@ -767,39 +749,55 @@ def begin(request):
     usefio = request.user.first_name.split('$#$%')
     request.session['ustns4usennam'] = usefio[1]
     request.session['ustns4use_fiko'] = " ".join(usefio)
+    request.session['us_lastlv'] = 0
     return render(request, 'jsprob/level1.html',
-                  {'usp': 'Успеха, ' + usefio[1], 'lv': 'Этап 1.', 'namlv': 'Разминка', 'list': 'list1'})
+                  {'usp': 'Успеха, ' + usefio[1], 'lv': 'Этап 1.', 'namlv': 'Разминка'})
 
 
-def list1(request):
-    Vyb = Vyborka(request, 0, 10)
-    data = {'ti': 50000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
-    return render(request, 'jsprob/list1.html', data)
+def passLv(request):
+    ti_mass = [50000, 100000, 120000, 150000, 130000, 180000]
+    lev = request.session['us_lastlv']
+    try:
+        Vyb = Vyborka(request, 10 * lev, 10 * (lev + 1))
+    except:
+        return redirect('home')
+    if lev < 5:
+        data = {'ti': ti_mass[lev], 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'lv': lev + 1}
+        return render(request, 'jsprob/passing_lv.html', data)
+    else:
+        data = {'ti': ti_mass[lev], 'tas': Vyb.tas, 'ot': Vyb.ot}
+        return render(request, 'jsprob/list6.html', data)
 
-def list2(request):
-    Vyb = Vyborka(request, 10, 20)
-    return render(request, 'jsprob/list2.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 100000})
-
-def list3(request):
-    Vyb = Vyborka(request, 20, 30)
-    return render(request, 'jsprob/list3.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 120000})
-
-def list4(request):
-    Vyb = Vyborka(request, 30, 40)
-    return render(request, 'jsprob/list4.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 150000})
-
-def list5(request):
-    Vyb = Vyborka(request, 40, 50)
-    return render(request, 'jsprob/list5.html',
-                  {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 130000})
-
-def list6(request):
-    Vyb = Vyborka(request, 50, 60)
-    return render(request, 'jsprob/list6.html',
-                  {'tas': Vyb.tas, 'ot': Vyb.ot, 'ti': 180000})
+#
+# def list1(request):
+#     Vyb = Vyborka(request, 0, 10)
+#     data = {'ti': 50000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
+#     return render(request, 'jsprob/list1.html', data)
+#
+# def list2(request):
+#     Vyb = Vyborka(request, 10, 20)
+#     return render(request, 'jsprob/list2.html',
+#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 100000})
+#
+# def list3(request):
+#     Vyb = Vyborka(request, 20, 30)
+#     return render(request, 'jsprob/list3.html',
+#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 120000})
+#
+# def list4(request):
+#     Vyb = Vyborka(request, 30, 40)
+#     return render(request, 'jsprob/list4.html',
+#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 150000})
+#
+# def list5(request):
+#     Vyb = Vyborka(request, 40, 50)
+#     return render(request, 'jsprob/list5.html',
+#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 130000})
+#
+# def list6(request):
+#     Vyb = Vyborka(request, 50, 60)
+#     return render(request, 'jsprob/list6.html',
+#                   {'tas': Vyb.tas, 'ot': Vyb.ot, 'ti': 180000})
 
 def itoglv(request):
     ud = request.COOKIES.get('lelrec15').split('$')
@@ -981,8 +979,9 @@ def itoglv(request):
             mesnam = ['"Сквозь десятки"', "Минуя сотни",
                       '"Хитрое" умножение', '"Life hack"-Деление', '"Высший пилотаж"'][lastlv - 1]
             usp = ['Удачи, ' + request.session['ustns4usennam'] + '!', '', '', '', '', ''][lastlv - 1]
+            request.session['us_lastlv'] = lastlv
             return render(request, 'jsprob/level1.html',
-                          {'usp': usp, 'lv': meslv, 'namlv': mesnam, 'list': 'list' + str(lastlv + 1)})
+                          {'usp': usp, 'lv': meslv, 'namlv': mesnam}) # 'list': 'list' + str(lastlv + 1)}
     return render(request, 'jsprob/itoglv.html',
                   {'txt1': txt1, 'txt2': txt2, 'txt5': txt5, 'txt0': txt0, 'tab': tab5,
                    'txt6': txt6, 'txtpz': txtpz, 'txt7': pr[0], 'txt8': pr[1]})
@@ -1576,75 +1575,31 @@ class Vyborka():
             self.tas = tasks
             self.ot = otvs
 
-# class Inttabl:
-#     def __init__(self, fio, lv, re):
-#         tablv = Indexs.objects.get(log=lv)
-#         sctablv = tablv.scor.split('_')
-#         ustablv = tablv.fio.split('$^%^')
-#         if fio not in ustablv:
-#             sctablv.append(re)
-#             ustablv.append(fio)
-#         i = 1
-#         while i == 1:
-#             i = 0
-#             for z in range(1, len(sctablv)):
-#                 if float(sctablv[z - 1]) < float(sctablv[z]):
-#                     sctablv[z - 1], sctablv[z] = sctablv[z], sctablv[z - 1]
-#                     ustablv[z - 1], ustablv[z] = ustablv[z], ustablv[z - 1]
-#                     i = 1
-#         p2 = ''
-#         p1 = ''
-#         for i in range(9):
-#             if i != 8:
-#                 p1 = p1 + sctablv[i] + '_'
-#                 p2 = p2 + ustablv[i] + '$^%^'
-#             else:
-#                 p1 = p1 + sctablv[i]
-#                 p2 = p2 + ustablv[i]
-#         tablv.fio = p2
-#         tablv.scor = p1
-#         tablv.save()
-#
-#
-# class UpInttabl:
-#     def __init__(self, fio, lv, re):
-#         tablv = Indexs.objects.get(log=lv)
-#         sctablv = tablv.scor.split('_')
-#         ustablv = tablv.fio.split('$^%^')
-#         if fio in ustablv:
-#             sctablv[ustablv.index(fio)] = re
-#             i = 1
-#             while i == 1:
-#                 i = 0
-#                 for z in range(1, len(sctablv)):
-#                     if float(sctablv[z - 1]) < float(sctablv[z]):
-#                         sctablv[z - 1], sctablv[z] = sctablv[z], sctablv[z - 1]
-#                         ustablv[z - 1], ustablv[z] = ustablv[z], ustablv[z - 1]
-#                         i = 1
-#             p2 = ''
-#             p1 = ''
-#             for i in range(9):
-#                 if i != 8:
-#                     p1 = p1 + sctablv[i] + '_'
-#                     p2 = p2 + ustablv[i] + '$^%^'
-#                 else:
-#                     p1 = p1 + sctablv[i]
-#                     p2 = p2 + ustablv[i]
-#             tablv.fio = p2
-#             tablv.scor = p1
-#             tablv.save()
-#         else:
-#             Inttabl(fio, lv, re)
 
 def instr(request):
-    # send_mail(
-    #     'Проверка',
-    #     'Здравствуйте!',
-    #     'u4help@mail.ru',
-    #     ['vovar3573@mail.ru'],
-    #     fail_silently=False,
-    # )
     return render(request, 'jsprob/instr.html')
+
+
+def brend(request):
+    usna = request.session['ustns4usen']
+    if (usna == None): return redirect('home')
+    tts0 = request.COOKIES.get('totsummb').split('(#)$)')
+    tts = sum(map(int, tts0[:6]))
+    t = OrfKras(tts, ["очков", "очка", "очко"])
+    tt = DataUser.objects.get(log=usna)
+    scolddt = tt.scorTD
+    scoldd = tt.res1
+    scold = tt.scores  # в этапах sclvus
+    ds = int(float(tts) - scold)  # сравнение с рекордом сезона
+    dsd = int(float(tts) - scoldd)  # сравнение с абсолютным рекордом
+    dstd = int(float(tts) - scolddt)  # сравнение с рекордом дня
+    if ds > 0:
+        DataUser.objects.filter(log=usna).update(scores=tts, pravil=(int(float(tts0[6]) + float(tts0[7]))),
+                                             bezosh=tts0[7])
+    if dsd > 0: DataUser.objects.filter(log=usna).update(res1=tts)
+    if dstd > 0: DataUser.objects.filter(log=usna).update(scorTD=tts)
+    return render(request, 'jsprob/britog.html', {'tts': tts, 't': t})
+
 
 class Prit4i:
     def __init__(self):
@@ -1846,3 +1801,6 @@ class Prit4i:
         p[1] = "Притчи " + p[1]
         self.pr = p
         # self.pr = mp[0]
+
+
+
