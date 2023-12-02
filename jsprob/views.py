@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 
 def hello(request):
     answer = request.GET
+    dayend()
     # try:
     #     er = request.session['ti_contr']
     # except:
@@ -52,15 +53,41 @@ def hello(request):
     #     request.session['ti_contr'] = time.time() - 3
     # else:
     #     request.session['ti_contr'] = time.time()
-    userLog = request.user.username
+    userAkt = request.user
+    userLog = userAkt.username
     dat = Indexs.objects.get(id=1)
     datn = datetime.date.today()
     fl0 = '0'
     if (userLog != ''):
-        nm = request.user.first_name.split('$#$%')
+        nm = userAkt.first_name.split('$#$%')
         if len(nm) == 4: fl0 = '1'
         nm = ', ' + nm[1]
         fl = 1
+        if userAkt.last_name != '':
+
+            plase = int(userAkt.last_name.split("$")[0])
+            datn = datetime.date.today()
+            deltaday = (datn - datetime.datetime.strptime(userAkt.last_name.split("$")[1], "%Y-%m-%d").date()).days
+            txcon = 'ПОЗДРАВЛЯЕМ' + '!' * (7-plase)
+            txst = ['В ТОП-е вчерашнего дня', 'В позавчерашнем ТОП-е',
+                    'В ТОП-е дня Вашего последнего посещения игры (' + userAkt.last_name.split("$")[1] + ')'][min(deltaday,2)]
+            txt2 = [['Вы стали ЧЕМПИОНОМ!!!', 'Вы заняли ПЕРВОЕ МЕСТО!!!'][randint(0,1)], 'Вы заняли ВТОРОЕ МЕСТО!!',
+                    'Вы вошли в ТРОЙКУ СИЛЬНЕЙШИХ!', 'Вы вошли в семерку сильнейших.'][min(plase-1,3)]
+
+            if plase == 1:
+                kub0 = "1"
+                wi = 400
+            if 1 < plase < 4:
+                kub0 = "23"
+                wi = 400 - 50 * plase
+            if 3 < plase < 8:
+                kub0 = "47"
+                wi = 400 - 30 * plase
+            kub = 'jsprob/img/' + kub0 +  '.png'
+            userAkt.last_name = ''
+            userAkt.save()
+            return render(request, 'jsprob/congratul.html',
+                          {'con': txcon, 'pl': plase, 'tx1': txst, 'tx2': txt2, 'kub':kub, 'wi': wi})
     else:
         nm = ''
         fl = 0
@@ -158,15 +185,20 @@ def changefik(request):
 
 def dayend():
     dat = Indexs.objects.get(id=1)
-    datn = datetime.date.today()
+    datn = datetime.date.today()                        # datetime.datetime.now()
     if dat.curdate != datn:
         lastday = dat.curdate
         dat.curdate = datn
         dat.save(update_fields=['curdate'])
         masd = DataUser.objects.order_by('-scorTD').filter(scorTD__gt=0).values_list('id', 'fik', 'scorTD')
         masd7 = masd[:min(7, len(masd))]
+        nn = 0
         for p in masd7:
             kar = DataUser.objects.get(id=p[0])
+            uss7 = User.objects.get(username=kar.log)
+            nn += 1
+            print(str(nn) + '$' + str(datn))
+            uss7.last_name = str(nn) + '$' + str(datn)
             kar.quanttop = kar.quanttop + 1
             if p == masd7[0]:
                 kar.quantwin = kar.quantwin + 1
@@ -182,6 +214,7 @@ def dayend():
                 Indexs.objects.filter(id=1).update(pole1=p1)
             kar.scorTD = 0
             kar.save()
+            uss7.save()
         for p in DataUser.objects.filter(scorTD__gt=0):
             p.scorTD = 0
             p.save(update_fields=['scorTD'])
@@ -709,17 +742,39 @@ def topglob(request):
 def reset(request):
     if (request.user.is_superuser) != True: return redirect('home')
     if request.method == 'GET':
+        lev_plase = 3    # до какого места призеры в отдельных этапах
+        win_days = 7     # до какого места призеры за победы в днях
+        top7_days = 15   # до какого места призеры за вхождения в ТОП7 в днях
+        priz_place = 15  # сколько позиций в общем ТОПе сезона призовые
         answer = request.GET
         if 'res' in answer:
+            lev_plase = int(answer.__getitem__('lv'))  # до какого места призеры в отдельных этапах
+            win_days = int(answer.__getitem__('wd'))  # до какого места призеры за победы в днях
+            top7_days = int(answer.__getitem__('t7d'))  # до какого места призеры за вхождения в ТОП7 в днях
+            priz_place = int(answer.__getitem__('pp'))  # сколько позиций в общем ТОПе сезона призовые
             n = 0
+            peoples_prize = []
+            mass = []
+            for k in range(6):
+                lv = '-scoresl' + str(k+1)
+                mas = [i[0] for i in
+                    DataUser.objects.order_by(lv).values_list('log')[:lev_plase]]
+                for i in mas:
+                    if i not in mass:
+                        mass.append(i)
+            mass += [i[0] for i in
+                    DataUser.objects.order_by('-quantwin').values_list('log')[:win_days]]
+            mass += [i[0] for i in
+                    DataUser.objects.order_by('-quanttop').values_list('log')[:top7_days]]
             for r in DataUser.objects.order_by('-scores'):
                 if r.id > 12:
                     if r.scores != 0:
                         n += 1
                         du = list(map(int, r.pole2.split('$')))
-                        print(r.fik, du)
                         du[7] += 1                # всего сезонов (участие)
-                        if n < 11: du[8] += 1     # количество призерств
+                        if n <= priz_place or r.log in mass:
+                            peoples_prize.append(r.fik)
+                            du[8] += 1     # количество призерств
                         if n == 1: du[9] += 1     # количество чемпионств
                         du[10] += r.quantwin     # побед в днях во всех предыдущих сезонах
                         du[11] += r.quanttop     # ТОП-7 в днях во всех предыдущих сезонах
@@ -732,6 +787,7 @@ def reset(request):
                     r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
                     r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
                     r.save()
+            return render(request, 'jsprob/prizs.html', {'prizs': list(set(peoples_prize))})
             return redirect('home')
     return render(request, 'jsprob/reset.html')
 
@@ -994,7 +1050,7 @@ def unification(request):
         if 'uni' in answer:
             prosh = DataUser.objects.get(pk=int(answer['prosh']))
             nast = DataUser.objects.get(pk=int(answer['nast']))
-            print(prosh.fik, nast.fik)
+            # print(prosh.fik, nast.fik)
             prp2 = list(map(int, prosh.pole2.split('$')))   #!!
             nastp2 = list(map(int, nast.pole2.split('$')))
             if nast.scoresl1 > prp2[0]: prp2[0] = nast.scoresl1
@@ -1587,18 +1643,19 @@ def brend(request):
     tts = sum(map(int, tts0[:6]))
     t = OrfKras(tts, ["очков", "очка", "очко"])
     tt = DataUser.objects.get(log=usna)
-    scolddt = tt.scorTD
-    scoldd = tt.res1
-    scold = tt.scores  # в этапах sclvus
-    ds = int(float(tts) - scold)  # сравнение с рекордом сезона
-    dsd = int(float(tts) - scoldd)  # сравнение с абсолютным рекордом
-    dstd = int(float(tts) - scolddt)  # сравнение с рекордом дня
-    if ds > 0:
-        DataUser.objects.filter(log=usna).update(scores=tts, pravil=(int(float(tts0[6]) + float(tts0[7]))),
+    bon = int(float(tts0[7]) * 100)
+    total = int(tts + bon)
+    if total == 0: return redirect('home')
+
+    t1 = OrfKras(float(tts0[7]), ["очков", "очка", "очко"])
+    t3 = OrfKras(total, ["очков", "очка", "очко"])
+    if total >tt.scores:
+        DataUser.objects.filter(log=usna).update(scores=total, pravil=(int(float(tts0[6]) + float(tts0[7]))),
                                              bezosh=tts0[7])
-    if dsd > 0: DataUser.objects.filter(log=usna).update(res1=tts)
-    if dstd > 0: DataUser.objects.filter(log=usna).update(scorTD=tts)
-    return render(request, 'jsprob/britog.html', {'tts': tts, 't': t})
+    if total > tt.res1: DataUser.objects.filter(log=usna).update(res1=total)
+    if total > tt.scorTD: DataUser.objects.filter(log=usna).update(scorTD=total)
+
+    return render(request, 'jsprob/britog.html', {'tts': tts, 't': t, 'bezosh': bon, 't1': t1, 'tot': total, 't3': t3})
 
 
 class Prit4i:

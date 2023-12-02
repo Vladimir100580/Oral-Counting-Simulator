@@ -1,15 +1,28 @@
 {% extends 'jsprob/shabl.html' %}
-{% block title %} Приветствие {% endblock %}
+{% block title %} ОКОНЧАНИЕ СЕЗОНА {% endblock %}
 {% block content %}
 
 <aside>
-    <h2 class="featuress"> ТОЧНО!? </h2>
+    <h2 class="featuress"> Введите данные о призерах в уходящем сезоне </h2>
 
 </aside>
+    <div class="features">
     <form action="" method="get">
             {% csrf_token %}
-    <div class="features">
-        <button class="btn btn-danger btn" id = 'butt2' type="submit" name="res" > ДА </button></br></br>
+        <h4 class="featuress"> До какой позиции в ТОП (включительно) определяются призеры: </h4>
+        <h4> <input type="number" id="inpu1" name="pp" placeholder='В общем ТОПе' maxlength="2"  size="20"> </h4>
+        <h4> <input type="number" id="inpu0" name="lv" placeholder='В отдельных этапах' maxlength="2"  size="20"> </h4>
+        <h4> <input type="number" id="inpu3" name="wd" placeholder='Побед дней' maxlength="2"  size="20"> </h4>
+        <h4> <input type="number" id="inpu2" name="t7d" placeholder='ТОП-7 дней' maxlength="2"  size="20"> </h4>
+
+        <button class="btn btn-danger btn" id = 'butt2' type="submit" onclick="Func()" name="res" > ПРОДОЛЖИТЬ </button></br></br>
+         </form>
     </div>
+
+<script>
+    function Func() {
+        alert("ВНИМАНИЕ! Продолжение приведет к Завершению сезона");
+    }
+</script>
 
 {% endblock %}

@@ -7,12 +7,17 @@
 </aside>
         <div class="features">
         <br>
-        <h6> Суммарный результат за пройденные этапы: </h6>
+        <h6> Суммарный результат за завершенные этапы: </h6>
+        <h4> {{tts}} {{t}}. </h4>
         <br>
-        <h3> {{tts}} {{t}}. </h3>
+        <h6> Бонус за безошибочные ответы: </h6>
+        <h4> {{bezosh}} {{t1}}. </h4>
         <br>
+        <h4> Всего: {{tot}} {{t3}}. </h4>
         <br>
+        <a href="{% url 'topday' %}" id = "butt1" class="btn btn-success" onclick="Func()"> ТОП сегодняшнего дня </a>
         <h4 id = 'wait'> </h4>
+        <br>
         <a href="{% url 'home' %}" id = "butt" class="btn btn-success" onclick="Func()"> ГЛАВНОЕ МЕНЮ </a>
         </div>
 
@@ -24,6 +29,7 @@
 
     function Func() {
             document.getElementById('butt').style.display='none';
+            document.getElementById('butt1').style.display='none';
             var txt2 = document.getElementById('wait');
             txt2.innerHTML = 'ПОЖАЛУЙСТА, ОЖИДАЙТЕ';
             txt2.style.fontStyle = 'Italic';

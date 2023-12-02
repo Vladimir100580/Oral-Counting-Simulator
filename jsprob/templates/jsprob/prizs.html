@@ -1,0 +1,20 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} Призеры минувшего сезона {% endblock %}
+{% block content %}
+
+<aside>
+    <h2 class="featuress" style="font-style: italic; font-size: min(35px, 4.5vw);" > Призеры минувшего сезона </h2>
+</aside>
+
+    <div class="features">
+
+        {% for pr in prizs %}
+               <h5 style='color:#AD1457'> {{pr}} </h5>
+        {% endfor %}
+        <a style="font-size: max(13px, 1.3vw);" href="{% url 'home' %}" id = 'butt1' class="btn btn-success" onclick="Func()"> СТАРТОВОЕ МЕНЮ </a>
+
+        </br></br>
+
+    </div>
+
+{% endblock %}

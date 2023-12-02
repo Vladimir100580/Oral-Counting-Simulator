@@ -1,0 +1,28 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} ПОЗДРАВЛЯЕМ! Вы достигли успехов в ТОП дня {% endblock %}
+{% block content %}
+{% load static %}
+
+<aside>
+    <h2 class="featuress" style="font-style: italic"> {{con}} </h2>
+</aside>
+
+    <div class="features">
+        <img style="height: auto; width: {{wi}}px" src="{% static kub %}"><br><br>
+        <h3 style="font-style: italic"> {{tx1}} </h3>
+        <h3 style="font-style: italic"> {{tx2}} </h3><br>
+        <h3 id ='wt' style="font-style: italic"> </h3>
+
+         <a style="font-size: max(13px, 1.3vw); "href="{% url 'topdays' %}"  id = 'butt1' class="btn btn-success" onclick="Func()"> ТОП ТОП-ов дня </a>
+         <a style="font-size: max(13px, 1.3vw);" href="{% url 'home' %}" id = 'butt2' class="btn btn-success" onclick="Func()"> СТАРТОВОЕ МЕНЮ </a>
+
+    </div>
+
+ <script>
+        function Func() {
+                document.getElementById('butt1').style.display='none';
+                document.getElementById('butt2').style.display='none';
+                document.getElementById('wt').innerHTML = 'Пожалуйста, подождите.';}
+    </script>
+
+{% endblock %}
