@@ -442,34 +442,38 @@ def itog(request):
             pos_old = int(len(mas01) + 1)
             pos_now = int(len(mas11) + 1)
 
-            if pos_now < 11:
-                if pos_old == pos_now:
-                    if txt == '': txt = "Поздравляем!"
-                    if pos_now != 1:
-                        txt4 = 'также еще прочнее укрепились на ' + str(pos_now) + '-позиции глобального TOP-10.'
+            if dsd > 0:
+                if pos_now < 11:
+                    if pos_old == pos_now:
+                        if txt == '': txt = "Поздравляем!"
+                        if pos_now != 1:
+                            txt4 = 'также еще прочнее укрепились на ' + str(pos_now) + '-позиции глобального TOP-10.'
+                        else:
+                            txt4 = 'также еще сильнее утвердили свое ЛИДЕРСТВО в игре.'
                     else:
-                        txt4 = 'также еще сильнее утвердили свое ЛИДЕРСТВО в игре.'
+                        if pos_old > 10:
+                            if pos_now != 1:
+                                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                                txt4 = 'также на данный момент Вы вошли в Абсолютный TOП-10! \
+                                         ( ' + str(pos_now) + ' место )'
+                            else:
+                                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
+                                txt4 = 'На данный момент Вы врываетесь в глобальный ТОП-10 и становитесь ЧЕМПИОНОМ!!'
+                        else:
+                            if pos_now != 1:
+                                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
+                                txt4 = 'также улучшили свою позицию в глобальном TOП-10. (' + \
+                                       str(pos_old) + ' --> ' + str(pos_now) + ')'          #!!!
+                            else:
+                                if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
+                                txt4 = ' также на данный момент Вы становитесь абсолютным ЧЕМПИОНОМ!'
                 else:
-                    if pos_old > 10:
-                        if pos_now != 1:
-                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                            txt4 = 'также на данный момент Вы вошли в Абсолютный TOП-10! \
-                                     ( ' + str(pos_now) + ' место )'
-                        else:
-                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
-                            txt4 = 'На данный момент Вы врываетесь в глобальный ТОП-10 и становитесь ЧЕМПИОНОМ!!'
+                    if pos_old != pos_now:
+                        txt4 = 'также Ваше место в глобальном TOП-е стало выше. (' + \
+                               str(pos_old) + ' --> ' + str(pos_now) + ')'
                     else:
-                        if pos_now != 1:
-                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
-                            txt4 = 'также улучшили свою позицию в глобальном TOП-10. (' + \
-                                   str(pos_old) + ' --> ' + str(pos_now) + ')'
-                        else:
-                            if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
-                            txt4 = ' также на данный момент Вы становитесь абсолютным ЧЕМПИОНОМ!'
-            else:
-                if pos_old != pos_now:
-                    txt4 = 'также Ваше место в глобальном TOП-е стало выше. (' + \
-                           str(pos_old) + ' --> ' + str(pos_now) + ')'
+                        txt4 = 'также улучшили свой результат в глобальном ТОП-е на ' + sqr(abs(dsd)) + ', ' \
+                               'укрепившись на ' + str(pos_old) + ' позиции'
 
         else:
             tvs = ''
@@ -485,8 +489,9 @@ def itog(request):
             if dsTD > 0:
 
                 DataUser.objects.filter(log=usna).update(scorTD=sum)
-                txt5 = "Вы побили свой рекорд сегодняшнего дня на " + str(dsTD) + ". (" + str(scoldtd) + " --> " \
-                       + str(sum) + ")"
+                if scoldtd > 0:
+                    txt5 = "Вы побили свой рекорд сегодняшнего дня на " + str(dsTD) + ". (" + str(scoldtd) + " --> " \
+                           + str(sum) + ")"
 
                 pos_old = int(len(mas02) + 1)
                 pos_now = int(len(mas12) + 1)
