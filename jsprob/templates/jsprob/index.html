@@ -4,9 +4,10 @@
 
 <aside>
     <h5 class="featuress" id = 'nomb' style="font-style: italic; font-size: min(35px, 5.5vw);"> Здравствуйте{{nm}}!{{us}} </h5>
-    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(32px, 5vw);"> Добро пожаловать на VII турнир по устному счету! </h5>
+    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(32px, 5vw);"> Вас приветствует тренажер устного счета! </h5>
+<!--    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(32px, 5vw);"> Добро пожаловать на VII турнир по устному счету! </h5>-->
 <!--    <h5 class="featuress" id = 'wait0' style="font-style: italic; font-size: min(32px, 4.2vw);"> Идет турнир, в рамках Математической недели. </h5>-->
-    <h5 class="featuress" id = 'wait1' style="font-style: italic; font-size: min(28px, 3.9vw);"> Участвовать могут все: от мала до велика. </h5>
+    <h5 class="featuress" id = 'wait1' style="font-style: italic; font-size: min(28px, 3.9vw);"> В данный момент турнир не проводится. </h5>
 <!--    <h5 class="featuress" id = 'wait1' style="font-style: italic; font-size: min(28px, 3.7vw);"> Участвовать могут ученики любых классов Лицея №1. </h5>-->
 </aside>
 
@@ -82,7 +83,8 @@
             <h5 style="font-size: min(25px, 3.2vw);"> Участники с некорректными ФИО(ФИК) удаляются! </h5>
             <h5 style="font-size: min(23px, 3vw);"> Попыток по улучшению своего результата можно совершать неограниченное число раз. </h5>
             <h5 style="font-size: min(23px, 3vw);"> VI этап завершен. Подробности о победителях и призерах см.в разделе "Инструкция" и в <a href="https://vk.com/club223699010" target="_blank"> ГРУППЕ ВК </a> </h5>
-            <h5 style="font-size: min(25px, 3.2vw);"> Итоги Рождественско-Новогоднего турнира будут подведены 13.01.2024г. в 20:00 по MSK </h5>
+            <h5 style="font-size: min(25px, 3.2vw);"> В данное время турнир не проводится. Тренируйтесь. </h5>
+<!--            <h5 style="font-size: min(25px, 3.2vw);"> Итоги Рождественско-Новогоднего турнира будут подведены 13.01.2024г. в 20:00 по MSK </h5>-->
             <h5 style="font-size: min(23px, 3vw);"> Если Вы забыли свой логин <a href="https://vk.com/vovartus" target="_blank"> уточните в ЛС </a> .</h5>
 <!--            <h5 style="font-size: min(25px, 3.2vw);"> Итоги турнира будут подведены: 07.04.2023 в 15:00  </h5>-->
 
@@ -155,8 +157,17 @@
     var txt2 = document.getElementById('wait');
     txt2.innerHTML = 'ПОЖАЛУЙСТА, ОЖИДАЙТЕ';
     txt2.style.cssText = 'font-style: italic; font-size: 36px; margin-top: 50px;';
+    i = 0;
+    st = '';
+    while(i < 200)  {
+        n = Math.floor(Math.random() * 9) + 1;
+        if (i != 199) {st = st + n + '$';}
+        else {st = st + n;}
+        i++;
+        }
     localStorage.setItem('key3',0);
     localStorage.setItem('kontr', 0);
+    localStorage.setItem('shifr', st);
     localStorage.setItem('pravresh', 0);
     localStorage.setItem('bezosh', 0);
     localStorage.setItem('totsum', 0);
@@ -166,15 +177,6 @@
     localStorage.setItem('lvl4', 0);
     localStorage.setItem('lvl5', 0);
     localStorage.setItem('lvl6', 0);
-    i = 0;
-    st = '';
-    while(i < 200)  {
-        n = Math.floor(Math.random() * 9) + 1;
-        if (i != 199) {st = st + n + '$';}
-        else {st = st + n;}
-        i++;
-        }
-    localStorage.setItem('shifr', st);
     document.cookie = "keyshif=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     document.cookie = "keyshif=" + st;
     }

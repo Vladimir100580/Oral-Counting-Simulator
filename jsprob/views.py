@@ -1609,7 +1609,7 @@ class Vyborka():
                 for z in range(4):
                     if tasks[r].find(simv[z]) != -1:
                         x = tasks[r].find(simv[z])
-                        tasks1.append(float(tasks[r][:x]) + otvs + (r - m) ** 2)
+                        tasks1.append(float(tasks[r][:x]) + otvs + (r - m) ** 2 - int(kod[r]))
                         tasksz.append(z)
                         tasks2.append(float(tasks[r][x + 1:len(tasks[r]) - 1]))
 

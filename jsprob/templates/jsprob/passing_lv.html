@@ -4,7 +4,7 @@
 
     <div class="features">
  <h1 style="font-style: italic" id = 'vy4'> Вычислите:  </h1>
-        <h2 style="font-style: italic; font-size: min(68px, 16vw);" id = 'prim'> </h2>
+        <h2 class="enable" style="font-style: italic; font-size: min(68px, 16vw);" id = 'prim'> </h2>
         <h2 id = "err"> </h2>
         <h3 id = "end1"> </h3>
         <h3 id = "end2"> </h3>
@@ -27,6 +27,16 @@
 <!--        <a href="{% url 'home' %}" id = "byni" class="btn btn-danger btn-sm"> ЗАВЕРШИТЬ! Перейти в главное меню. </a>-->
 
     </div>
+
+    <style>
+        .enable {
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+	    }
+
+    </style>
     <script>
         tas1 ={{tas1}};
         tas2 ={{tas2}};
@@ -40,6 +50,7 @@
         localStorage.setItem('kontr', kon);
         var na4 = new Date() - new Date(0)
         document.getElementById('butt').style.display='none';
+        sh = localStorage.getItem('shifr').split('$');
         ds = ti - (new Date() - new Date(0) - Number(na4));
         fl2=0;
         fl1=0;
@@ -52,7 +63,6 @@
         p1 = 0;
         n = 0;
         ot='';
-
         function Func() {
             if (lv == 1) {
             ost = ti - (new Date() - new Date(0) - Number(na4));
@@ -160,8 +170,9 @@
             document.getElementById('timer').innerHTML = Math.floor(ost/1000);
             if (fl2==0) {
                 prim++;
+                koefd = Number(sh[(lv - 1) * 10 + prim]);
                 ot='';
-                pr=(tas1[prim]-prim**2-otv)+simv[tasz[prim]]+tas2[prim];
+                pr=(tas1[prim] - prim**2 - otv + koefd) + simv[tasz[prim]]+tas2[prim];
                 document.getElementById('prim').innerHTML = pr + '=';
                 fl2=1;}
             if (fl1==1) {
@@ -173,11 +184,11 @@
 
         function Funcnj() {
             if (lv < 4) {
-            if (prim<5) {sr = tas1[prim] - prim**2 - otv + tas2[prim];}
-            else {sr = tas1[prim] - prim**2 - otv - tas2[prim]}
+            if (prim<5) {sr = tas1[prim] - prim**2 + koefd - otv + tas2[prim];}
+            else {sr = tas1[prim] - prim**2 - otv + koefd - tas2[prim]}
             }
-            if (lv == 4) {sr = (tas1[prim] - prim**2 - otv) * (tas2[prim]);}
-            if (lv == 5) {sr = (tas1[prim] - prim**2 - otv) / (tas2[prim]);}
+            if (lv == 4) {sr = (tas1[prim] - prim**2 - otv + koefd) * (tas2[prim]);}
+            if (lv == 5) {sr = (tas1[prim] - prim**2 - otv + koefd) / (tas2[prim]);}
             if (ot.length == String(sr).length) {
                 if (ot == sr) {
                 fl2 = 0;
