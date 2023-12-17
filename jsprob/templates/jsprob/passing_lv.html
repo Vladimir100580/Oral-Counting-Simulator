@@ -4,7 +4,7 @@
 
     <div class="features">
  <h1 style="font-style: italic" id = 'vy4'> Вычислите:  </h1>
-        <h2 class="enable" style="font-style: italic; font-size: min(68px, 16vw);" id = 'prim'> </h2>
+        <h2 style="font-style: italic; font-size: min(68px, 16vw);" id = 'prim'> </h2>
         <h2 id = "err"> </h2>
         <h3 id = "end1"> </h3>
         <h3 id = "end2"> </h3>
@@ -28,15 +28,6 @@
 
     </div>
 
-    <style>
-        .enable {
-            -ms-user-select: none;
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
-	    }
-
-    </style>
     <script>
         tas1 ={{tas1}};
         tas2 ={{tas2}};
@@ -172,6 +163,7 @@
                 prim++;
                 koefd = Number(sh[(lv - 1) * 10 + prim]);
                 ot='';
+                document.getElementById('prim').style.cssText = '-ms-user-select: none; -moz-user-select: none; -webkit-user-select: none; user-select: none; font-style: italic; font-size: min(68px, 16vw);';
                 pr=(tas1[prim] - prim**2 - otv + koefd) + simv[tasz[prim]]+tas2[prim];
                 document.getElementById('prim').innerHTML = pr + '=';
                 fl2=1;}
