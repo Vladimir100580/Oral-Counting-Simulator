@@ -658,6 +658,44 @@ def toplvl(request):
     return render(request, 'jsprob/toplvl.html', {'tt': tt})
 
 
+def toplvlgl(request):
+    dayend()
+    tt = []
+    try:
+        usna = request.user.first_name.replace('$#$%', ' ')
+    except:
+        usna = ''
+    for r in DataUser.objects.all().values_list('fik', 'pole2'):
+        m = ([r[0], r[1].split('$')[:6]])
+        if len(m[1]) < 6:
+            continue
+        tt0 = []
+        tt0.append(m[0])
+        s = 0
+        for k in range(6):
+            tt0.append(int(m[1][k]))
+            s += int(m[1][k])
+        tt0.append((s + 6000))
+        tt.append(tt0)
+    ttt = [[] for i in range(7)]
+    for i in range(7):
+        if i < 6:
+            ttt[i].append('Этап: ' + str(i+1))
+        else:
+            ttt[i].append('ТОП-30 суммарного теоретического потенциала')
+        tts = sorted(tt, key=lambda x: x[i+1], reverse=True)[:30]
+        n = 0
+        for r in tts:
+            n += 1
+            if r[0] != usna:
+                col = str(n % 3)
+            else:
+                col = '3'
+            ttt[i].append([col, str(n) + ') ' + r[0], r[i+1]])
+
+    return render(request, 'jsprob/toplvlgl.html', {'tt': ttt})
+
+
 def topday(request):
     tt = []
     try:

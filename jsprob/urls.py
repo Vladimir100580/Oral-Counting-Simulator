@@ -22,6 +22,7 @@ urlpatterns = [
     path('topdays', views.topdays, name='topdays'),
     path('toptab', views.toptab, name='toptab'),
     path('toplvl', views.toplvl, name='toplvl'),
+    path('toplvlgl', views.toplvlgl, name='toplvlgl'),
     path('topglob', views.topglob, name='topglob'),
     path('unification', views.unification, name='unification'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
