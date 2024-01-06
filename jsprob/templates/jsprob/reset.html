@@ -15,13 +15,17 @@
         <h4> <input type="number" id="inpu3" name="wd" placeholder='Побед дней' maxlength="2"  size="20"> </h4>
         <h4> <input type="number" id="inpu2" name="t7d" placeholder='ТОП-7 дней' maxlength="2"  size="20"> </h4>
 
-        <button class="btn btn-danger btn" id = 'butt2' type="submit" onclick="Func()" name="res" > ПРОДОЛЖИТЬ </button></br></br>
+        <button class="btn btn-danger btn" id = 'butt2' type="submit" onclick="Func()" name="res" > ЗАВЕРШЕНИЕ СЕЗОНА </button></br></br>
+        <button class="btn btn-success btn" id = 'butt3' type="submit" onclick="Func()" name="prpr" > ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР </button></br></br>
+
          </form>
     </div>
 
 <script>
+
     function Func() {
-        alert("ВНИМАНИЕ! Продолжение приведет к Завершению сезона");
+        if ({{kon}} == 1) {
+        alert("ВНИМАНИЕ! Продолжение приведет к Завершению сезона");}
     }
 </script>
 
