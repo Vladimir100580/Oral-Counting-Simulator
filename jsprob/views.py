@@ -786,9 +786,13 @@ def reset(request):
     if (request.user.is_superuser) != True: return redirect('home')
     if request.method == 'GET':
         lev_plase = 3    # до какого места призеры в отдельных этапах
+        lev_plase_cost_prizes = [100, 50, 50]
         win_days = 7     # до какого места призеры за победы в днях
+        win_days_cost_prizes = [200, 200, 100, 100, 100, 100, 100]
         top7_days = 15   # до какого места призеры за вхождения в ТОП7 в днях
+        top7_days_cost_prizes = [200, 200, 200, 150, 150, 150, 100, 100, 100, 100, 100, 100, 100, 100]
         priz_place = 15  # сколько позиций в общем ТОПе сезона призовые
+        priz_place_cost_prizes = [300, 300, 300, 200, 200, 200, 200, 100, 100, 100, 100, 100, 100, 100, 100]
         answer = request.GET
         if 'res' in answer:
             lev_plase = int(answer.__getitem__('lv'))  # до какого места призеры в отдельных этапах
@@ -797,27 +801,56 @@ def reset(request):
             priz_place = int(answer.__getitem__('pp'))  # сколько позиций в общем ТОПе сезона призовые
             n = 0
             peoples_prize = []
-            mass = []
-            for k in range(6):
-                lv = '-scoresl' + str(k+1)
-                mas = [i[0] for i in
-                    DataUser.objects.order_by(lv).values_list('log')[:lev_plase]]
-                for i in mas:
-                    if i not in mass:
-                        mass.append(i)
-            mass += [i[0] for i in
-                    DataUser.objects.order_by('-quantwin').values_list('log')[:win_days]]
-            mass += [i[0] for i in
-                    DataUser.objects.order_by('-quanttop').values_list('log')[:top7_days]]
+            mass = {}
+            for l in range(6):
+                lv = '-scoresl' + str(l+1)
+                mas = DataUser.objects.order_by(lv).values_list('log', lv[1:], 'fik')[:lev_plase]
+                m = 0
+                for i, j, k in mas:
+                    if j > 0:
+                        mass[i] = [mass.get(i, ["", k, 0])[0] + "Э" + str(l+1) + "-" + str(lev_plase_cost_prizes[m]) +
+                                   "; ", k, mass.get(i, ["", k, 0])[2] + lev_plase_cost_prizes[m]]
+                        m += 1
+            print(f'{mass=}')
+            mas = DataUser.objects.order_by('-quantwin').values_list('log', 'quantwin', 'fik')[:win_days]
+            m = 0
+            for i, j, k in mas:
+                if j > 0:
+                    mass[i] = [mass.get(i, ["", k, 0])[0] + "TdWin-" + str(win_days_cost_prizes[m]) + "; ", k,
+                               mass.get(i, ["", k, 0])[2] + win_days_cost_prizes[m]]
+                    m += 1
+
+            print(f'{mass=}')
+            mas = DataUser.objects.order_by('-quanttop').values_list('log', 'quanttop', 'fik')[:top7_days]
+            m = 0
+            for i, j, k in mas:
+                if j > 0:
+                    mass[i] = [mass.get(i, ["", k, 0])[0] + "Td7Top-" + str(top7_days_cost_prizes[m]) + "; ", k,
+                               mass.get(i, ["", k, 0])[2] + top7_days_cost_prizes[m]]
+                    m += 1
+            print(f'{mass=}')
+
+            mas = DataUser.objects.filter(scoresl7__gt=0, pk__gt=12).order_by('-scoresl7').values_list('log', 'scoresl7', 'fik')
+            print(f"{mas=}")
+            m = 0
+            for i, j, k in mas:
+                if j > 0:
+                    mass[i] = [mass.get(i, ["", k, 0])[0] + "Balls-" + str(int(j/10 + .5)) + "; ", k,
+                               mass.get(i, ["", k, 0])[2] + int(j/10 + .5)]
+                    m += 1
+            print(f'{mass=}')
+
             for r in DataUser.objects.order_by('-scores'):
                 if r.id > 12:
                     if r.scores != 0:
                         n += 1
                         du = list(map(int, r.pole2.split('$')))
                         du[7] += 1                # всего сезонов (участие)
-                        if n <= priz_place or r.log in mass:
-                            peoples_prize.append(r.fik)
+                        if n <= priz_place or mass.get(r.log) != None:     # Условие вхождения в призеры.
+                            # peoples_prize.append(r.fik)
                             du[8] += 1     # количество призерств
+                            if n <= priz_place:
+                                mass[r.log] = [mass.get(r.log, ["", r.fik, 0])[0] + "ТОП-" + str(priz_place_cost_prizes[n-1]) + "; ", r.fik, mass.get(r.log, ["", r.fik, 0])[2] + priz_place_cost_prizes[n-1]]
                         if n == 1: du[9] += 1     # количество чемпионств
                         du[10] += r.quantwin     # побед в днях во всех предыдущих сезонах
                         du[11] += r.quanttop     # ТОП-7 в днях во всех предыдущих сезонах
@@ -829,7 +862,10 @@ def reset(request):
                     r.scoresl2, r.scoresl3, r.scoresl4 = 0, 0, 0
                     r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
                     r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
-                    r.save()
+                    # r.save()
+            # sort_mass = sorted(mass.items(), key=lambda x: sum(map(int, x[1][0].split("$")[:-1])), reverse=True)  Шедевр для истории
+            sort_mass = sorted(mass.items(), key=lambda x: x[1][2], reverse=True)
+            print(f'{sort_mass=}')
             return render(request, 'jsprob/prizs.html', {'prizs': list(set(peoples_prize))})
             return redirect('home')
     return render(request, 'jsprob/reset.html')
