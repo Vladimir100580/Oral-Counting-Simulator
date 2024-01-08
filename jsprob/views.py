@@ -53,6 +53,7 @@ def hello(request):
     #     request.session['ti_contr'] = time.time() - 3
     # else:
     #     request.session['ti_contr'] = time.time()
+
     userAkt = request.user
     userLog = userAkt.username
     dat = Indexs.objects.get(id=1)
@@ -68,12 +69,17 @@ def hello(request):
             plase = int(userAkt.last_name.split("$")[0])
             datn = datetime.date.today()
             deltaday = (datn - datetime.datetime.strptime(userAkt.last_name.split("$")[1], "%Y-%m-%d").date()).days
-            txcon = 'ПОЗДРАВЛЯЕМ' + '!' * (7-plase)
+            txcon = 'ПОЗДРАВЛЯЕМ' + '!' * max(1, (8-plase))
             txst = ['В ТОП-е вчерашнего дня', 'В позавчерашнем ТОП-е',
                     'В ТОП-е дня Вашего последнего посещения игры (' + userAkt.last_name.split("$")[1] + ')'][min(deltaday,2)]
             txt2 = [['Вы стали ЧЕМПИОНОМ!!!', 'Вы заняли ПЕРВОЕ МЕСТО!!!'][randint(0,1)], 'Вы заняли ВТОРОЕ МЕСТО!!',
-                    'Вы вошли в ТРОЙКУ СИЛЬНЕЙШИХ!', 'Вы вошли в семерку сильнейших.'][min(plase-1,3)]
-
+                    'Вы вошли в ТРОЙКУ СИЛЬНЕЙШИХ!', f'Вы вошли в семерку сильнейших ({plase} место).',
+                    f'Вы вошли в дюжину сильнейших ({plase} место).',
+                    f'Вы заняли {plase} место.'][min(plase - 1, max(3, min(4 + int((plase/13 + 2) / 3), plase - 4)))]
+            balls = [60, 57, 54, 51, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28,
+                         26, 24, 22, 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1][plase - 1]
+            t = OrfKras(balls, ["накопительных баллов", "накопительных балла", "накопительный балл"])
+            txt3 = f'И получили {balls} {t}.'
             if plase == 1:
                 kub0 = "1"
                 wi = 400
@@ -83,11 +89,14 @@ def hello(request):
             if 3 < plase < 8:
                 kub0 = "47"
                 wi = 400 - 30 * plase
+            if 7 < plase < 34:
+                kub0 = "rukop"
+                wi = 400 - 10 * plase
             kub = 'jsprob/img/' + kub0 +  '.png'
             userAkt.last_name = ''
             userAkt.save()
             return render(request, 'jsprob/congratul.html',
-                          {'con': txcon, 'pl': plase, 'tx1': txst, 'tx2': txt2, 'kub':kub, 'wi': wi})
+                          {'con': txcon, 'pl': plase, 'tx1': txst, 'tx2': txt2, 'tx3': txt3, 'kub':kub, 'wi': wi})
     else:
         nm = ''
         fl = 0
@@ -191,16 +200,17 @@ def dayend():
         dat.curdate = datn
         dat.save(update_fields=['curdate'])
         masd = DataUser.objects.order_by('-scorTD').filter(scorTD__gt=0).values_list('id', 'fik', 'scorTD')
-        masd7 = masd[:min(7, len(masd))]
+        masd33 = masd[:min(33, len(masd))]
+        arr_balls = [60, 57, 54, 51, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28,
+                     26, 24, 22, 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
         nn = 0
-        for p in masd7:
+        for p in masd33:
             kar = DataUser.objects.get(id=p[0])
             uss7 = User.objects.get(username=kar.log)
             nn += 1
-            print(str(nn) + '$' + str(datn))
             uss7.last_name = str(nn) + '$' + str(datn)
             kar.quanttop = kar.quanttop + 1
-            if p == masd7[0]:
+            if p == masd33[0]:
                 kar.quantwin = kar.quantwin + 1
                 p1 = Indexs.objects.get(id=1).pole1.split('@%>$')
                 if len(p1) >= 3:
@@ -213,6 +223,7 @@ def dayend():
                         p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')' + '@%>$' + '@%>$'.join(p1)
                 Indexs.objects.filter(id=1).update(pole1=p1)
             kar.scorTD = 0
+            kar.scoresl7 = kar.scoresl7 + arr_balls[nn - 1]
             kar.save()
             uss7.save()
         for p in DataUser.objects.filter(scorTD__gt=0):
@@ -294,6 +305,7 @@ def progress(request):
         'na4pops1': OrfKras(na4pops, sk),
         'na4popt1': OrfKras(na4popt, sk),
         'popsez1': OrfKras(popsez, sk),
+        'bss': kar.scoresl7,
     }
     if fl1 == 0:
         return render(request, 'jsprob/progress.html', data)
@@ -865,7 +877,7 @@ def reset(request):
                             du[8] += 1     # количество призерств
                             if n <= priz_place:
                                 mass[r.log] = [mass.get(r.log, ["", r.fik, 0])[0]
-                                               + f'ТОП({n})-{priz_place_cost_prizes[n-1]}р; ',
+                                               + f'ТОП({n})-{priz_place_cost_prizes[n-1]}р.; ',
                                                r.fik, mass.get(r.log, ["", r.fik, 0])[2] + priz_place_cost_prizes[n-1]]
                         if n == 1: du[9] += 1     # количество чемпионств
                         du[10] += r.quantwin     # побед в днях во всех предыдущих сезонах
@@ -880,6 +892,10 @@ def reset(request):
                         r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
                         r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
                         r.save()
+                        for us in User.objects.all():
+                            if us.last_name != '':
+                                us.last_name = ''
+                                us.save()
             # sort_mass = sorted(mass.items(), key=lambda x: sum(map(int, x[1][0].split("$")[:-1])), reverse=True)  Шедевр для истории
             sort_mass = sorted(mass.items(), key=lambda x: x[1][2], reverse=True)
             listmas = [j for i, j in sort_mass]
