@@ -1,20 +1,50 @@
 {% extends 'jsprob/shabl.html' %}
-{% block title %} Призеры минувшего сезона {% endblock %}
+{% block title %} Призеры сезона {% endblock %}
 {% block content %}
 
 <aside>
-    <h2 class="featuress" style="font-style: italic; font-size: min(35px, 4.5vw);" > Призеры минувшего сезона </h2>
+    <h2 class="featuress" style="font-style: italic; font-size: min(35px, 4.5vw);" > Призеры сезона </h2>
 </aside>
 
     <div class="features">
 
-        {% for pr in prizs %}
-               <h5 style='color:#AD1457'> {{pr}} </h5>
+        {% for k, v in prizs.items %}
+              <h6 class='st1' style='color: #AD1457'> {{k}} </h6>
+              <h6 class='st2'style='color: #AD1457'> {{v.1}} </h6>
+              <h6 class='st3' style='color: #AD1457'> {{v.2}}руб. </h6>
+              <h6 class='st4' style='color: #AD1457'> {{v.0}} </h6>
+
         {% endfor %}
+        <div style="clear: left"></div>
+        <br>
+        <h5> ОБЩАЯ СУММА: {{sp}}</h5>
         <a style="font-size: max(13px, 1.3vw);" href="{% url 'home' %}" id = 'butt1' class="btn btn-success" onclick="Func()"> СТАРТОВОЕ МЕНЮ </a>
 
         </br></br>
 
     </div>
+
+  <style>
+   .st1 {
+    float: left;
+    width: 4%;
+    text-align: left;
+   }
+   .st2 {
+    float: left;
+    width: 25%;
+    text-align: left;
+   }
+   .st3 {
+    float: left;
+    width: 8%;
+    text-align: left;
+   }
+   .st4 {
+    float: left;
+    width: 63%;
+    text-align: left;
+   }
+     </style>
 
 {% endblock %}

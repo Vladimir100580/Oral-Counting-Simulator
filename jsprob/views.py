@@ -786,37 +786,35 @@ def reset(request):
     if (request.user.is_superuser) != True: return redirect('home')
     request.session['reset_control'] = 0
     if request.method == 'GET':
-        lev_plase0 = 3    # до какого места призеры в отдельных этапах
-        lev_plase_cost_prizes = [100, 50, 50]
-        win_days0 = 7     # до какого места призеры за победы в днях
-        win_days_cost_prizes = [200, 200, 100, 100, 100, 100, 100]
-        top7_days0 = 15   # до какого места призеры за вхождения в ТОП7 в днях
+        lev_plase_cost_prizes = [100, 50, 50]  # призы в отдельных этапах
+        win_days_cost_prizes = [200, 200, 100, 100, 100, 100, 100] # призы за победы в днях
+        # призы за вхождения в ТОП7 в днях
         top7_days_cost_prizes = [200, 200, 200, 150, 150, 150, 100, 100, 100, 100, 100, 100, 100, 100]
-        priz_place0 = 15  # сколько позиций в общем ТОПе сезона призовые
+        # призы общем ТОПе сезона
         priz_place_cost_prizes = [300, 300, 300, 200, 200, 200, 200, 100, 100, 100, 100, 100, 100, 100, 100]
         answer = request.GET
         if 'res' in answer or 'prpr' in answer:
             if 'res' in answer:
                 request.session['reset_control'] = 1
-            print(answer)
+
             lev_plase = answer.__getitem__('lv')  # до какого места призеры в отдельных этапах
             if lev_plase == "":
-                lev_plase = lev_plase0
+                lev_plase = len(lev_plase_cost_prizes)
             else:
                 lev_plase = int(lev_plase)
             win_days = answer.__getitem__('wd')  # до какого места призеры за победы в днях
             if win_days == "":
-                win_days = win_days0
+                win_days = len(win_days_cost_prizes)
             else:
                 win_days = int(win_days)
             top7_days = answer.__getitem__('t7d')  # до какого места призеры за вхождения в ТОП7 в днях
             if top7_days == "":
-                top7_days = top7_days0
+                top7_days = len(top7_days_cost_prizes)
             else:
                 top7_days = int(top7_days)
             priz_place = answer.__getitem__('pp')  # сколько позиций в общем ТОПе сезона призовые
             if priz_place == "":
-                priz_place = priz_place0
+                priz_place = len(priz_place_cost_prizes)
             else:
                 priz_place = int(priz_place)
             n = 0
@@ -829,14 +827,14 @@ def reset(request):
                 for i, j, k in mas:
                     if j > 0:
                         mass[i] = [mass.get(i, ["", k, 0])[0] + "Э" + str(l+1) + "-" + str(lev_plase_cost_prizes[m]) +
-                                   "; ", k, mass.get(i, ["", k, 0])[2] + lev_plase_cost_prizes[m]]
+                                   "р.; ", k, mass.get(i, ["", k, 0])[2] + lev_plase_cost_prizes[m]]
                         m += 1
 
             mas = DataUser.objects.order_by('-quantwin').values_list('log', 'quantwin', 'fik')[:win_days]
             m = 0
             for i, j, k in mas:
                 if j > 0:
-                    mass[i] = [mass.get(i, ["", k, 0])[0] + "TdWin-" + str(win_days_cost_prizes[m]) + "; ", k,
+                    mass[i] = [mass.get(i, ["", k, 0])[0] + "TDWin-" + str(win_days_cost_prizes[m]) + "р.; ", k,
                                mass.get(i, ["", k, 0])[2] + win_days_cost_prizes[m]]
                     m += 1
 
@@ -844,7 +842,7 @@ def reset(request):
             m = 0
             for i, j, k in mas:
                 if j > 0:
-                    mass[i] = [mass.get(i, ["", k, 0])[0] + "Td7Top-" + str(top7_days_cost_prizes[m]) + "; ", k,
+                    mass[i] = [mass.get(i, ["", k, 0])[0] + "TDTop7-" + str(top7_days_cost_prizes[m]) + "р.; ", k,
                                mass.get(i, ["", k, 0])[2] + top7_days_cost_prizes[m]]
                     m += 1
 
@@ -852,7 +850,7 @@ def reset(request):
             m = 0
             for i, j, k in mas:
                 if j > 0:
-                    mass[i] = [mass.get(i, ["", k, 0])[0] + "Balls-" + str(int(j/10 + .5)) + "; ", k,
+                    mass[i] = [mass.get(i, ["", k, 0])[0] + "Balls-" + str(int(j/10 + .5)) + "р.; ", k,
                                mass.get(i, ["", k, 0])[2] + int(j/10 + .5)]
                     m += 1
 
@@ -866,27 +864,31 @@ def reset(request):
                             # peoples_prize.append(r.fik)
                             du[8] += 1     # количество призерств
                             if n <= priz_place:
-                                mass[r.log] = [mass.get(r.log, ["", r.fik, 0])[0] + "ТОП-" + str(priz_place_cost_prizes[n-1]) + "; ", r.fik, mass.get(r.log, ["", r.fik, 0])[2] + priz_place_cost_prizes[n-1]]
+                                mass[r.log] = [mass.get(r.log, ["", r.fik, 0])[0]
+                                               + f'ТОП({n})-{priz_place_cost_prizes[n-1]}р; ',
+                                               r.fik, mass.get(r.log, ["", r.fik, 0])[2] + priz_place_cost_prizes[n-1]]
                         if n == 1: du[9] += 1     # количество чемпионств
                         du[10] += r.quantwin     # побед в днях во всех предыдущих сезонах
                         du[11] += r.quanttop     # ТОП-7 в днях во всех предыдущих сезонах
                         if du[12] == 0 or du[12] > n: du[12] = n   # Лучшее место в ТОПе
                         r.pole2 = "$".join(map(str, du))
                         r.res2 = (r.res2 // 10 + 1) * 10 + r.res2 % 10  # res2=диницы - системное, бОльшие разряды - кол-во сезонов.
-                    r.pole1 = '0$0$' + r.pole1.split('$')[2]       # обнуление pole1='запусоков в сезоне$пройдено в сезоне$запусокв всего'
-                    r.scores, r.scoresl1 = 0, 0
-                    r.scoresl2, r.scoresl3, r.scoresl4 = 0, 0, 0
-                    r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
-                    r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
-                    if request.session['reset_control'] == 1: print("УДАЛЯЯЯЯЕМ!!!")
-                    else: print("НЕЕЕЕЕЕ_УДАЛЯЯЯЯЕМ!!!")
-                    # r.save()
+                    if request.session['reset_control'] == 1:
+                        r.pole1 = '0$0$' + r.pole1.split('$')[2]       # обнуление pole1='запусоков в сезоне$пройдено в сезоне$запусокв всего'
+                        r.scores, r.scoresl1 = 0, 0
+                        r.scoresl2, r.scoresl3, r.scoresl4 = 0, 0, 0
+                        r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
+                        r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
+                        r.save()
             # sort_mass = sorted(mass.items(), key=lambda x: sum(map(int, x[1][0].split("$")[:-1])), reverse=True)  Шедевр для истории
             sort_mass = sorted(mass.items(), key=lambda x: x[1][2], reverse=True)
-            print(f'{sort_mass=}')
-            return render(request, 'jsprob/prizs.html', {'prizs': list(set(peoples_prize)), 'kon': request.session['reset_control']})
+            listmas = [j for i, j in sort_mass]
+            summ_pr = sum(list(zip(*listmas))[2])
+            return render(request, 'jsprob/prizs.html', {'prizs': dict(enumerate(listmas, start=1)),
+                                                         'kon': request.session['reset_control'],
+                                                         'sp': summ_pr})
             return redirect('home')
-    return render(request, 'jsprob/reset.html', {'kon': request.session['reset_control']})
+    return render(request, 'jsprob/reset.html')
 
 
 def begin(request):
