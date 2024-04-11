@@ -1,0 +1,320 @@
+{% extends 'jsprob/shabl.html' %}
+{% block title %} Уровень {{lv}} {% endblock %}
+{% block content %}
+
+    <div class="features">
+ <h1 style="font-style: italic" id = 'vy4'> Вычислите:  </h1>
+        <h2 style="font-style: italic; font-size: min(68px, 16vw);" id = 'prim'> </h2>
+        <h2 id = "err"> </h2>
+        <h3 id = "end1"> </h3>
+        <h3 id = "end2"> </h3>
+        <h3 style="font-style: italic" id = "end3"> </h3>
+        <button class="btn btn-success btn" style="margin-top: 50px;" id = 'butt'  onclick="Funcend()"> ПРОДОЛЖИТЬ </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn1' onclick="Func1()"> &nbsp;1&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn2' onclick="Func2()"> &nbsp;2&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn3' onclick="Func3()"> &nbsp;3&nbsp; </button></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn4' onclick="Func4()"> &nbsp;4&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn5' onclick="Func5()"> &nbsp;5&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn6' onclick="Func6()"> &nbsp;6&nbsp; </button></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn7' onclick="Func7()"> &nbsp;7&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn8' onclick="Func8()"> &nbsp;8&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn9' onclick="Func9()"> &nbsp;9&nbsp; </button></br>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btn0' onclick="Func0()"> &nbsp;0&nbsp; </button>
+        <button class="btn btn-success btn-lg" style="margin:15px 15px 15px 15px; font-size: 36px;" id='btnd' onclick="Funcd()"> &nbsp;<-&nbsp; </button></br>
+        <h2 style="font-style: italic" id = "prnpr"> </h2>
+        <h2 style="font-style: italic" id = "timer"> </h2>
+        <button class="btn btn-danger btn-sm" id='byni' onclick="Funcbr()"> ЗАВЕРШИТЬ! Итог. </button>
+<!--        <a href="{% url 'home' %}" id = "byni" class="btn btn-danger btn-sm"> ЗАВЕРШИТЬ! Перейти в главное меню. </a>-->
+
+    </div>
+
+    <script>
+        tas1 ={{tas1}};
+        tas2 ={{tas2}};
+        tasz ={{tasz}};
+        otv = {{otv}};
+        ti = {{ti}};
+        lv = {{lv}};
+        simv = ['+', '–', '•', ':'];
+        prim=-1;
+        kon = Number(localStorage.getItem('kontr'))+1;
+        localStorage.setItem('kontr', kon);
+        var na4 = new Date() - new Date(0)
+        document.getElementById('butt').style.display='none';
+        sh = localStorage.getItem('shifr').split('$');
+        ds = ti - (new Date() - new Date(0) - Number(na4));
+        fl2=0;
+        fl1=0;
+        fl3=0;
+        fl4=0;
+        tt=0;
+        kk=0;
+        po=0;
+        p0 = 0;
+        p1 = 0;
+        n = 0;
+        ot='';
+        function Func() {
+            if (lv == 1) {
+            ost = ti - (new Date() - new Date(0) - Number(na4));
+            } else {
+            ost = ti - (new Date() - new Date(0) - Number(na4)) - (ti/10-4000)*n;
+            }
+            if (Math.abs(ost-ds)>(ti/10 - 2000)) {
+            na4 = new Date() - new Date(0) + 200000;
+            alert('Контроль безопасности обнаружил смещение времени! Придется начать сначала!');
+            }
+            ds = ost;
+            if (kon!=lv || ost>ti)
+                {
+                if (typeof timerId !== 'undefined') {clearInterval(timerId);}
+                window.location.assign('12');
+                }
+            addEventListener("keyup", function(event) {kk=0;});
+            addEventListener("keydown", function(event) {
+                  if (event.keyCode>47 && event.keyCode<58 && event.keyCode!=kk)
+                     {fl1=1;
+                     ot = ot + String(event.keyCode-48);
+                     kk = event.keyCode;
+                     Funcnj();}
+                  if (event.keyCode>95 && event.keyCode<106 && event.keyCode!=kk)
+                     {fl1=1;
+                     ot = ot + String(event.keyCode-96);
+                     kk = event.keyCode;
+                     Funcnj();}
+                  if (event.keyCode==8 && kk!=8)
+                     {kk = 8;
+                     Funcd();}
+                  });
+            if (fl4==1 && tt==0) {
+                document.getElementById('byni').style.display='none';
+                document.getElementById('btn1').style.display='none';
+                document.getElementById('btn2').style.display='none';
+                document.getElementById('btn3').style.display='none';
+                document.getElementById('btn4').style.display='none';
+                document.getElementById('btn5').style.display='none';
+                document.getElementById('btn6').style.display='none';
+                document.getElementById('btn7').style.display='none';
+                document.getElementById('btn8').style.display='none';
+                document.getElementById('btn9').style.display='none';
+                document.getElementById('btn0').style.display='none';
+                document.getElementById('btnd').style.display='none';
+                document.getElementById('vy4').style.display='none';
+                document.getElementById('prim').style.display='none';
+                document.getElementById('prnpr').style.display='none';
+                document.getElementById('timer').style.display='none';
+                tt = new Date() - new Date(0);
+                if (po==2) {
+                document.getElementById('err').innerHTML = 'ОШИБКА';
+                document.getElementById('err').style.cssText = 'margin-top: 40px; font-style: italic; font-size: 62px; color: red;';
+
+                razm = Math.floor(1100 / (pr.length + ot.length + 1))/10;
+                fs = 'font-size: min(64px, ' + razm + 'vw)';
+                document.getElementById('end1').innerHTML = pr + '≠' + ot;
+                document.getElementById('end1').style.cssText = 'font-style: italic; ' + fs + '; color: red'
+
+                razm = Math.floor(1400 / (pr.length + String(sr).length + 1))/10;
+                fs = 'font-size: min(76px, ' + razm + 'vw)';
+                document.getElementById('end2').innerHTML = pr + '=' + sr;
+                document.getElementById('end2').style.cssText = 'font-style: italic; ' + fs + '; color: blue'
+                }
+                if (po==1) {
+                document.getElementById('err').innerHTML = 'НЕВЕРНО';
+                document.getElementById('err').style.cssText = 'margin-top: 120px; font-style: italic; font-size: 62px; color: red;';
+                ot='';}
+                }
+
+            if (ost<=0 && fl3==0 || prim>=10 && fl3==0)  {
+                if (ost<0) {ost=0}
+                Funcend();
+                }
+
+            if (fl4==1 && new Date() - new Date(0) - Number(tt) > (2000*po - 1000)) {
+                document.getElementById('byni').style.display='';
+                document.getElementById('btn1').style.display='';
+                document.getElementById('btn2').style.display='';
+                document.getElementById('btn3').style.display='';
+                document.getElementById('btn4').style.display='';
+                document.getElementById('btn5').style.display='';
+                document.getElementById('btn6').style.display='';
+                document.getElementById('btn7').style.display='';
+                document.getElementById('btn8').style.display='';
+                document.getElementById('btn9').style.display='';
+                document.getElementById('btn0').style.display='';
+                document.getElementById('btnd').style.display='';
+                document.getElementById('vy4').style.display='';
+                document.getElementById('prim').style.display='';
+                document.getElementById('prnpr').style.display='';
+                document.getElementById('timer').style.display='';
+                document.getElementById('err').innerHTML = '';
+                document.getElementById('end1').innerHTML = '';
+                document.getElementById('end2').innerHTML = '';
+                document.getElementById('err').style.cssText = 'margin-top:0px;';
+                fl4=0;
+                tt=0;
+                fl3=0;
+                ot='';
+                if (po==2) {po=0;}
+                }
+
+            if (fl3==0) {
+            document.getElementById('timer').innerHTML = Math.floor(ost/1000);
+            if (fl2==0) {
+                prim++;
+                koefd = Number(sh[(lv - 1) * 10 + prim]);
+                ot='';
+                document.getElementById('prim').style.cssText = '-ms-user-select: none; -moz-user-select: none; -webkit-user-select: none; user-select: none; font-style: italic; font-size: min(68px, 16vw);';
+                pr=(tas1[prim] - prim**2 - otv + koefd) + simv[tasz[prim]]+tas2[prim];
+                document.getElementById('prim').innerHTML = pr + '=';
+                fl2=1;}
+            if (fl1==1) {
+                document.getElementById('prim').innerHTML = pr + '=' + ot;
+                fl1=0;
+                }
+                    }
+                    }
+
+        function Funcnj() {
+            if (lv < 4) {
+            if (prim<5) {sr = tas1[prim] - prim**2 + koefd - otv + tas2[prim];}
+            else {sr = tas1[prim] - prim**2 - otv + koefd - tas2[prim]}
+            }
+            if (lv == 4) {sr = (tas1[prim] - prim**2 - otv + koefd) * (tas2[prim]);}
+            if (lv == 5) {sr = (tas1[prim] - prim**2 - otv + koefd) / (tas2[prim]);}
+            if (ot.length == String(sr).length) {
+                if (ot == sr) {
+                fl2 = 0;
+                if (po==0) p0++;
+                if (po==1) p1++;
+                if (prim==9) Funcend();
+                po = 0;
+                }
+                else {
+                    if (po==1){
+                        fl2 = 0;
+                        n++;}
+                    fl4=1;
+                    fl3=1;
+                    po++;
+                }
+                //document.getElementById('prnpr').innerHTML = 'Верных ответов: '+ p0 + p1 + ', <br> из них безошибочных: ' + p0 + '<br> двойных ошибок: ' + n;
+                //fl2 = 0;
+                    }
+            else {document.getElementById('prim').innerHTML = pr + ot;}
+                }
+
+        function Funcbr() {
+            document.getElementById('byni').style.display='none';
+            document.cookie = "totsummb=" + localStorage.getItem('lvl1') + '(#)$)'
+             + localStorage.getItem('lvl2') + '(#)$)' + localStorage.getItem('lvl3') + '(#)$)'
+              + localStorage.getItem('lvl4') + '(#)$)' + localStorage.getItem('lvl5') + '(#)$)'
+              + localStorage.getItem('lvl6') + '(#)$)'
+             + localStorage.getItem('pravresh') + '(#)$)' + localStorage.getItem('bezosh');
+            localStorage.setItem('key1', 0);
+            clearInterval(timerId);
+            window.location.assign('13');
+            }
+
+        function Func1() {
+            fl1=1;
+            ot = ot + '1'
+            Funcnj();
+            }
+
+        function Func2() {
+            fl1=1;
+            ot = ot + '2'
+            Funcnj();
+            }
+
+        function Func3() {
+            fl1=1;
+            ot = ot + '3'
+            Funcnj();
+            }
+
+        function Func4() {
+            fl1=1;
+            ot = ot + '4'
+            Funcnj();
+            }
+
+        function Func5() {
+            fl1=1;
+            ot = ot + '5'
+            Funcnj();
+            }
+
+        function Func6() {
+            fl1=1;
+            ot = ot + '6'
+            Funcnj();
+            }
+
+        function Func7() {
+            fl1=1;
+            ot = ot + '7'
+            Funcnj();
+            }
+
+        function Func8() {
+            fl1=1;
+            ot = ot + '8'
+            Funcnj();
+            }
+
+        function Func9() {
+            fl1=1;
+            ot = ot + '9'
+            Funcnj();
+            }
+
+        function Func0() {
+            fl1=1;
+            ot = ot + '0';
+            Funcnj();
+            }
+
+        function Funcd() {
+            fl1=1;
+            if (ot.length == 1) {ot = '';}
+            if (ot.length > 1)   {ot = ot.substring(0, ot.length - 1);}
+            console.log(ot);
+            Funcnj();
+            }
+
+        function Funcend() {
+            document.getElementById('byni').style.display='none';
+            document.getElementById('btn1').style.display='none';
+            document.getElementById('btn2').style.display='none';
+            document.getElementById('btn3').style.display='none';
+            document.getElementById('btn4').style.display='none';
+            document.getElementById('btn5').style.display='none';
+            document.getElementById('btn6').style.display='none';
+            document.getElementById('btn7').style.display='none';
+            document.getElementById('btn8').style.display='none';
+            document.getElementById('btn9').style.display='none';
+            document.getElementById('btn0').style.display='none';
+            document.getElementById('btnd').style.display='none';
+            document.getElementById('vy4').style.display='none';
+            document.getElementById('prim').style.display='';
+            document.getElementById('prnpr').style.display='none';
+            document.getElementById('timer').style.display='none';
+            document.getElementById('prim').innerHTML = 'ЭТАП ЗАВЕРШЕН!'
+            document.getElementById('prim').style.cssText = 'margin-top:50px;';
+            localStorage.setItem('totsum', Number(localStorage.getItem('totsum'))+ost);
+            localStorage.setItem('pravresh', Number(localStorage.getItem('pravresh'))+p1);
+            localStorage.setItem('bezosh', Number(localStorage.getItem('bezosh'))+p0);
+            localStorage.setItem('lvl' + lv, ost);
+            document.cookie = "lelrec15=" +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = "lelrec15=" + lv + '$' + ost + '$' + (p0 + p1) + '$' + p0;
+            clearInterval(timerId);
+            window.location.assign('itoglv');
+              }
+        Func();
+        timerId = setInterval(() => Func(), 10);
+
+        //document.getElementById('mas').innerHTML=mas[1][2]
+
+    </script>
+{% endblock %}

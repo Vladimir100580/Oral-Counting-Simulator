@@ -11,7 +11,7 @@
     <div class="features">
          <form action="" method="get">
             {% csrf_token %}
-        <h4> <input type="text" id="inpu0" name="lg" placeholder='Уникальный Логин' maxlength="30"  size="20"> </h4>
+        <h4> <input type="text" id="inpu0" name="lg" placeholder='Придумайте Логин' maxlength="30"  size="20"> </h4>
         <h4> <input type="text" id="inpu1" name="fam" placeholder='Ваша Фамилия' maxlength="25"  size="20"> </h4>
         <h4> <input type="text" id="inpu2" name="name" placeholder='Ваше Имя' maxlength="25"  size="20"> </h4>
         <h4> <input type="text" id="inpu3" name="kl" placeholder='Ваш класс (или отчество)' maxlength="25"  size="20"> </h4>
@@ -20,9 +20,10 @@
              <h4 style="font-style: italic; font-size: min(32px, 4vw);"> Если введенный логин уже будет в базе данных, придется заполнить форму заново. </h4>
 <!--             <h4 style="font-style: italic; font-size: min(27px, 3.5vw);"> Для участия в турнире вместо литеры класса укажите: 'НМ' (Например: PPert6Beta, Петров, Пётр, 6НМ) </h4> </h4>-->
              <h4 style="font-style: italic; font-size: min(25px, 3.2vw);"> В ТОП таблице будут указаны Ваши ФИК (или ФИО)) </h4>
+             <h4 style="font-style: italic; font-size: min(25px, 3.2vw);"> Внимание! Нажимая на "ПОДТВЕРДИТЬ" Вы даете согласие на обработку сайтом введенных персональных данных. </h4>
         <h4 id = 'wait0'> </h4>
         </br>
-        <button class="btn btn-success btn" style="font-size: min(25px, 3vw);" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ВВЕСТИ </button></br></br>
+        <button class="btn btn-success btn" style="font-size: min(25px, 3vw);" id = 'butt1' type="submit" name="intlg" onclick="Func()"> ПОДТВЕРДИТЬ </button></br></br>
         <a href="{% url 'home' %}" style="font-size: min(25px, 3vw);" id = 'butt2' class="btn btn-success btn-sm"> Начальное меню </a></br></br>
 
     </form>

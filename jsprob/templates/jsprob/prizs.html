@@ -9,10 +9,10 @@
     <div class="features">
 
         {% for k, v in prizs.items %}
-              <h6 class='st1' style='color: #AD1457'> {{k}} </h6>
-              <h6 class='st2'style='color: #AD1457'> {{v.1}} </h6>
-              <h6 class='st3' style='color: #AD1457'> {{v.2}}руб. </h6>
-              <h6 class='st4' style='color: #AD1457'> {{v.0}} </h6>
+              <h6 class='st1' style='line-height: 12px; font-style: italic;'> {{k}}) </h6>
+              <h6 class='st2'style='line-height: 12px; font-style: italic;'> {{v.1}} </h6>
+              <h6 class='st3' style='line-height: 12px; font-style: italic;'> {{v.2}} руб. </h6>
+              <h6 class='st4' style='line-height: 12px; font-style: italic;'> {{v.0}} </h6>
 
         {% endfor %}
         <div style="clear: left"></div>
@@ -27,12 +27,12 @@
   <style>
    .st1 {
     float: left;
-    width: 4%;
+    width: 3%;
     text-align: left;
    }
    .st2 {
     float: left;
-    width: 25%;
+    width: 20%;
     text-align: left;
    }
    .st3 {
@@ -42,7 +42,7 @@
    }
    .st4 {
     float: left;
-    width: 63%;
+    width: 69%;
     text-align: left;
    }
      </style>

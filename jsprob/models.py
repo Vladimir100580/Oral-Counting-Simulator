@@ -18,11 +18,15 @@ class DataUser(models.Model):
     poptd = models.IntegerField('Поп сег', default=0)
     res1 = models.IntegerField('РезЦел1', default=0)
     res2 = models.IntegerField('РезЦел2', default=0)
+    res3 = models.IntegerField('РезЦел3', default=0)
+    res4 = models.IntegerField('РезЦел4', default=0)
     scorTD = models.IntegerField('Очки TD', default=0)
     quantwin = models.IntegerField('Побед дня', default=0)
     quanttop = models.IntegerField('TOPы7 дня', default=0)
     pole1 = models.CharField('Поле1', max_length=200, default='0')
     pole2 = models.CharField('Поле2', max_length=200, default='0')
+    pole3 = models.CharField('Поле3', max_length=200, default='0')
+    pole4 = models.CharField('Поле4', max_length=200, default='0')
 
 
     def __str__(self):
