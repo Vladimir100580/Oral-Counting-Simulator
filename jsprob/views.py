@@ -76,15 +76,24 @@ def hello(request):
                     'Вы вошли в ТРОЙКУ СИЛЬНЕЙШИХ!', f'Вы вошли в семерку сильнейших ({plase} место).',
                     f'Вы вошли в дюжину сильнейших ({plase} место).',
                     f'Вы заняли {plase} место.'][min(plase - 1, max(3, min(4 + int((plase/13 + 2) / 3), plase - 4)))]
-            # костыль!!!
-            if len(lu) > 2:
+            # костыль!!! (убрать в новом сезоне)
+            if len(lu) > 3:
                 llu = int(lu[2])
+                reduct = float(lu[3])
+            elif len(lu) == 3:
+                llu = int(lu[2])
+                reduct = 1
             else:
                 arr_balls = [60, 57, 54, 51, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28,
                              26, 24, 22, 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
                 llu = arr_balls[plase - 1]
+                reduct = 1
+            # if reduct != 1:
+            #     txt_r = f' (ПК: {reduct})'
+            # else: txt_r = ''
+            txt_r = '' if reduct == 1 else f' (ПК: {reduct})'
             t = OrfKras(llu, ["накопительных баллов", "накопительных балла", "накопительный балл"])
-            txt3 = f'И получили {llu} {t}.'
+            txt3 = f'И получили {llu} {t}{txt_r}.'
             if plase == 1:
                 kub0 = "1"
                 wi = 400
@@ -101,7 +110,14 @@ def hello(request):
             userAkt.last_name = ''
             userAkt.save()
             return render(request, 'jsprob/congratul.html',
-                          {'con': txcon, 'pl': plase, 'tx1': txst, 'tx2': txt2, 'tx3': txt3, 'kub':kub, 'wi': wi})
+                          {'con': txcon,
+                           'pl': plase,
+                           'tx1': txst,
+                           'tx2': txt2,
+                           'tx3': txt3,
+                           'kub':kub,
+                           'wi': wi,
+                           })
     else:
         nm = ''
         fl = 0
@@ -213,9 +229,10 @@ def dayend():
             kar = DataUser.objects.get(id=p[0])
             uss7 = User.objects.get(username=kar.log)
             nn += 1
-            # print(f'{masd33[0][2] = }  {p[2] = }')
+            print(f'{masd33[0][2] = }  {p[2] = }')
             koef = 1.15 ** (masd33[0][2] / p[2] - 1)
-            # print(f'{koef = }  {nn = }  {arr_balls[nn] = } {round(arr_balls[nn] / koef) = }')
+            koef_r = round(1 / koef, 2)
+            print(f'{koef = }  {nn = }  {arr_balls[nn] = } {round(arr_balls[nn] / koef) = }')
             uss7.last_name = str(nn) + '$' + str(datn)
             if nn < 8:
                 kar.quanttop = kar.quanttop + 1
@@ -233,7 +250,7 @@ def dayend():
                 Indexs.objects.filter(id=1).update(pole1=p1)
             kar.scorTD = 0
             kar.scoresl7 = kar.scoresl7 + arr_balls[nn - 1] + kar.res3   # Искуственное индивидульное поощрение
-            uss7.last_name += '$' + str(arr_balls[nn - 1] + kar.res3)
+            uss7.last_name += '$' + str(arr_balls[nn - 1] + kar.res3) + '$' + str(koef_r)
             kar.res3 = 0
             kar.save()
             uss7.save()
