@@ -1,10 +1,11 @@
 from random import randint
-
-li = [['Jason', 10], ['John', 2], ['Jim', 9]]
-print(sorted(li, key=lambda x: x[1]))
-
-
-
+import time, datetime
+nn = 5
+# li = [['Jason', 10], ['John', 2], ['Jim', 9]]
+# print(sorted(li, key=lambda x: x[1]))
+datn = datetime.date.today()
+o = '$'.join(map(str, (nn, datn, round(23.56) + 5, 23)))
+print(o)
 # k = 0
 # mas = [4,5,8,6,3]
 # print(mas[:k])

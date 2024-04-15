@@ -27,3 +27,8 @@ urlpatterns = [
     path('unification', views.unification, name='unification'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
 ]
+
+
+
+
+

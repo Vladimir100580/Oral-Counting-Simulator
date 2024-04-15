@@ -1,4 +1,5 @@
 import time, datetime, re
+import copy
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from random import randint
@@ -84,8 +85,8 @@ def hello(request):
                 llu = int(lu[2])
                 reduct = 1
             else:
-                arr_balls = [60, 57, 54, 51, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28,
-                             26, 24, 22, 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+                arr_balls = [77, 73, 69, 65, 61, 57, 53, 49, 45, 43, 41, 39, 37, 35, 33, 31,
+                             29, 27, 25, 23, 21, 19, 17, 15, 14, 18, 16, 14, 12, 10, 9, 8, 7]
                 llu = arr_balls[plase - 1]
                 reduct = 1
             # if reduct != 1:
@@ -222,18 +223,15 @@ def dayend():
         dat.save(update_fields=['curdate'])
         masd = DataUser.objects.order_by('-scorTD').filter(scorTD__gt=0).values_list('id', 'fik', 'scorTD')
         masd33 = masd[:min(33, len(masd))]
-        arr_balls = [60, 57, 54, 51, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28,
-                     26, 24, 22, 20, 18, 16, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        arr_balls = [77, 73, 69, 65, 61, 57, 53, 49, 45, 43, 41, 39, 37, 35, 33, 31,
+                     29, 27, 25, 23, 21, 19, 17, 15, 14, 18, 16, 14, 12, 10, 9, 8, 7]
         nn = 0
         for p in masd33:
             kar = DataUser.objects.get(id=p[0])
             uss7 = User.objects.get(username=kar.log)
             nn += 1
-            print(f'{masd33[0][2] = }  {p[2] = }')
             koef = 1.15 ** (masd33[0][2] / p[2] - 1)
             koef_r = round(1 / koef, 2)
-            print(f'{koef = }  {nn = }  {arr_balls[nn] = } {round(arr_balls[nn] / koef) = }')
-            uss7.last_name = str(nn) + '$' + str(datn)
             if nn < 8:
                 kar.quanttop = kar.quanttop + 1
             if p == masd33[0]:
@@ -249,17 +247,23 @@ def dayend():
                         p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')' + '@%>$' + '@%>$'.join(p1)
                 Indexs.objects.filter(id=1).update(pole1=p1)
             kar.scorTD = 0
-            kar.scoresl7 = kar.scoresl7 + arr_balls[nn - 1] + kar.res3   # Искуственное индивидульное поощрение
-            uss7.last_name += '$' + str(arr_balls[nn - 1] + kar.res3) + '$' + str(koef_r)
+            uss7.last_name = '$'.join(map(str, (nn, datn, round(arr_balls[nn-1] * koef_r) + kar.res3, koef_r)))
+            kar.scoresl7 = kar.scoresl7 + round(arr_balls[nn-1] * koef_r) + kar.res3   # Искуственное индивидульное поощрение
             kar.res3 = 0
             kar.save()
             uss7.save()
+
+        objs1 = []
         for p in DataUser.objects.filter(scorTD__gt=0):
             p.scorTD = 0
-            p.save(update_fields=['scorTD'])
+            objs1.append(p)
+        DataUser.objects.bulk_update(objs1, ['scorTD'])
+
+        objs2 = []
         for p in DataUser.objects.filter(poptd__gt=0):
             p.poptd = 0
-            p.save(update_fields=['poptd'])
+            objs2.append(p)
+        DataUser.objects.bulk_update(objs2, ['poptd'])
 
 
 def progress(request):
@@ -826,12 +830,12 @@ def reset(request):
     if (request.user.is_superuser) != True: return redirect('home')
     request.session['reset_control'] = 0
     if request.method == 'GET':
-        lev_plase_cost_prizes = [100, 80, 60, 40, 20]  # призы в отдельных этапах
+        lev_plase_cost_prizes = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5]  # призы в отдельных этапах
         win_days_cost_prizes = [200, 200, 100, 100, 100, 100, 100] # призы за победы в днях
         # призы за вхождения в ТОП7 в днях
         top7_days_cost_prizes = [200, 200, 200, 150, 150, 150, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
         # призы общем ТОПе сезона
-        priz_place_cost_prizes = [300, 200, 200, 150, 150, 150, 150, 100, 100, 100, 100, 100, 50, 50, 50, 50, 50, 50, 50, 50]
+        priz_place_cost_prizes = [200, 180, 160, 140, 120, 100, 90,	80,	70,	60,	50,	40,	30,	20,	10]
         answer = request.GET
         if 'res' in answer or 'prpr' in answer:
             if 'res' in answer:
@@ -891,10 +895,31 @@ def reset(request):
             m = 0
             for i, j, k in mas:
                 if j > 0:
+
                     mass[i] = [mass.get(i, ["", k, 0])[0] + "Balls-" + str(int(j/10 + .5)) + "р.; ", k,
                                mass.get(i, ["", k, 0])[2] + int(j/10 + .5)]
                     m += 1
 
+            # start0 = time.time()
+            # objs = []
+            # for r in DataUser.objects.order_by('-scores'):
+            #     if r.pk % 2 == 0:
+            #         r.scoresl6 -= 25
+            #         r.scoresl7 -= 25
+            #         objs.append(r)
+            # DataUser.objects.bulk_update(objs, ["scoresl6", "scoresl7"])
+            # print('DataUser_time', time.time() - start0)   # 0.49 сек
+
+            # start0 = time.time()
+            # objs = []
+            # for us in User.objects.all():
+            #     # us.last_name += 'ku'
+            #     us.last_name = us.last_name[:-2]
+            #     objs.append(us)
+            # User.objects.bulk_update(objs, ["last_name"])
+            # print('User_time', time.time() - start0)  # 0.32 сек
+
+            objs = []
             for r in DataUser.objects.order_by('-scores'):
                 if r.id > 12:
                     if r.scores != 0:
@@ -920,18 +945,37 @@ def reset(request):
                         r.scoresl2, r.scoresl3, r.scoresl4 = 0, 0, 0
                         r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
                         r.scorTD, r.quantwin, r.quanttop = 0, 0, 0
-                        r.save()
-                        for us in User.objects.all():
-                            if us.last_name != '':
-                                us.last_name = ''
-                                us.save()
+                        objs.append(r)
+            if request.session['reset_control'] == 1:
+                DataUser.objects.bulk_update(objs, ["pole2", "res2", "pole1", "scores", "scoresl1",
+                                                    "scoresl2", "scoresl3", "scoresl4",
+                                                    "scoresl5", "scoresl6", "scoresl7",
+                                                    "scorTD", "quantwin", "quanttop"])
+                objsu = []
+                for us in User.objects.exclude(last_name='').exclude(last_name=None):
+                    us.last_name = ''
+                    objsu.append(us)
+                User.objects.bulk_update(objsu, ["last_name"])
+
             # sort_mass = sorted(mass.items(), key=lambda x: sum(map(int, x[1][0].split("$")[:-1])), reverse=True)  Шедевр для истории
             sort_mass = sorted(mass.items(), key=lambda x: x[1][2], reverse=True)
+            sort_mass1 = copy.deepcopy(sort_mass)
+            i = 0
+            while i < len(sort_mass1):
+                if sort_mass1[i][1][2] >= 10:
+                    sort_mass1[i][1][2] = round(sort_mass1[i][1][2] / 10) * 10
+                    i += 1
+                else:
+                    sort_mass1.pop(i)
             listmas = [j for i, j in sort_mass]
+            listmas1 = [j for i, j in sort_mass1]
             summ_pr = sum(list(zip(*listmas))[2])
+            summ_pr1 = sum(list(zip(*listmas1))[2])
             return render(request, 'jsprob/prizs.html', {'prizs': dict(enumerate(listmas, start=1)),
+                                                         'prizs1': dict(enumerate(listmas1, start=1)),
                                                          'kon': request.session['reset_control'],
-                                                         'sp': summ_pr})
+                                                         'sp': summ_pr,
+                                                         'sp1': summ_pr1})
             return redirect('home')
     return render(request, 'jsprob/reset.html')
 
@@ -1219,6 +1263,7 @@ def unification(request):
     return render(request, 'jsprob/unification.html')
 
 class Examples:
+    """ generator of examples for each stage """
     def __init__(self, rab, mm, request):
         otvs = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
         tasks = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
@@ -1467,7 +1512,6 @@ class Examples:
                             tasks[z][r] = str(a + b) + '–' + str(a) + '='
                             otvs[z][r] = str(b)
                             break
-
             if mm == 30:
                 # умножение на 10n
                 provsov = [[0] * 2 for i in range(11)]
