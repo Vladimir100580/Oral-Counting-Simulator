@@ -75,20 +75,6 @@ WSGI_APPLICATION = 'Ustn.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'vovar3573_us',
-#         'USER': 'vovar3573_us',
-#         'PASSWORD': 'LordOnlyus4',
-#         'HOST': 'vovar3573.beget.tech',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         }
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
