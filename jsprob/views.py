@@ -8,6 +8,16 @@ from django.contrib.auth import authenticate, login
 from django.conf import settings
 from django.core.mail import send_mail
 
+PRIZ_PLACE_COST_PRIZES = [200, 180, 160, 140, 120, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10]  # Призы в общем ТОПе сезона
+LEV_PLASE_COST_PRIZES = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5]  # Призы в отдельных этапах
+# TOP7_DAYS_COST_PRIZES = [200, 200, 200, 150, 150, 150, 100, 100, 100, 100, 100,
+#                                  100, 100, 100, 100, 100, 100, 100]  # Призы за вхождения в ТОП7 в днях
+# WIN_DAYS_COST_PRIZES = [200, 200, 100, 100, 100, 100, 100]  # Призы за макс. кол-во побед в отдельных днях
+ARR_BALLS = [77, 73, 69, 65, 61, 57, 53, 49, 45, 43, 41, 39, 37, 35, 33, 31,
+             29, 27, 25, 23, 21, 19, 17, 15, 14, 18, 16, 14, 12, 10, 9, 8, 7]  # Накопительные баллы
+TI_MASS = [50000, 100000, 120000, 150000, 130000, 180000]
+DECLENSIONS = ["очков", "очка", "очко"]
+
 
 def hello(request):
     """ Welcome home page.
@@ -29,13 +39,13 @@ def hello(request):
             plase = int(lu[0])
             datn = datetime.date.today()
             deltaday = (datn - datetime.datetime.strptime(lu[1], "%Y-%m-%d").date()).days
-            txcon = 'ПОЗДРАВЛЯЕМ' + '!' * max(1, (8-plase))
+            txcon = 'ПОЗДРАВЛЯЕМ' + '!' * max(1, (8 - plase))
             txst = ['В ТОП-е вчерашнего дня', 'В позавчерашнем ТОП-е',
-                    'В ТОП-е дня Вашего последнего посещения игры (' + lu[1] + ')'][min(deltaday,2)]
-            txt2 = [['Вы стали ЧЕМПИОНОМ!!!', 'Вы заняли ПЕРВОЕ МЕСТО!!!'][randint(0,1)], 'Вы заняли ВТОРОЕ МЕСТО!!',
+                    'В ТОП-е дня Вашего последнего посещения игры (' + lu[1] + ')'][min(deltaday, 2)]
+            txt2 = [['Вы стали ЧЕМПИОНОМ!!!', 'Вы заняли ПЕРВОЕ МЕСТО!!!'][randint(0, 1)], 'Вы заняли ВТОРОЕ МЕСТО!!',
                     'Вы вошли в ТРОЙКУ СИЛЬНЕЙШИХ!', f'Вы вошли в семерку сильнейших ({plase} место).',
                     f'Вы вошли в дюжину сильнейших ({plase} место).',
-                    f'Вы заняли {plase} место.'][min(plase - 1, max(3, min(4 + int((plase/13 + 2) / 3), plase - 4)))]
+                    f'Вы заняли {plase} место.'][min(plase - 1, max(3, min(4 + int((plase / 13 + 2) / 3), plase - 4)))]
             # костыль!!! (убрать в новом сезоне)
             if len(lu) > 3:
                 llu = int(lu[2])
@@ -58,7 +68,7 @@ def hello(request):
             if 7 < plase < 34:
                 kub0 = "rukop"
                 wi = 400 - 10 * plase
-            kub = 'jsprob/img/' + kub0 +  '.png'
+            kub = 'jsprob/img/' + kub0 + '.png'
             userAkt.last_name = ''
             userAkt.save()
             return render(request, 'jsprob/congratul.html',
@@ -67,7 +77,7 @@ def hello(request):
                            'tx1': txst,
                            'tx2': txt2,
                            'tx3': txt3,
-                           'kub':kub,
+                           'kub': kub,
                            'wi': wi,
                            })
     else:
@@ -106,7 +116,7 @@ def hello(request):
         else:
             return render(request, 'jsprob/nezar.html')
     return render(request, 'jsprob/index.html', {'nm': nm, 'fl': fl, 'fl0': fl0, 'fl1': fl1,
-                                                'p1': p1, 'prit': prit, 'st': st})
+                                                 'p1': p1, 'prit': prit, 'st': st})
 
 
 def regist(request):
@@ -130,13 +140,14 @@ def regist(request):
                 request.session['fik_contr_us'] = f + '$#$%' + n + '$#$%' + k
                 return render(request, 'jsprob/ujuse.html')
             else:
-                DataUser(log=lg, scores=0, pop=0, fik=f + ' ' + n + ' ' + k, pole1='0$0$0', pole2='0$'*13+'0').save()
+                DataUser(log=lg, scores=0, pop=0, fik=f + ' ' + n + ' ' + k, pole1='0$0$0',
+                         pole2='0$' * 13 + '0').save()
                 user = User.objects.create_user(lg, '', '4591423', first_name=f + '$#$%' + n + '$#$%' + k)
                 user.save()
                 user = authenticate(request, username=lg, password='4591423')
                 login(request, user)
                 return render(request, 'jsprob/uspreg.html')
-    return render(request, 'jsprob/registr.html', {"ph0":ph0, "ph1":ph1, "ph2":ph2})
+    return render(request, 'jsprob/registr.html', {"ph0": ph0, "ph1": ph1, "ph2": ph2})
 
 
 def changefik(request):
@@ -165,21 +176,19 @@ def changefik(request):
             user.save()
             DataUser.objects.filter(log=usna).update(fik=f + ' ' + n + ' ' + k)
             return redirect('home')
-    return render(request, 'jsprob/changefik.html', {"ph0":ph0, "ph1":ph1, "ph2":ph2})
+    return render(request, 'jsprob/changefik.html', {"ph0": ph0, "ph1": ph1, "ph2": ph2})
 
 
 def dayend():
     """ Processing data from the past day. Formation of results. """
     dat = Indexs.objects.get(id=1)
-    datn = datetime.date.today()                        # datetime.datetime.now()
+    datn = datetime.date.today()  # datetime.datetime.now()
     if dat.curdate != datn:
         lastday = dat.curdate
         dat.curdate = datn
         dat.save(update_fields=['curdate'])
         masd = DataUser.objects.order_by('-scorTD').filter(scorTD__gt=0).values_list('id', 'fik', 'scorTD')
         masd33 = masd[:min(33, len(masd))]
-        arr_balls = [77, 73, 69, 65, 61, 57, 53, 49, 45, 43, 41, 39, 37, 35, 33, 31,
-                     29, 27, 25, 23, 21, 19, 17, 15, 14, 18, 16, 14, 12, 10, 9, 8, 7]
         nn = 0
         for p in masd33:
             kar = DataUser.objects.get(id=p[0])
@@ -199,11 +208,13 @@ def dayend():
                     if p1 == ['0']:
                         p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')'
                     else:
-                        p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')' + '@%>$' + '@%>$'.join(p1)
+                        p1 = lastday.strftime('%d.%m.%Y') + ': ' + p[1] + ' (' + str(p[2]) + ')' + '@%>$' + '@%>$'.join(
+                            p1)
                 Indexs.objects.filter(id=1).update(pole1=p1)
             kar.scorTD = 0
-            uss7.last_name = '$'.join(map(str, (nn, datn, round(arr_balls[nn-1] * koef_r) + kar.res3, koef_r)))
-            kar.scoresl7 = kar.scoresl7 + round(arr_balls[nn-1] * koef_r) + kar.res3   # Искуственное индивидульное поощрение
+            uss7.last_name = '$'.join(map(str, (nn, datn, round(ARR_BALLS[nn - 1] * koef_r) + kar.res3, koef_r)))
+            kar.scoresl7 = kar.scoresl7 + round(
+                ARR_BALLS[nn - 1] * koef_r) + kar.res3  # Искуственное индивидульное поощрение
             kar.res3 = 0
             kar.save()
             uss7.save()
@@ -228,7 +239,7 @@ def progress(request):
     if (usna is None) or (usna == ''):
         return redirect('home')
     kar = DataUser.objects.get(log=usna)
-    fl1 = kar.res2//10   # Количество предыдущих сезонов
+    fl1 = kar.res2 // 10  # Количество предыдущих сезонов
     popt = kar.pop
     if popt < 1: return render(request, 'jsprob/gogo.html')
     scl = []
@@ -242,7 +253,7 @@ def progress(request):
     na4pops = int(float(kar.pole1.split('$')[0]))  # начато игр в сезоне
     popsez = int(float(kar.pole1.split('$')[1]))  # проёдено игр в сезоне
     na4popt = int(float(kar.pole1.split('$')[2]))  # начато игр за все время
-    sk1 = ["очков", "очка", "очко"]
+    sk1 = DECLENSIONS
     if kar.scorTD != 0:
         sctd = str(kar.scorTD) + OrfKras(
             kar.scorTD, sk1) + ' (' + str(len(DataUser.objects.filter(scorTD__gt=kar.scorTD)) + 1) + ' место)'
@@ -289,28 +300,28 @@ def progress(request):
         # print(MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']))
         poll = kar.pole2.split('$')[7:]
         data1 = {
-        'pot' : kar.bezosh * 100 + sum(map(int, kar.pole2.split('$')[0:6])),
-        'pol2': list(enumerate(kar.pole2.split('$')[0:6], 1)),
-        'quantwint': kar.quantwin + int(poll[3]),
-        'quantwint1': OrfKras(kar.quantwin + int(poll[3]), sk),
-        'quanttopt': kar.quanttop + int(poll[4]),
-        'quanttopt1': OrfKras(kar.quanttop + int(poll[4]), sk),
-        'sezquan': poll[0],
-        'sezquan1': OrfKras(int(poll[0]), ["сезонах", "сезонах", "сезоне"]),
-        'bestpoz': poll[5],
-        'winsez': poll[2],
-        'winsez1': OrfKras(int(poll[2]), sk),
-        'prizersez': poll[1],
-        'prizersez1': OrfKras(int(poll[1]), sk),
+            'pot': kar.bezosh * 100 + sum(map(int, kar.pole2.split('$')[0:6])),
+            'pol2': list(enumerate(kar.pole2.split('$')[0:6], 1)),
+            'quantwint': kar.quantwin + int(poll[3]),
+            'quantwint1': OrfKras(kar.quantwin + int(poll[3]), sk),
+            'quanttopt': kar.quanttop + int(poll[4]),
+            'quanttopt1': OrfKras(kar.quanttop + int(poll[4]), sk),
+            'sezquan': poll[0],
+            'sezquan1': OrfKras(int(poll[0]), ["сезонах", "сезонах", "сезоне"]),
+            'bestpoz': poll[5],
+            'winsez': poll[2],
+            'winsez1': OrfKras(int(poll[2]), sk),
+            'prizersez': poll[1],
+            'prizersez1': OrfKras(int(poll[1]), sk),
         }
         data.update(data1)
         return render(request, 'jsprob/progress1.html', data)
 
 
-def OrfKras(n, l):  #k5, k23, k31 склоняем по количеству в списке l
+def OrfKras(n, l):  # k5, k23, k31 склоняем по количеству в списке l
     """ Generating correct word endings. """
     t = ' ' + l[0]
-    if (n // 10) % 10 != 1:    # например: пять
+    if (n // 10) % 10 != 1:  # например: пять
         if n % 10 == 2 or n % 10 == 3 or n % 10 == 4: t = ' ' + l[1]  # например 22
         if n % 10 == 1: t = ' ' + l[2]  # например 31
     return t
@@ -330,10 +341,11 @@ def itog(request):
     tx = ['неплохо', 'весьма неплохо', 'довольно хорошо', 'очень хорошо',
           'прекрасно', 'просто превосходно'][min(sum // 120000, 5)]
     tt = DataUser.objects.get(log=usna)
-    if tt.res2%10 == 0:
+    if tt.res2 % 10 == 0:
         tt.pop = tt.pop + 1
         tt.poptd = tt.poptd + 1
-        popmas = tt.pole1.split('$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
+        popmas = tt.pole1.split(
+            '$')  # pole1 = Попыток в сезоне $ Пройдено игр в сезоне $ Попыток всего  pop - попыток всего
         popmas[1] = str(int(float(popmas[1]) + 1))
         tt.pole1 = '$'.join(popmas)
         tt.save()
@@ -343,7 +355,7 @@ def itog(request):
     dsd = 0
     scold = 0
     scoldd = 0
-    t = OrfKras(sum, ["очков", "очка", "очко"])
+    t = OrfKras(sum, DECLENSIONS)
     txx = 'что — '
     if tt.pop == 1: txx = 'что, для первого раза — '
 
@@ -354,7 +366,7 @@ def itog(request):
     scold = tt.scores  # в этапах sclvus
     ds = int(float(sum) - scold)  # сравнение с рекордом сезона
     dsd = int(float(sum) - scoldd)  # сравнение с абсолютным рекордом
-    if tt.res2%10 == 0 and sum > 0 and tt.pop != 1 and popmas[1] != '1':
+    if tt.res2 % 10 == 0 and sum > 0 and tt.pop != 1 and popmas[1] != '1':
         mas0 = [i for i in
                 DataUser.objects.filter(scores__gt=scold).order_by('-scores').values_list('scores', 'fik')]
         mas1 = [i for i in
@@ -452,7 +464,7 @@ def itog(request):
                             if pos_now != 1:
                                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!'
                                 txt4 = 'также улучшили свою позицию в глобальном TOП-10. (' + \
-                                       str(pos_old) + ' --> ' + str(pos_now) + ')'          #!!!
+                                       str(pos_old) + ' --> ' + str(pos_now) + ')'  # !!!
                             else:
                                 if txt == '': txt = 'ПОЗДРАВЛЯЕМ!!!'
                                 txt4 = ' также на данный момент Вы становитесь абсолютным ЧЕМПИОНОМ!'
@@ -462,7 +474,8 @@ def itog(request):
                                str(pos_old) + ' --> ' + str(pos_now) + ')'
                     else:
                         txt4 = 'также улучшили свой результат в глобальном ТОП-е на ' + str(abs(dsd)) + ', ' \
-                               'укрепившись на ' + str(pos_old) + ' позиции'
+                                                                                                        'укрепившись на ' + str(
+                            pos_old) + ' позиции'
 
         else:
             tvs = ''
@@ -543,7 +556,7 @@ def itog(request):
                     txt2 = 'Полагаем, Вы просто решили проверить, что произойдет?'
                     txt3 = 'Как видите — ничего особо страшного.'
 
-        if sum != 0 and tt.res2%10 == 0:
+        if sum != 0 and tt.res2 % 10 == 0:
             mas1 = [i for i in
                     DataUser.objects.filter(res1__gt=sum).order_by('-res1').values_list('res1', 'fik')]
             pos_now = int(len(mas1) + 1)
@@ -595,7 +608,7 @@ def itog(request):
                                                      pravil=(int(float(tts[1]) + float(tts[2]))), bezosh=tts[2])
 
     pr = prit4i()
-    DataUser.objects.filter(log=usna).update(res2=(tt.res2//10)*10 + 1)
+    DataUser.objects.filter(log=usna).update(res2=(tt.res2 // 10) * 10 + 1)
     return render(request, 'jsprob/itog.html', {'txt': txt, 'txt1': txt1, 'txt2': txt2, 'txt3': txt3,
                                                 'txt4': txt4, 'txt5': txt5, 'txt6': txt6, 'txt7': pr[0],
                                                 'txt8': pr[1], 'pr': int(float(tts[1]) + float(tts[2])),
@@ -672,10 +685,10 @@ def toplvlgl(request):
     ttt = [[] for i in range(7)]
     for i in range(7):
         if i < 6:
-            ttt[i].append('Этап: ' + str(i+1))
+            ttt[i].append('Этап: ' + str(i + 1))
         else:
             ttt[i].append('ТОП-30 суммарного теоретического потенциала')
-        tts = sorted(tt, key=lambda x: x[i+1], reverse=True)[:30]
+        tts = sorted(tt, key=lambda x: x[i + 1], reverse=True)[:30]
         n = 0
         for r in tts:
             n += 1
@@ -683,7 +696,7 @@ def toplvlgl(request):
                 col = str(n % 3)
             else:
                 col = '3'
-            ttt[i].append([col, str(n) + ') ' + r[0], r[i+1]])
+            ttt[i].append([col, str(n) + ') ' + r[0], r[i + 1]])
 
     return render(request, 'jsprob/toplvlgl.html', {'tt': ttt})
 
@@ -779,15 +792,10 @@ def topglob(request):
 
 def reset(request):
     """ Ending the season or previewing the season results (only available to the administrator). """
-    if (request.user.is_superuser) != True: return redirect('home')
+    if not request.user.is_superuser:
+        return redirect('home')
     request.session['reset_control'] = 0
     if request.method == 'GET':
-        lev_plase_cost_prizes = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5]  # призы в отдельных этапах
-        win_days_cost_prizes = [200, 200, 100, 100, 100, 100, 100] # призы за победы в днях
-        # призы за вхождения в ТОП7 в днях
-        top7_days_cost_prizes = [200, 200, 200, 150, 150, 150, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
-        # призы общем ТОПе сезона
-        priz_place_cost_prizes = [200, 180, 160, 140, 120, 100, 90,	80,	70,	60,	50,	40,	30,	20,	10]
         answer = request.GET
         if 'res' in answer or 'prpr' in answer:
             if 'res' in answer:
@@ -795,43 +803,43 @@ def reset(request):
 
             lev_plase = answer.__getitem__('lv')  # до какого места призеры в отдельных этапах
             if lev_plase == "":
-                lev_plase = len(lev_plase_cost_prizes)
+                lev_plase = len(LEV_PLASE_COST_PRIZES)
             else:
                 lev_plase = int(lev_plase)
-            win_days = answer.__getitem__('wd')  # до какого места призеры за победы в днях
-            if win_days == "":
-                win_days = len(win_days_cost_prizes)
-            else:
-                win_days = int(win_days)
-            top7_days = answer.__getitem__('t7d')  # до какого места призеры за вхождения в ТОП7 в днях
-            if top7_days == "":
-                top7_days = len(top7_days_cost_prizes)
-            else:
-                top7_days = int(top7_days)
+            # win_days = answer.__getitem__('wd')  # до какого места призеры за победы в днях
+            # if win_days == "":
+            #     win_days = len(WIN_DAYS_COST_PRIZES)
+            # else:
+            #     win_days = int(win_days)
+            # top7_days = answer.__getitem__('t7d')  # до какого места призеры за вхождения в ТОП7 в днях
+            # if top7_days == "":
+            #     top7_days = len(TOP7_DAYS_COST_PRIZES)
+            # else:
+            #     top7_days = int(top7_days)
             priz_place = answer.__getitem__('pp')  # сколько позиций в общем ТОПе сезона призовые
             if priz_place == "":
-                priz_place = len(priz_place_cost_prizes)
+                priz_place = len(PRIZ_PLACE_COST_PRIZES)
             else:
                 priz_place = int(priz_place)
             n = 0
             peoples_prize = []
             mass = {}
             for l in range(6):
-                lv = '-scoresl' + str(l+1)
+                lv = '-scoresl' + str(l + 1)
                 mas = DataUser.objects.order_by(lv).values_list('log', lv[1:], 'fik')[:lev_plase]
                 m = 0
                 for i, j, k in mas:
                     if j > 0:
-                        mass[i] = [mass.get(i, ["", k, 0])[0] + "Э" + str(l+1) + "-" + str(lev_plase_cost_prizes[m]) +
-                                   "р.; ", k, mass.get(i, ["", k, 0])[2] + lev_plase_cost_prizes[m]]
+                        mass[i] = [mass.get(i, ["", k, 0])[0] + "Э" + str(l + 1) + "-" + str(LEV_PLASE_COST_PRIZES[m]) +
+                                   "р.; ", k, mass.get(i, ["", k, 0])[2] + LEV_PLASE_COST_PRIZES[m]]
                         m += 1
 
             # mas = DataUser.objects.order_by('-quantwin', '-scores').values_list('log', 'quantwin', 'fik')[:win_days]
             # m = 0
             # for i, j, k in mas:
             #     if j > 0:
-            #         mass[i] = [mass.get(i, ["", k, 0])[0] + "TDWin-" + str(win_days_cost_prizes[m]) + "р.; ", k,
-            #                    mass.get(i, ["", k, 0])[2] + win_days_cost_prizes[m]]
+            #         mass[i] = [mass.get(i, ["", k, 0])[0] + "TDWin-" + str(WIN_DAYS_COST_PRIZES[m]) + "р.; ", k,
+            #                    mass.get(i, ["", k, 0])[2] + WIN_DAYS_COST_PRIZES[m]]
             #         m += 1
             #
             # mas = DataUser.objects.order_by('-quanttop', '-scores').values_list('log', 'quanttop', 'fik')[:top7_days]
@@ -839,17 +847,17 @@ def reset(request):
             # for i, j, k in mas:
             #     if j > 0:
             #         mass[i] = [mass.get(i, ["", k, 0])[0] + "TDTop7(" + str(m+1) + ")-"
-            #                    + str(top7_days_cost_prizes[m]) + "р.; ", k,
-            #                    mass.get(i, ["", k, 0])[2] + top7_days_cost_prizes[m]]
+            #                    + str(TOP7_DAYS_COST_PRIZES[m]) + "р.; ", k,
+            #                    mass.get(i, ["", k, 0])[2] + TOP7_DAYS_COST_PRIZES[m]]
             #         m += 1
 
-            mas = DataUser.objects.filter(scoresl7__gt=0, pk__gt=12).order_by('-scoresl7').values_list('log', 'scoresl7', 'fik')
+            mas = DataUser.objects.filter(scoresl7__gt=0,
+                                          pk__gt=12).order_by('-scoresl7').values_list('log', 'scoresl7', 'fik')
             m = 0
             for i, j, k in mas:
                 if j > 0:
-
-                    mass[i] = [mass.get(i, ["", k, 0])[0] + "Balls-" + str(int(j/10 + .5)) + "р.; ", k,
-                               mass.get(i, ["", k, 0])[2] + int(j/10 + .5)]
+                    mass[i] = [mass.get(i, ["", k, 0])[0] + "Balls-" + str(int(j / 10 + .5)) + "р.; ", k,
+                               mass.get(i, ["", k, 0])[2] + int(j / 10 + .5)]
                     m += 1
 
             objs = []
@@ -858,24 +866,27 @@ def reset(request):
                     if r.scores != 0:
                         n += 1
                         du = list(map(int, r.pole2.split('$')))
-                        du[7] += 1                # всего сезонов (участие)
-                        if n <= priz_place or mass.get(r.log) != None:     # Условие вхождения в призеры.
+                        du[7] += 1  # всего сезонов (участие)
+                        if n <= priz_place or mass.get(r.log) != None:  # Условие вхождения в призеры.
                             # peoples_prize.append(r.fik)
-                            du[8] += 1     # количество призерств
+                            du[8] += 1  # количество призерств
                             if n <= priz_place:
                                 mass[r.log] = [mass.get(r.log, ["", r.fik, 0])[0]
-                                               + f'ТОП({n})-{priz_place_cost_prizes[n-1]}р.; ',
-                                               r.fik, mass.get(r.log, ["", r.fik, 0])[2] + priz_place_cost_prizes[n-1]]
+                                               + f'ТОП({n})-{PRIZ_PLACE_COST_PRIZES[n - 1]}р.; ',
+                                               r.fik,
+                                               mass.get(r.log, ["", r.fik, 0])[2] + PRIZ_PLACE_COST_PRIZES[n - 1]]
                     if request.session['reset_control'] == 1:
                         if n == 1:
-                            du[9] += 1     # количество чемпионств
-                        du[10] += r.quantwin     # побед в днях во всех предыдущих сезонах
-                        du[11] += r.quanttop     # ТОП-7 в днях во всех предыдущих сезонах
+                            du[9] += 1  # количество чемпионств
+                        du[10] += r.quantwin  # побед в днях во всех предыдущих сезонах
+                        du[11] += r.quanttop  # ТОП-7 в днях во всех предыдущих сезонах
                         if du[12] == 0 or du[12] > n:
-                            du[12] = n   # Лучшее место в ТОПе
+                            du[12] = n  # Лучшее место в ТОПе
                         r.pole2 = "$".join(map(str, du))
-                        r.res2 = (r.res2 // 10 + 1) * 10 + r.res2 % 10  # res2=диницы - системное, бОльшие разряды - кол-во сезонов.
-                        r.pole1 = '0$0$' + r.pole1.split('$')[2]       # обнуление pole1='запусоков в сезоне$пройдено в сезоне$запусокв всего'
+                        r.res2 = (
+                                         r.res2 // 10 + 1) * 10 + r.res2 % 10  # res2=диницы - системное, бОльшие разряды - кол-во сезонов.
+                        r.pole1 = '0$0$' + r.pole1.split('$')[
+                            2]  # обнуление pole1='запусоков в сезоне$пройдено в сезоне$запусокв всего'
                         r.scores, r.scoresl1 = 0, 0
                         r.scoresl2, r.scoresl3, r.scoresl4 = 0, 0, 0
                         r.scoresl5, r.scoresl6, r.scoresl7 = 0, 0, 0
@@ -891,7 +902,8 @@ def reset(request):
                     us.last_name = ''
                     objsu.append(us)
                 User.objects.bulk_update(objsu, ["last_name"])
-            # sort_mass = sorted(mass.items(), key=lambda x: sum(map(int, x[1][0].split("$")[:-1])), reverse=True)  Шедевр для истории
+            # sort_mass = sorted(mass.items(),
+            #                    key=lambda x: sum(map(int, x[1][0].split("$")[:-1])), reverse=True)  Шедевр для истории
             sort_mass = sorted(mass.items(), key=lambda x: x[1][2], reverse=True)
             sort_mass1 = copy.deepcopy(sort_mass)
             i = 0
@@ -935,17 +947,16 @@ def begin(request):
 
 def passLv(request):
     """ Transfer to the next level. """
-    ti_mass = [50000, 100000, 120000, 150000, 130000, 180000]
     lev = request.session['us_lastlv']
     try:
         Vyb = Vyborka(request, 10 * lev, 10 * (lev + 1))
     except:
         return redirect('home')
     if lev < 5:
-        data = {'ti': ti_mass[lev], 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'lv': lev + 1}
+        data = {'ti': TI_MASS[lev], 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'lv': lev + 1}
         return render(request, 'jsprob/passing_lv.html', data)
     else:
-        data = {'ti': ti_mass[lev], 'tas': Vyb.tas, 'ot': Vyb.ot}
+        data = {'ti': TI_MASS[lev], 'tas': Vyb.tas, 'ot': Vyb.ot}
         return render(request, 'jsprob/list6.html', data)
 
 
@@ -954,14 +965,14 @@ def itoglv(request):
     ud = request.COOKIES.get('lelrec15').split('$')
     if ud[0] == 'e': return redirect('home')
     lastlv = int(float(ud[0]))
-    usna = request.session['ustns4usen']    #login
+    usna = request.session['ustns4usen']  # login
     us = DataUser.objects.get(log=usna)
     maslevs = us.pole2.split("$")
     sclvabs = maslevs[lastlv - 1]
     krit = 'scoresl' + str(ud[0])
     sclvus = DataUser.objects.filter(log=usna, fik=us.fik).values_list(krit)[0][
         0]  # с каждым этапом меняем поле, к которому обращаемся, поэтому так заморочено
-    tx = OrfKras(int(float(ud[1])), ["очков", "очка", "очко"]) + '.'
+    tx = OrfKras(int(float(ud[1])), DECLENSIONS) + '.'
     vstsl = ['На разминочном ', 'Во втором ', 'В третьем ', 'В четвертом ', 'В пятом ', 'В шестом '][lastlv - 1]
     txt1 = vstsl + 'этапе Вы набрали ' + ud[1] + tx
     txt2 = 'Решено правильно: ' + ud[2] + '; из них безошибочно: ' + ud[3] + '. '
@@ -974,7 +985,7 @@ def itoglv(request):
         if float(sclvus) != 0:
             txt5 = 'Вы улучшили свой рекорд пройденного этапа в сезоне на ' + str(int(float(ud[1]) - float(sclvus))) \
                    + '. ' + ' (' + str(int(float(sclvus))) + ' --> ' + str(int(float(ud[1]))) + ')'
-            if us.res2//10 != 0:
+            if us.res2 // 10 != 0:
                 if float(ud[1]) == float(sclvabs):
                     # Вы улучшили свой рекорд, пройденного этапа в сезоне на ... ,
                     txt5 += "."
@@ -986,15 +997,16 @@ def itoglv(request):
                                + '. ' + ' (' + str(int(float(sclvus))) + ' --> ' + str(int(float(ud[1]))) + ')'
                     if float(sclvabs) > float(sclvus):
                         txt5 += ","
-                        txt0 = "а также побили свой абсолюный рекорд этапа на " + str(int(float(ud[1]) - float(sclvabs))) \
-                       + '. ' + ' (' + str(int(float(sclvabs))) + ' --> ' + str(int(float(ud[1]))) + ')'
+                        txt0 = "а также побили свой абсолюный рекорд этапа на " + str(
+                            int(float(ud[1]) - float(sclvabs))) \
+                               + '. ' + ' (' + str(int(float(sclvabs))) + ' --> ' + str(int(float(ud[1]))) + ')'
         else:
             if us.res2 // 10 != 0:
                 if float(ud[1]) == float(sclvabs):
                     txt5 = "Вы повторили свой абсолютный рекорд пройденного этапа!"
                 if float(ud[1]) > float(sclvabs):
                     txt5 = "Вы побили свой абсолюный рекорд этапа на " + str(int(float(ud[1]) - float(sclvabs))) \
-                            + '. ' + ' (' + str(int(float(sclvabs))) + ' --> ' + str(int(float(ud[1]))) + ')'
+                           + '. ' + ' (' + str(int(float(sclvabs))) + ' --> ' + str(int(float(ud[1]))) + ')'
         if float(ud[1]) > float(sclvabs):
             maslevs[lastlv - 1] = ud[1]
             us.pole2 = "$".join(maslevs)
@@ -1039,7 +1051,7 @@ def itoglv(request):
         pos_old = int(len(mas0) + 1)
         pos_now = int(len(mas1) + 1)
         mas0 = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik')]
-        if mas0[pos_now-1][1] != request.session['ustns4use_fiko']:  # Здравстсвуй, костыль 2
+        if mas0[pos_now - 1][1] != request.session['ustns4use_fiko']:  # Здравстсвуй, костыль 2
             kk = 0
             for mm in mas0:
                 kk += 1
@@ -1048,7 +1060,7 @@ def itoglv(request):
         vsk = min(pos_now - 1, 2)
         request.session['kontrol_lv'] = 1
         ii = pos_now - 1 - vsk
-        mas2 = mas0[ii:min(pos_now+4-vsk, len(mas0))]
+        mas2 = mas0[ii:min(pos_now + 4 - vsk, len(mas0))]
         tab5 = []
 
         for m in mas2:
@@ -1098,8 +1110,9 @@ def itoglv(request):
             txt6 = 'Уникальный случай! Вы в точности повторили свой рекорд пройденного этапа.'
         elif request.session['kontrol_lv'] == 0:
             dscore = int(float(sclvus) - float(ud[1]))
-            tx12 = ['минувшего', 'пройденного', 'прошедшего'][randint(0,2)]
-            txt6 = 'До Вашего рекорда ' + tx12 + ' этапа не хватило ' + str(dscore) + OrfKras(dscore, ["очков", "очка", "очка"])
+            tx12 = ['минувшего', 'пройденного', 'прошедшего'][randint(0, 2)]
+            txt6 = 'До Вашего рекорда ' + tx12 + ' этапа не хватило ' + str(dscore) + OrfKras(dscore,
+                                                                                              ["очков", "очка", "очка"])
         mas0 = [i for i in DataUser.objects.order_by('-' + krit).values_list(krit, 'fik', 'log')]
         ii = 0
         for m in mas0:
@@ -1132,7 +1145,7 @@ def itoglv(request):
             usp = ['Удачи, ' + request.session['ustns4usennam'] + '!', '', '', '', '', ''][lastlv - 1]
             request.session['us_lastlv'] = lastlv
             return render(request, 'jsprob/level1.html',
-                          {'usp': usp, 'lv': meslv, 'namlv': mesnam}) # 'list': 'list' + str(lastlv + 1)}
+                          {'usp': usp, 'lv': meslv, 'namlv': mesnam})  # 'list': 'list' + str(lastlv + 1)}
     return render(request, 'jsprob/itoglv.html',
                   {'txt1': txt1, 'txt2': txt2, 'txt5': txt5, 'txt0': txt0, 'tab': tab5,
                    'txt6': txt6, 'txtpz': txtpz, 'txt7': pr[0], 'txt8': pr[1]})
@@ -1142,13 +1155,13 @@ def unification(request):
     """ Merging two users into one. Used if the user has forgotten his login,
      started playing under a new login, but all data must be saved (Used only by the administrator). """
     if (request.user.is_superuser) != True: return redirect('home')
-    if request.method == 'GET':    # id берем из "Данные участника"!!!!
+    if request.method == 'GET':  # id берем из "Данные участника"!!!!
         answer = request.GET
         if 'uni' in answer:
             prosh = DataUser.objects.get(pk=int(answer['prosh']))
             nast = DataUser.objects.get(pk=int(answer['nast']))
             # print(prosh.fik, nast.fik)
-            prp2 = list(map(int, prosh.pole2.split('$')))   #!!
+            prp2 = list(map(int, prosh.pole2.split('$')))  # !!
             nastp2 = list(map(int, nast.pole2.split('$')))
             if nast.scoresl1 > prp2[0]: prp2[0] = nast.scoresl1
             if nast.scoresl2 > prp2[1]: prp2[1] = nast.scoresl2
@@ -1160,7 +1173,7 @@ def unification(request):
             # prp2[7] += 1 уже добавляется в reset
             if prosh.res1 > nast.res1: nast.res1 = prosh.res1
             prp1 = list(map(int, prosh.pole1.split('$')))
-            nastp1 = list(map(int, nast.pole1.split('$')))  #!!
+            nastp1 = list(map(int, nast.pole1.split('$')))  # !!
             nastp1[2] += prp1[2]
             nast.pop += prosh.pop
             nast.res2 = (nast.res2 // 10 + 1) * 10 + nast.res2 % 10
@@ -1171,8 +1184,10 @@ def unification(request):
             prosh.delete()
     return render(request, 'jsprob/unification.html')
 
+
 class Examples:
     """ Generator of examples for each stage """
+
     def __init__(self, rab, mm, request):
         otvs = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
         tasks = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
@@ -1182,7 +1197,7 @@ class Examples:
             # сложение
             if mm == 0:
                 provsov = [[0] * 3 for i in range(11)]  # обнуление массива контроля повторений
-                prcoin = [0] * 10 # каждая цифра попадается не более 2 раз
+                prcoin = [0] * 10  # каждая цифра попадается не более 2 раз
                 for z in range(0, 5):
                     while True:
                         fl = 0
@@ -1196,7 +1211,7 @@ class Examples:
                                 ff = 1
                         mas = provsov
                         d = 0
-                        while(d < 5):  # все 5 используя предыдущие
+                        while (d < 5):  # все 5 используя предыдущие
                             if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][0] == b) and (mas[d][1] == a) \
                                     or (mas[d][2] == a + b):
                                 prcoin[a] -= 1
@@ -1228,7 +1243,7 @@ class Examples:
                                 ff = 1
                         mas = provsov
                         d = 0
-                        while(d < 5):  # все 5 используя предыдущие
+                        while (d < 5):  # все 5 используя предыдущие
                             if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][0] == b) and (mas[d][1] == a) or (
                                     mas[d][2] == a - b):
                                 prcoin[a] -= 1
@@ -1249,7 +1264,7 @@ class Examples:
                 provsov = [[0] * 3 for i in range(11)]
                 z = 10
                 kost = 0
-                while (z < 15): # for z in range(10, 15): Костыль!
+                while (z < 15):  # for z in range(10, 15): Костыль!
                     ff = 0
                     while True:
                         if (kost == 300):
@@ -1266,8 +1281,8 @@ class Examples:
                             if (a + b) % 10 >= int(1.5 * (z - 10)) and (a + b) != 11:
                                 break
                         mas = provsov
-                        for d in range(0, z-10):  # все 5 используя предыдущие
-                            if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][2] == a + b) or\
+                        for d in range(0, z - 10):  # все 5 используя предыдущие
+                            if (mas[d][0] == a) and (mas[d][1] == b) or (mas[d][2] == a + b) or \
                                     (mas[d][0] == b) and (mas[d][1] == a):
                                 kost += 1
                                 fl = 1
@@ -1529,7 +1544,7 @@ class Examples:
                 while True:
                     c = randint(2, 9) * 10
                     if a != c: break
-                d = randint(4,7)
+                d = randint(4, 7)
                 if randint(0, 1) == 0:
                     tasks[51][r] = str(a - b) + '•' + str(a + b)
                 else:
@@ -1669,6 +1684,7 @@ class Examples:
         self.tas = tasks
         self.ot = otvs
 
+
 def gene(pol):
     """ An auxiliary generation method for generating examples from the sixth level. """
     while True:
@@ -1684,8 +1700,10 @@ def gene(pol):
             break
     return s, su
 
+
 class Vyborka():
     """ Selection of tasks. """
+
     def __init__(self, request, m, n):
         request.session['kontrol_lv'] = 0
         rab = 1
@@ -1742,17 +1760,16 @@ def brend(request):
     if (usna == None): return redirect('home')
     tts0 = request.COOKIES.get('totsummb').split('(#)$)')
     tts = sum(map(int, tts0[:6]))
-    t = OrfKras(tts, ["очков", "очка", "очко"])
+    t = OrfKras(tts, DECLENSIONS)
     tt = DataUser.objects.get(log=usna)
     bon = int(float(tts0[7]) * 100)
     total = int(tts + bon)
     if total == 0: return redirect('home')
-
-    t1 = OrfKras(float(tts0[7]), ["очков", "очка", "очко"])
-    t3 = OrfKras(total, ["очков", "очка", "очко"])
-    if total >tt.scores:
+    t1 = OrfKras(float(tts0[7]), DECLENSIONS)
+    t3 = OrfKras(total, DECLENSIONS)
+    if total > tt.scores:
         DataUser.objects.filter(log=usna).update(scores=total, pravil=(int(float(tts0[6]) + float(tts0[7]))),
-                                             bezosh=tts0[7])
+                                                 bezosh=tts0[7])
     if total > tt.res1: DataUser.objects.filter(log=usna).update(res1=total)
     if total > tt.scorTD: DataUser.objects.filter(log=usna).update(scorTD=total)
 
