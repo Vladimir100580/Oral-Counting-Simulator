@@ -10,51 +10,10 @@ from django.core.mail import send_mail
 
 
 def hello(request):
+    """ Welcome home page.
+        Go to the congratulations page, if you hit the TOP, in the past day. """
     answer = request.GET
     dayend()
-    # try:
-    #     er = request.session['ti_contr']
-    # except:
-    #     request.session['ti_contr'] = time.time() - 4
-    # if abs(float(request.session['ti_contr']) - time.time()) < 3 and 'intlg' not in answer\
-    #         and 'reg' not in answer and 'chfik' not in answer:
-    #     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    #     if x_forwarded_for:
-    #         ip = x_forwarded_for.split(',')[-1].strip()
-    #     else:
-    #         ip = request.META.get('REMOTE_ADDR')
-    #
-    #     tab = Indexs.objects.get(pk=1)
-    #     koler = tab.ipskol.split('$')
-    #     idus = tab.ips.split('$')
-    #
-    #     if ip in idus:
-    #         koler[idus.index(ip)] = str(int(float(koler[idus.index(ip)]) + 1))
-    #     else:
-    #         idus.append(ip)
-    #         koler.append('1')
-    #     stid = ''
-    #     stkol = ''
-    #     i = 0
-    #     for idu in idus:
-    #         if (i + 1) != len(idus):
-    #             d = '$'
-    #         else:
-    #             d = ''
-    #         stid = stid + str(idu) + d
-    #         stkol = stkol + str(koler[i]) + d
-    #         i += 1
-    #     tab.ips = stid
-    #     tab.ipskol = stkol
-    #     tab.save()
-    #     t = 5 / 0
-
-    # if 'intlg' in answer or 'reg' in answer or 'chfik' in answer:
-    #     dayend()
-    #     request.session['ti_contr'] = time.time() - 3
-    # else:
-    #     request.session['ti_contr'] = time.time()
-
     userAkt = request.user
     userLog = userAkt.username
     dat = Indexs.objects.get(id=1)
@@ -81,17 +40,9 @@ def hello(request):
             if len(lu) > 3:
                 llu = int(lu[2])
                 reduct = float(lu[3])
-            elif len(lu) == 3:
-                llu = int(lu[2])
-                reduct = 1
             else:
-                arr_balls = [77, 73, 69, 65, 61, 57, 53, 49, 45, 43, 41, 39, 37, 35, 33, 31,
-                             29, 27, 25, 23, 21, 19, 17, 15, 14, 18, 16, 14, 12, 10, 9, 8, 7]
-                llu = arr_balls[plase - 1]
+                llu = 1
                 reduct = 1
-            # if reduct != 1:
-            #     txt_r = f' (ПК: {reduct})'
-            # else: txt_r = ''
             txt_r = '' if reduct == 1 else f' (ПК: {reduct})'
             t = OrfKras(llu, ["накопительных баллов", "накопительных балла", "накопительный балл"])
             txt3 = f'И получили {llu} {t}{txt_r}.'
@@ -156,10 +107,10 @@ def hello(request):
 
 
 def regist(request):
+    """ User registration. """
     dayend()
     fno = request.session['fik_contr_us'].split('$#$%')
     ph0, ph1, ph2 = fno[0], fno[1], fno[2]
-    # return redirect('logout')
     if request.method == 'GET':
         answer = request.GET
         if 'fam' in answer and 'name' in answer and 'lg' in answer:
@@ -186,6 +137,7 @@ def regist(request):
 
 
 def changefik(request):
+    """ Changing user registration information. """
     dayend()
     if request.session['fik_co_us_fl'] == "1":
         fno = request.user.first_name.split('$#$%')
@@ -193,7 +145,6 @@ def changefik(request):
     else:
         fno = request.session['fik_contr_us'].split('$#$%')
         ph0, ph1, ph2 = fno[0], fno[1], fno[2]
-    # return redirect('logout')
     if request.method == 'GET':
         answer = request.GET
         if 'fam' in answer and 'name' in answer:
@@ -215,6 +166,7 @@ def changefik(request):
 
 
 def dayend():
+    """ Processing data from the past day. Formation of results. """
     dat = Indexs.objects.get(id=1)
     datn = datetime.date.today()                        # datetime.datetime.now()
     if dat.curdate != datn:
@@ -267,19 +219,7 @@ def dayend():
 
 
 def progress(request):
-    # user = User.objects.get(username='Frederick_Krause1095')
-    # user.username = "Frederick_Krause 1095"
-    # user.save()
-    # allpolz = DataUser.objects.all()
-    # for polz in allpolz:
-        # if polz.scoresl1==0:
-        #     polz.scoresl1 = 2
-        #     polz.save(update_fields=['scoresl1'])
-        # stmas = [str(polz.scoresl1), str(polz.scoresl2), str(polz.scoresl3),        # 0-6 абс оп этапам, 7 кол-во сез
-        #             str(polz.scoresl4), str(polz.scoresl5), str(polz.scoresl6),     # 8 Приз-во в сез, 9 Поб в сез
-        #             str(polz.scoresl7), "0", "0", "0", "0", "0", "0", "0"]  # 10 поб в днях, 11 ТОП7 в днях,12 луч_поз
-        # polz.pole2 = "$".join(stmas)
-        # polz.save(update_fields=['pole2'])
+    """ User data summary. """
     dayend()
     usna = request.user.username
     if (usna is None) or (usna == ''):
@@ -365,6 +305,7 @@ def progress(request):
 
 
 def OrfKras(n, l):  #k5, k23, k31 склоняем по количеству в списке l
+    """ Generating correct word endings. """
     t = ' ' + l[0]
     if (n // 10) % 10 != 1:    # например: пять
         if n % 10 == 2 or n % 10 == 3 or n % 10 == 4: t = ' ' + l[1]  # например 22
@@ -373,6 +314,7 @@ def OrfKras(n, l):  #k5, k23, k31 склоняем по количеству в 
 
 
 def itog(request):
+    """ Results of the game (all levels). """
     dayend()
     ud = request.COOKIES.get('lelrec15').split('$')
     if ud[0] == 'e': return redirect('home')
@@ -660,6 +602,7 @@ def itog(request):
 
 
 def toptab(request):
+    """ TOP best players of the current season. """
     dayend()
     tt = []
     try:
@@ -680,6 +623,7 @@ def toptab(request):
 
 
 def toplvl(request):
+    """ TOP 10 best player performance in individual stages (in the current season). """
     tt = [[] for i in range(6)]
     try:
         usna = request.user.first_name.replace('$#$%', ' ')
@@ -703,6 +647,7 @@ def toplvl(request):
 
 
 def toplvlgl(request):
+    """ TOP 10 best players in terms of performance at individual stages (all time). """
     dayend()
     tt = []
     try:
@@ -741,6 +686,7 @@ def toplvlgl(request):
 
 
 def topday(request):
+    """ TOP best results of the current day. """
     tt = []
     try:
         usna = request.user.first_name.replace('$#$%', ' ')
@@ -766,6 +712,7 @@ def topday(request):
 
 
 def topdays(request):
+    """ TOP total hits in the TOP of the day. """
     dayend()
     tt = []
     tt1 = []
@@ -801,6 +748,7 @@ def topdays(request):
 
 
 def topglob(request):
+    """ Overall TOP of all time. """
     dayend()
     tt = []
     try:
@@ -827,6 +775,7 @@ def topglob(request):
 
 
 def reset(request):
+    """ Ending the season or previewing the season results (only available to the administrator). """
     if (request.user.is_superuser) != True: return redirect('home')
     request.session['reset_control'] = 0
     if request.method == 'GET':
@@ -939,7 +888,6 @@ def reset(request):
                     us.last_name = ''
                     objsu.append(us)
                 User.objects.bulk_update(objsu, ["last_name"])
-
             # sort_mass = sorted(mass.items(), key=lambda x: sum(map(int, x[1][0].split("$")[:-1])), reverse=True)  Шедевр для истории
             sort_mass = sorted(mass.items(), key=lambda x: x[1][2], reverse=True)
             sort_mass1 = copy.deepcopy(sort_mass)
@@ -964,6 +912,7 @@ def reset(request):
 
 
 def begin(request):
+    """ Beginning of the game. """
     dayend()
     usna = request.user.username
     tt = DataUser.objects.get(log=usna)
@@ -982,6 +931,7 @@ def begin(request):
 
 
 def passLv(request):
+    """ Transfer to the next level. """
     ti_mass = [50000, 100000, 120000, 150000, 130000, 180000]
     lev = request.session['us_lastlv']
     try:
@@ -995,38 +945,9 @@ def passLv(request):
         data = {'ti': ti_mass[lev], 'tas': Vyb.tas, 'ot': Vyb.ot}
         return render(request, 'jsprob/list6.html', data)
 
-#
-# def list1(request):
-#     Vyb = Vyborka(request, 0, 10)
-#     data = {'ti': 50000, 'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot}
-#     return render(request, 'jsprob/list1.html', data)
-#
-# def list2(request):
-#     Vyb = Vyborka(request, 10, 20)
-#     return render(request, 'jsprob/list2.html',
-#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 100000})
-#
-# def list3(request):
-#     Vyb = Vyborka(request, 20, 30)
-#     return render(request, 'jsprob/list3.html',
-#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 120000})
-#
-# def list4(request):
-#     Vyb = Vyborka(request, 30, 40)
-#     return render(request, 'jsprob/list4.html',
-#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 150000})
-#
-# def list5(request):
-#     Vyb = Vyborka(request, 40, 50)
-#     return render(request, 'jsprob/list5.html',
-#                   {'tas1': Vyb.t1, 'tas2': Vyb.t2, 'tasz': Vyb.tz, 'otv': Vyb.ot, 'ti': 130000})
-#
-# def list6(request):
-#     Vyb = Vyborka(request, 50, 60)
-#     return render(request, 'jsprob/list6.html',
-#                   {'tas': Vyb.tas, 'ot': Vyb.ot, 'ti': 180000})
 
 def itoglv(request):
+    """Result of the passed level."""
     ud = request.COOKIES.get('lelrec15').split('$')
     if ud[0] == 'e': return redirect('home')
     lastlv = int(float(ud[0]))
@@ -1215,6 +1136,8 @@ def itoglv(request):
 
 
 def unification(request):
+    """ Merging two users into one. Used if the user has forgotten his login,
+     started playing under a new login, but all data must be saved (Used only by the administrator). """
     if (request.user.is_superuser) != True: return redirect('home')
     if request.method == 'GET':    # id берем из "Данные участника"!!!!
         answer = request.GET
@@ -1246,7 +1169,7 @@ def unification(request):
     return render(request, 'jsprob/unification.html')
 
 class Examples:
-    """ generator of examples for each stage """
+    """ Generator of examples for each stage """
     def __init__(self, rab, mm, request):
         otvs = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
         tasks = [[''] * 1 for i in range(60)]  # №задачи (кол-во вариантов -1), количество задач (№ коретжа)
@@ -1744,6 +1667,7 @@ class Examples:
         self.ot = otvs
 
 def gene(pol):
+    """ An auxiliary generation method for generating examples from the sixth level. """
     while True:
         s = []
         for i in range(6):
@@ -1758,6 +1682,7 @@ def gene(pol):
     return s, su
 
 class Vyborka():
+    """ Selection of tasks. """
     def __init__(self, request, m, n):
         request.session['kontrol_lv'] = 0
         rab = 1
@@ -1804,10 +1729,12 @@ class Vyborka():
 
 
 def instr(request):
+    """ application instructions. """
     return render(request, 'jsprob/instr.html')
 
 
 def brend(request):
+    """ The total result for the game, if it was interrupted. """
     usna = request.session['ustns4usen']
     if (usna == None): return redirect('home')
     tts0 = request.COOKIES.get('totsummb').split('(#)$)')
@@ -1830,6 +1757,7 @@ def brend(request):
 
 
 class Prit4i:
+    """ A selection of one of Solomon's blessed parables. """
     def __init__(self):
         mp = ['«Скажи мудрости: «Ты сестра моя!» и разум назови родным твоим.» Притчи Соломона 7:4',
               '«Скудоумный высказывает презрение к ближнему своему; но разумный человек молчит.» Притчи Соломона 11:12',
