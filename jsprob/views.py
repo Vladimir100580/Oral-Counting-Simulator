@@ -881,7 +881,7 @@ def reset(request):
             #         mass[i] = [mass.get(i, ["", k, 0])[0] + "TDWin-" + str(win_days_cost_prizes[m]) + "р.; ", k,
             #                    mass.get(i, ["", k, 0])[2] + win_days_cost_prizes[m]]
             #         m += 1
-
+            #
             # mas = DataUser.objects.order_by('-quanttop', '-scores').values_list('log', 'quanttop', 'fik')[:top7_days]
             # m = 0
             # for i, j, k in mas:
@@ -900,25 +900,6 @@ def reset(request):
                                mass.get(i, ["", k, 0])[2] + int(j/10 + .5)]
                     m += 1
 
-            # start0 = time.time()
-            # objs = []
-            # for r in DataUser.objects.order_by('-scores'):
-            #     if r.pk % 2 == 0:
-            #         r.scoresl6 -= 25
-            #         r.scoresl7 -= 25
-            #         objs.append(r)
-            # DataUser.objects.bulk_update(objs, ["scoresl6", "scoresl7"])
-            # print('DataUser_time', time.time() - start0)   # 0.49 сек
-
-            # start0 = time.time()
-            # objs = []
-            # for us in User.objects.all():
-            #     # us.last_name += 'ku'
-            #     us.last_name = us.last_name[:-2]
-            #     objs.append(us)
-            # User.objects.bulk_update(objs, ["last_name"])
-            # print('User_time', time.time() - start0)  # 0.32 сек
-
             objs = []
             for r in DataUser.objects.order_by('-scores'):
                 if r.id > 12:
@@ -933,13 +914,15 @@ def reset(request):
                                 mass[r.log] = [mass.get(r.log, ["", r.fik, 0])[0]
                                                + f'ТОП({n})-{priz_place_cost_prizes[n-1]}р.; ',
                                                r.fik, mass.get(r.log, ["", r.fik, 0])[2] + priz_place_cost_prizes[n-1]]
-                        if n == 1: du[9] += 1     # количество чемпионств
+                    if request.session['reset_control'] == 1:
+                        if n == 1:
+                            du[9] += 1     # количество чемпионств
                         du[10] += r.quantwin     # побед в днях во всех предыдущих сезонах
                         du[11] += r.quanttop     # ТОП-7 в днях во всех предыдущих сезонах
-                        if du[12] == 0 or du[12] > n: du[12] = n   # Лучшее место в ТОПе
+                        if du[12] == 0 or du[12] > n:
+                            du[12] = n   # Лучшее место в ТОПе
                         r.pole2 = "$".join(map(str, du))
                         r.res2 = (r.res2 // 10 + 1) * 10 + r.res2 % 10  # res2=диницы - системное, бОльшие разряды - кол-во сезонов.
-                    if request.session['reset_control'] == 1:
                         r.pole1 = '0$0$' + r.pole1.split('$')[2]       # обнуление pole1='запусоков в сезоне$пройдено в сезоне$запусокв всего'
                         r.scores, r.scoresl1 = 0, 0
                         r.scoresl2, r.scoresl3, r.scoresl4 = 0, 0, 0
