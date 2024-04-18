@@ -17,6 +17,7 @@ ARR_BALLS = [77, 73, 69, 65, 61, 57, 53, 49, 45, 43, 41, 39, 37, 35, 33, 31,
              29, 27, 25, 23, 21, 19, 17, 15, 14, 18, 16, 14, 12, 10, 9, 8, 7]  # Ежедневные накопительные баллы
 TI_MASS = [50000, 100000, 120000, 150000, 130000, 180000]  # Количество миллисекунд в каждом этапе
 DECLENSIONS = ["очков", "очка", "очко"]
+COUNT_PARABLES = 192  # Количество притч Соломона в БД
 
 
 def hello(request):
@@ -188,7 +189,7 @@ def dayend():
         dat.curdate = datn
         dat.save(update_fields=['curdate'])
         masd = DataUser.objects.order_by('-scorTD').filter(scorTD__gt=0).values_list('id', 'fik', 'scorTD')
-        masd33 = masd[:min(33, len(masd))]
+        masd33 = masd[:min(len(ARR_BALLS), len(masd))]
         nn = 0
         for p in masd33:
             kar = DataUser.objects.get(id=p[0])
@@ -243,7 +244,6 @@ def progress(request):
     popt = kar.pop
     if popt < 1: return render(request, 'jsprob/gogo.html')
     scl = []
-
     scl.append([1, kar.scoresl1])
     scl.append([2, kar.scoresl2])
     scl.append([3, kar.scoresl3])
@@ -1778,6 +1778,6 @@ def brend(request):
 
 def prit4i():
     """ A selection of one of Solomon's blessed parables. """
-    p = Indexs.objects.get(log=str(randint(0, 191))).ips.split('Притчи')
+    p = Indexs.objects.get(log=str(randint(0, COUNT_PARABLES - 1))).ips.split('Притчи')
     p[1] = "Притчи " + p[1]
     return p
