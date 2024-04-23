@@ -1125,9 +1125,6 @@ def itoglv(request):
         for m in mas2:
             ii += 1
             tab5.append([f'{str(ii)}. {m[1]} ({m[0]})', int(ii == pos)])
-        # print('sclvus:', sclvus, '  ud[1]:', ud[1])
-        #
-        # print('mas0:', mas0, len(mas0), '   mas1:', mas1, len(mas1))
     pr = ['', '']
     if txtpz != '':
         pr = prit4i()
@@ -1388,7 +1385,7 @@ class Examples:
                                 break
                         i = randint(int((z - 18) * 0.7), z - 19) * 100
                         a = 100 - 10 * (randint(int((z - 20) * 0.35), int((z - 20) * 0.6)) + 1) + a
-                        b = randint(int((z - 19) * 0.5), int((z - 19) * 0.9)) * 10 + b  # 45-1
+                        b = randint(int((z - 19) * 0.5), int((z - 19) * 0.9)) * 10 + b
                         prst = str(a + i - 100 + b)
                         for d in range(0, 10):
                             if prst.find(str(d) + str(d)) != -1: fl = -1
